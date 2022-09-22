@@ -16,3 +16,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
+
+message(STATUS "Configuring ${CMAKE_BINARY_DIR}/Doxyfile...")
+configure_file(${CMAKE_SOURCE_DIR}/Doxyfile.in ${CMAKE_BINARY_DIR}/Doxyfile)
+
+add_custom_target(docs
+                  COMMAND doxygen ${CMAKE_BINARY_DIR}/Doxyfile
+                  BYPRODUCTS ${CMAKE_BINARY_DIR}/docs)
