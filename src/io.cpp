@@ -4,6 +4,7 @@
 //
 
 #include "io.hpp"
+#include <fstream>
 #include <stdexcept>
 #include <stack>
 
@@ -12,13 +13,49 @@ static std::ostream* pout = nullptr;
 static bool format = true;
 static bool wasInit = false;
 static std::stack<char> pushback;
+static std::ofstream logfile;
+
+static constexpr size_t MaxLogWidth = 45;
 
 #define TAB "    "
+
+static void log(std::string src, std::string mssg) {
+    static bool init = false;
+    if (!init) {
+        logfile.open(std::string(NCC_NAME) + ".log");
+        if (!logfile.is_open())
+            throw std::runtime_error("Unable to open/create logfile");
+        init = true;
+    }
+    
+    std::string sanitized;
+    
+    for (char c : mssg) {
+        if (c == '\n')
+            sanitized += "(newline)";
+        else if (c == '\t')
+            sanitized += "(tab)";
+        else if (c == EOF)
+            sanitized += "(EOF)";
+        else
+            sanitized += c;
+    }
+    
+    if (src.length() > MaxLogWidth)
+        src = src.substr(0, MaxLogWidth - 3) + "...";
+    
+    logfile << std::setw(MaxLogWidth) << src << ": " << sanitized << "\n";
+}
+
+#define WRITE_LOG(str) log(__PRETTY_FUNCTION__, str)
+
+#define INIT_CHECK() if (!wasInit) throw std::runtime_error(std::string(__PRETTY_FUNCTION__) + " requires init")
 
 void ncc::io::init(std::istream& in, std::ostream& out, bool fmt) {
     if (wasInit)
         throw std::runtime_error("calling \"init\" twice is prohibited");
 
+    WRITE_LOG("Initialized");
     pin = &in;
     pout = &out;
     format = fmt;
@@ -26,48 +63,55 @@ void ncc::io::init(std::istream& in, std::ostream& out, bool fmt) {
 }
 
 char ncc::io::read() {
-    if (!wasInit)
-        throw std::runtime_error(std::string(__PRETTY_FUNCTION__) + " requires init");
+    INIT_CHECK();
 
+    char c = '\0';
     if (!pushback.empty()) {
-        char c = pushback.top();
+        c = pushback.top();
         pushback.pop();
-        return c;
     } else {
-        return pin->get();
+        c = pin->get();
     }
+    
+    WRITE_LOG("Read \'" + std::string(1, c) + "\' from input");
+    return c;
 }
 
 void ncc::io::unread(char c) {
-    if (!wasInit)
-        throw std::runtime_error(std::string(__PRETTY_FUNCTION__) + " requires init");
+    INIT_CHECK();
 
+    WRITE_LOG("Unreading \'" + std::string(1, c) + "\'");
     pushback.push(c);
 }
 
 void ncc::io::write(std::string instr) {
-    if (!wasInit)
-        throw std::runtime_error(std::string(__PRETTY_FUNCTION__) + " requires init");
+    INIT_CHECK();
 
+    WRITE_LOG("Writing instruction \"" + instr + "\"");
+    
 #warning Todo- formatting, also error formatting
     *pout << TAB << instr << "\n";
 }
 
 void ncc::io::put(std::string instr) {
-    if (!wasInit)
-        throw std::runtime_error(std::string(__PRETTY_FUNCTION__) + " requires init");
+    INIT_CHECK();
 
+    WRITE_LOG("Writing \"" + instr + "\"");
     *pout << instr;
 }
 
 
 void ncc::io::error(std::string mssg) {
-    if (!wasInit)
-        throw std::runtime_error(std::string(__PRETTY_FUNCTION__) + " requires init");
+    INIT_CHECK();
     
+    WRITE_LOG("Error message: " + mssg);
     *pout << TAB << "## " << mssg << "\n";
 }
 
 std::string ncc::io::getTab() {
     return TAB;
+}
+
+void ncc::io::misc(std::string src, std::string mssg) {
+    log(src, mssg);
 }

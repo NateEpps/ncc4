@@ -35,6 +35,11 @@ void error(std::string);
 /// @brief Retrieve string used as a tab by `ncc::io`
 std::string getTab();
 
+/// @brief Miscellaneous log data
+///
+/// Params are source, message
+void misc(std::string, std::string);
+
 }
 
 #endif

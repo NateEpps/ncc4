@@ -8,6 +8,7 @@ cmake_minimum_required(VERSION 3.0)
 project(ncc VERSION 0.0)
 
 add_compile_definitions(NCC_VERSION="${PROJECT_VERSION}")
+add_compile_definitions(NCC_NAME="${PROJECT_NAME}")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)

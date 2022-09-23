@@ -12,6 +12,8 @@ int main(int argc, const char** argv) {
         
         ncc::Controller ctrl;
         ctrl.run();
+
+        ncc::io::misc(__PRETTY_FUNCTION__, "Exiting successfully");
     } catch (std::exception& ex) {
         std::cerr << "*** " << ex.what() << "\n";
     } catch (...) {

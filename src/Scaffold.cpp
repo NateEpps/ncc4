@@ -27,10 +27,9 @@ void Scaffold::start(ScaffoldType type) {
 void Scaffold::end() {
     if (scaffoldType == ScaffoldType::PRINT_RAX) {
         io::put("\n");
-#warning ToString
-        std::stringstream ss;
-        ss << parent->addStringData("%d\\n");
-        io::write("leaq S" + ss.str() + "(%rip), %rdi");
+
+        size_t index = parent->addStringData("%ld\\n");
+        io::write("leaq S" + std::to_string(index) + "(%rip), %rdi");
         io::write("movq %rax, %rsi");
         io::write("callq _printf");
         

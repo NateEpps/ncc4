@@ -6,10 +6,12 @@
 #include "Scanner.hpp"
 #include "Controller.hpp"
 #include "io.hpp"
+#include <sstream>
 using namespace ncc;
 
 Scanner::Scanner(Controller* pc) : parent(pc), current(io::read()) {
     skipWs();
+    io::misc(__PRETTY_FUNCTION__, "Scanner initialized, current = " + std::to_string((int) current) + " (ascii)");
 }
 
 void Scanner::skipWs() {
@@ -18,7 +20,7 @@ void Scanner::skipWs() {
 }
 
 void Scanner::expected(std::string s) {
-    io::error("expected " + s);
+    io::error("expected " + s + " [current = " + std::to_string((int) current) + " (ascii)]");
 
     throw std::runtime_error("expected " + s);
 }
