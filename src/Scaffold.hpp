@@ -7,6 +7,8 @@
 #define SCAFFOLD_HPP
 
 namespace ncc {
+class Controller;
+
 /**
  * @brief What kind of scaffold are we using?
  */
@@ -15,7 +17,21 @@ enum class ScaffoldType { PRINT_RAX };
 /**
  * @brief Handle setup / teardown code needed
  */
-class Scaffold {};
+class Scaffold {
+public:
+    Scaffold(Controller*);
+    
+    /// @brief Emit starting scaffold
+    void start(ScaffoldType);
+    
+    /// @brief Emit ending scaffold
+    void end();
+
+private:
+    Controller* parent;
+    
+    ScaffoldType scaffoldType;
+};
 }
 
 #endif

@@ -23,8 +23,17 @@ char read();
 /// Doesn't actually put back in input stream-- simply stores for next `read` call.
 void unread(char);
 
-/// @brief Write an instruction to ouput
+/// @brief Write an instruction to output
 void write(std::string);
+
+/// @brief Write unformatted output
+void put(std::string);
+
+/// @brief Write an error message to output
+void error(std::string);
+
+/// @brief Retrieve string used as a tab by `ncc::io`
+std::string getTab();
 
 }
 

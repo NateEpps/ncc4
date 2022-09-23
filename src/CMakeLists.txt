@@ -6,12 +6,14 @@
 set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/io.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Scanner.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Scaffold.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/Scaffold.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Controller.cpp)
 
 set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/io.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Scanner.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Scaffold.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/Scaffold.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Controller.hpp)
 
 add_library(${PROJECT_NAME}-sources SHARED ${SOURCES} ${HEADERS})
 
