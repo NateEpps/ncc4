@@ -47,6 +47,25 @@ static void log(std::string src, std::string mssg) {
     logfile << std::setw(MaxLogWidth) << src << ": " << sanitized << "\n";
 }
 
+static std::string layout(std::string instr) {
+    size_t index = instr.find(" ");
+    if (index == std::string::npos) {
+        return instr;
+    } else {
+        static constexpr int Width = 9;
+        std::string mnemonic = instr.substr(0, index);
+        std::string ops = instr.substr(index + 1);
+        
+        std::string spaces;
+        if (Width - mnemonic.size() > 0)
+            spaces = std::string(Width - mnemonic.size(), ' ');
+        else
+            spaces = " ";
+        
+        return mnemonic + spaces + ops;
+    }
+}
+
 #define WRITE_LOG(str) log(__PRETTY_FUNCTION__, str)
 
 #define INIT_CHECK() if (!wasInit) throw std::runtime_error(std::string(__PRETTY_FUNCTION__) + " requires init")
@@ -89,8 +108,7 @@ void ncc::io::write(std::string instr) {
 
     WRITE_LOG("Writing instruction \"" + instr + "\"");
     
-#warning Todo- formatting, also error formatting
-    *pout << TAB << instr << "\n";
+    *pout << TAB << (format ? layout(instr) : instr) << "\n";
 }
 
 void ncc::io::put(std::string instr) {

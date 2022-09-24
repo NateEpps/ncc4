@@ -13,7 +13,7 @@ $ ./ncc
     * CMake ✅
     * Git[hub] ✅
     * Doxygen ✅
-    * Parse a single-digit number ✅ - *Output formatting still needed*
+    * Parse a single-digit number ✅
     * IO logging ✅
     * Test setup
 * **0.2** - Integer parsing and mathematical expressions
@@ -24,6 +24,8 @@ $ ./ncc
 * **1.0**
 
 ## ncc In Action
+
+_Not updated for formatting_
 
 ```
 ~$ echo "5" > input1.c
