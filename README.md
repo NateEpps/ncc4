@@ -11,7 +11,7 @@ ncc v0.1
 
 * **0.1** - General setup and parse a single-digit integer ✅
 * **0.2** - Integer parsing and mathematical expressions
-    * >1 digit integers
+    * Multi-digit integers
     * Negative numbers
     * Plus/minus
     * Multiply/divide/modulus
