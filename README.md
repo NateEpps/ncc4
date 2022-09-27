@@ -4,19 +4,19 @@ Four strikes, you're out, or something... 👽
 
 ```
 $ ./ncc --version
-ncc v0.0
+ncc v0.1
 ```
 
 ## Version Planning
 
-* **0.1** - General setup and parse a single-digit integer ⚠️ _In Progress_
-    * CMake ✅
-    * Git[hub] ✅
-    * Doxygen ✅
-    * Parse a single-digit number ✅
-    * IO logging ✅
-    * Test setup ✅
+* **0.1** - General setup and parse a single-digit integer ✅
 * **0.2** - Integer parsing and mathematical expressions
+    * >1 digit integers
+    * Negative numbers
+    * Plus/minus
+    * Multiply/divide/modulus
+    * Parenthesis
+    * Tool- Expression generator
 * **0.3** - General expressions, including function calls
 * **0.4** - Declaration and assignment
 * **0.5** - `if`/`else`, maybe loops too
@@ -29,7 +29,7 @@ Particularly proud of this 😁
 
 ```
 ~$ ./test 
-./test v0.0
+./test v0.1
 
 Test Case "ParseNumber"
 Input:

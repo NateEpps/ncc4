@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.0)
 
-project(ncc VERSION 0.0)
+project(ncc VERSION 0.1)
 
 add_compile_definitions(NCC_VERSION="${PROJECT_VERSION}")
 add_compile_definitions(NCC_NAME="${PROJECT_NAME}")
