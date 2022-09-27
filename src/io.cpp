@@ -18,6 +18,7 @@ static std::ofstream logfile;
 static constexpr size_t MaxLogWidth = 45;
 
 #define TAB "    "
+#define TAB_STR std::string(TAB)
 
 static void log(std::string src, std::string mssg) {
     static bool init = false;
@@ -37,6 +38,8 @@ static void log(std::string src, std::string mssg) {
             sanitized += "(tab)";
         else if (c == EOF)
             sanitized += "(EOF)";
+        else if (iscntrl(c))
+            sanitized += "(control)";
         else
             sanitized += c;
     }
@@ -50,7 +53,7 @@ static void log(std::string src, std::string mssg) {
 static std::string layout(std::string instr) {
     size_t index = instr.find(" ");
     if (index == std::string::npos) {
-        return instr;
+        return TAB_STR + instr;
     } else {
         static constexpr int Width = 9;
         std::string mnemonic = instr.substr(0, index);
@@ -62,7 +65,7 @@ static std::string layout(std::string instr) {
         else
             spaces = " ";
         
-        return mnemonic + spaces + ops;
+        return TAB_STR + mnemonic + spaces + ops;
     }
 }
 
@@ -71,13 +74,22 @@ static std::string layout(std::string instr) {
 #define INIT_CHECK() if (!wasInit) throw std::runtime_error(std::string(__PRETTY_FUNCTION__) + " requires init")
 
 void ncc::io::init(std::istream& in, std::ostream& out, bool fmt) {
-    if (wasInit)
-        throw std::runtime_error("calling \"init\" twice is prohibited");
-
-    WRITE_LOG("Initialized");
     pin = &in;
     pout = &out;
     format = fmt;
+    
+    if (wasInit) {
+        std::stack<char> empty;
+        pushback.swap(empty);
+        
+        if (logfile.is_open())
+            logfile << "\n";
+
+        WRITE_LOG("Re-initialized");
+    } else {
+        WRITE_LOG("Initialized");
+    }
+    
     wasInit = true;
 }
 
@@ -108,7 +120,7 @@ void ncc::io::write(std::string instr) {
 
     WRITE_LOG("Writing instruction \"" + instr + "\"");
     
-    *pout << TAB << (format ? layout(instr) : instr) << "\n";
+    *pout << (format ? layout(instr) : instr) << "\n";
 }
 
 void ncc::io::put(std::string instr) {
@@ -123,7 +135,11 @@ void ncc::io::error(std::string mssg) {
     INIT_CHECK();
     
     WRITE_LOG("Error message: " + mssg);
-    *pout << TAB << "## " << mssg << "\n";
+
+    if (format)
+        mssg = TAB_STR + "## " + mssg;
+    
+    *pout << mssg << "\n";
 }
 
 std::string ncc::io::getTab() {

@@ -12,13 +12,17 @@ class Controller;
 /**
  * @brief What kind of scaffold are we using?
  */
-enum class ScaffoldType { PRINT_RAX };
+enum class ScaffoldType {
+    NONE, // No extra scaffolding
+    PRINT_RAX // Print contents of `%rax` register
+};
 
 /**
  * @brief Handle setup / teardown code needed
  */
 class Scaffold {
 public:
+    /// @brief Constructor
     Scaffold(Controller*);
     
     /// @brief Emit starting scaffold

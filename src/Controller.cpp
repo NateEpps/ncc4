@@ -10,8 +10,8 @@ using namespace ncc;
 
 Controller::Controller() : scanner(this), scaffold(this) {}
 
-void Controller::run() {
-    scaffold.start(ScaffoldType::PRINT_RAX);
+void Controller::run(ScaffoldType type) {
+    scaffold.start(type);
     
     scanner.expression();
     

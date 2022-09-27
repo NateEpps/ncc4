@@ -23,7 +23,7 @@ public:
     Controller();
     
     /// @brief Run the compiler
-    void run();
+    void run(ScaffoldType st = ScaffoldType::PRINT_RAX);
     
     /// @brief Add a string literal to the data section, and return index
     ///
