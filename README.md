@@ -13,6 +13,7 @@ ncc v0.1
 * **0.2** - Integer parsing and mathematical expressions ⚠️ _In Progress_
     * Multi-digit integers ✅
     * Negative numbers ✅
+    * [T-outline](https://en.cppreference.com/w/c/language/operator_precedence)
     * Plus/minus
     * Multiply/divide/modulus
     * Parenthesis
