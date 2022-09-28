@@ -10,9 +10,9 @@ ncc v0.1
 ## Version Planning
 
 * **0.1** - General setup and parse a single-digit integer ✅
-* **0.2** - Integer parsing and mathematical expressions
-    * Multi-digit integers
-    * Negative numbers
+* **0.2** - Integer parsing and mathematical expressions ⚠️ _In Progress_
+    * Multi-digit integers ✅
+    * Negative numbers ✅
     * Plus/minus
     * Multiply/divide/modulus
     * Parenthesis
@@ -23,48 +23,9 @@ ncc v0.1
 * ...
 * **1.0**
 
-## Test Suite
-
-Particularly proud of this 😁
-
-```
-~$ ./test 
-./test v0.1
-
-Test Case "ParseNumber"
-Input:
->>> 5
-Output:
->>> movq $5, %rax
-
-Test Case "ParseNumberWithExtra"
-Input:
->>> 5a
-Output:
->>> movq $5, %rax
-
-Test Case "ParseNumberLeadingWs"
-Input:
->>>      5
-Output:
->>> movq $5, %rax
-
-Error Case "ParseNumberError"
-Input:
->>> Error
-Error Message:
->>> expected number [current = 69 (ascii)]
-
-Test Case "ParseLongNumber"
-Input:
->>> 90210
-Output:
->>> movq $9, %rax
-
-Passed 5 / 5 tests
-```
-
 ## IO Logging
+
+This makes debugging the compiler a breeze
 
 ```
 ~$ echo "4" > input.c
@@ -111,4 +72,73 @@ void ncc::io::init(std::istream &, std::os...: Initialized
                void ncc::io::put(std::string): Writing "S0:(newline)    .asciz "%ld\n"(newline)"
                  int main(int, const char **): Exiting successfully
 
+```
+
+## Test Suite
+
+```
+~$ ./test 
+./test v0.1
+
+Test Case "ParseNumber"
+Input:
+>>> 5
+Output:
+>>> movq $5, %rax
+
+Test Case "ParseNumberWithExtra"
+Input:
+>>> 5a
+Output:
+>>> movq $5, %rax
+
+Test Case "ParseNumberLeadingWs"
+Input:
+>>>      5
+Output:
+>>> movq $5, %rax
+
+Error Case "ParseNumberError"
+Input:
+>>> Error
+Error Message:
+>>> expected number [current = 'E']
+
+Test Case "ParseLongNumber"
+Input:
+>>> 90210
+Output:
+>>> movq $90210, %rax
+
+Test Case "MixedChars"
+Input:
+>>> 123abc456
+Output:
+>>> movq $123, %rax
+
+Test Case "NegativeInt"
+Input:
+>>> -5
+Output:
+>>> movq $-5, %rax
+
+Test Case "NegativeInt2"
+Input:
+>>> -456
+Output:
+>>> movq $-456, %rax
+
+Error Case "MinusSign"
+Input:
+>>> -
+Error Message:
+>>> expected number [current = '?']
+
+Error Case "MinusSignExtra"
+Input:
+>>> -a
+Error Message:
+>>> expected number [current = 'a']
+
+Passed 10 / 10 tests
 ```
