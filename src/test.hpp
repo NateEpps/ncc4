@@ -23,7 +23,16 @@ static void TestCase(std::string name, std::string in) {
     ctrl.run(ncc::ScaffoldType::NONE);
     std::cout << "Test Case \"" << name << "\"\n";
     std::cout << "Input:\n>>> " << in << "\n";
-    std::cout << "Output:\n>>> " << output.str() << "\n";
+    std::cout << "Output:\n";
+    
+    std::string line;
+    while (std::getline(output, line)) {
+        if (line.empty())
+            break;
+        std::cout << ">>> " << line << "\n";
+    }
+    
+    std::cout << "\n";
 }
 
 #define TEST_CASE(name, in) void testCase##name () { TestCase(#name, in); }

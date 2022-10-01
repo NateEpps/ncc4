@@ -9,12 +9,13 @@ ncc v0.1
 
 ## Version Planning
 
+Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_precedence)
+
 * **0.1** - General setup and parse a single-digit integer ✅
 * **0.2** - Integer parsing and mathematical expressions ⚠️ _In Progress_
     * Multi-digit integers ✅
     * Negative numbers ✅
-    * [T-outline](https://en.cppreference.com/w/c/language/operator_precedence)
-    * Plus/minus
+    * Plus ✅ / minus ⚠️
     * Multiply/divide/modulus
     * Parenthesis
     * Tool- Expression generator
@@ -103,7 +104,7 @@ Error Case "ParseNumberError"
 Input:
 >>> Error
 Error Message:
->>> expected number [current = 'E']
+>>> expected operator [next = 'E']
 
 Test Case "ParseLongNumber"
 Input:
@@ -133,13 +134,38 @@ Error Case "MinusSign"
 Input:
 >>> -
 Error Message:
->>> expected number [current = '?']
+>>> expected number [next = '?']
 
 Error Case "MinusSignExtra"
 Input:
 >>> -a
 Error Message:
->>> expected number [current = 'a']
+>>> expected number [next = 'a']
 
-Passed 10 / 10 tests
+Test Case "JustPlus"
+Input:
+>>> +
+Output:
+
+Test Case "Add"
+Input:
+>>> 1+2
+Output:
+>>> movq $1, %rax
+>>> pushq %rax
+>>> movq $2, %rax
+>>> popq %r10
+>>> addq %r10, %rax
+
+Test Case "Add2"
+Input:
+>>> 123 + 456
+Output:
+>>> movq $123, %rax
+>>> pushq %rax
+>>> movq $456, %rax
+>>> popq %r10
+>>> addq %r10, %rax
+
+Passed 13 / 13 tests
 ```

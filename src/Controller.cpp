@@ -27,8 +27,9 @@ size_t Controller::addStringData(std::string str) {
 
 std::string Controller::getDataSection() {
     std::stringstream stream;
+    stream << "\n";
     for (int x = 0; x < data.size(); x++)
         stream << "S" << x << ":\n" << io::getTab() << ".asciz \"" << data[x] << "\"\n";
-    
+
     return stream.str();
 }

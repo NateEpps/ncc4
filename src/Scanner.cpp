@@ -9,25 +9,33 @@
 #include <sstream>
 using namespace ncc;
 
-Scanner::Scanner(Controller* pc) : parent(pc), current(io::read()) {
+// For general operation, we need two registers and the stack. I figured
+// %rax and %rbx would be okay for this, however after some weird issues, I
+// found that using %rbx causes programs to crash (???) So now we're using
+// %rax, and... this
+static const std::string r2 = "%r10";
+
+Scanner::Scanner(Controller* pc) :
+    parent(pc), next(io::read()), opType(OpType::None), tokenType(TokenType::None) {
+
     skipWs();
-    io::misc(__PRETTY_FUNCTION__, "Scanner initialized, current = \'" + std::string(1, current) + "\'");
+    io::misc(__PRETTY_FUNCTION__, "Scanner initialized, next = \'" + std::string(1, next) + "\'");
 }
 
 void Scanner::skipWs() {
-    while (isspace(current) && current != EOF)
-        current = io::read();
+    while (isspace(next) && next != EOF)
+        next = io::read();
 }
 
 void Scanner::expected(std::string s) {
-    io::error("expected " + s + " [current = \'" + std::string(1, current) + "\']");
+    io::error("expected " + s + " [next = \'" + std::string(1, next) + "\']");
 
     throw std::runtime_error("expected " + s);
 }
 
 void Scanner::match(char c) {
-    if (c == current) {
-        current = io::read();
+    if (c == next) {
+        next = io::read();
         skipWs();
     } else {
         expected(std::string(1, c));
@@ -35,33 +43,85 @@ void Scanner::match(char c) {
 }
 
 void Scanner::parseNumber() {
-    if (!isnumber(current) && current != '-')
+    if (!isnumber(next) && next != '-')
         expected("number");
+
+    token = "";
     
-    std::string num;
-    num += current;
-    current = io::read();
-    
-    while (isnumber(current)) {
-        num += current;
-        current = io::read();
+#warning Should be do-while
+    token += next;
+    next = io::read();
+
+    while (isnumber(next)) {
+        token += next;
+        next = io::read();
+    }
+
+    // input was just "-"
+    if (token == "-")
+        expected("number");
+
+    skipWs();
+    io::write("movq $" + token + ", %rax");
+
+    tokenType = TokenType::NumberLiteral;
+}
+
+void Scanner::parseOp() {
+    token = "";
+
+    if (next == '+') {
+        match('+');
+        token = "+";
+        opType = OpType::Plus;
+    } else if (next == '-') {
+        match('-');
+        token = "-";
+        opType = OpType::Minus;
+    } else {
+        expected("operator");
     }
     
-    // input was just "-"
-    if (num == "-")
-        expected("number");
-    
-    skipWs();
-    io::write("movq $" + num + ", %rax");
+    tokenType = TokenType::Operator;
 }
 
 void Scanner::parse() {
-    if (isnumber(current) || current == '-')
+    if (isnumber(next) || next == '-')
         parseNumber();
     else
+        parseOp();
+}
+
+void Scanner::add() {
+    io::write("pushq %rax");
+    
+    parse();
+    if (tokenType != TokenType::NumberLiteral)
         expected("number");
+
+    io::write("popq " + r2);
+    io::write("addq " + r2 + ", %rax");
+}
+
+void Scanner::sub() {
+#warning Todo- stub handling
+    expected("uhhh sub isn't implemented yet");
+}
+
+void Scanner::t4() {
+    parse();
+    
+    if (next == '+' || next == '-') {
+        do {
+            parseOp();
+            if (opType == OpType::Plus)
+                add();
+            else if (opType == OpType::Minus)
+                sub();
+        } while (next == '+' || next == '-');
+    }
 }
 
 void Scanner::expression() {
-    parse();
+    t4();
 }

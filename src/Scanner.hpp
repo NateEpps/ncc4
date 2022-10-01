@@ -12,6 +12,15 @@ namespace ncc {
 
 class Controller;
 
+/// @brief Operator types
+enum class OpType {
+    Plus, Minus, None
+};
+
+enum class TokenType {
+    NumberLiteral, Operator, None
+};
+
 /**
  * @brief Handle expressions
  */
@@ -32,8 +41,20 @@ public:
     /// @brief Parse a number
     void parseNumber();
     
-    /// @brief Parse... something. Right now only handles numbers
+    /// @brief Parse an operator
+    void parseOp();
+    
+    /// @brief Parse numberes, identifiers, literals, etc
     void parse();
+    
+    /// @brief Handle an add
+    void add();
+    
+    /// @brief Handle subtraction
+    void sub();
+    
+    /// @brief Tier 4 contains addition and subtraction
+    void t4();
     
     /// @brief Parse an expression
     void expression();
@@ -43,10 +64,16 @@ protected:
     Controller* parent;
     
     /// @brief Current char
-    char current;
+    char next;
     
     /// @brief Token, for lexical parsing
     std::string token;
+    
+    /// @brief Last parsed operator type
+    OpType opType;
+    
+    /// @brief Token type
+    TokenType tokenType;
 };
 
 }
