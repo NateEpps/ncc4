@@ -106,7 +106,15 @@ void Scanner::add() {
 }
 
 void Scanner::sub() {
-    stub("subtraction");
+    io::write("pushq %rax");
+    
+    parse();
+    if (tokenType != TokenType::NumberLiteral)
+        expected("number");
+
+    io::write("popq " + r2);
+    io::write("subq " + r2 + ", %rax");
+    io::write("negq %rax");
 }
 
 void Scanner::t4() {

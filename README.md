@@ -15,7 +15,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 * **0.2** - Integer parsing and mathematical expressions ⚠️ _In Progress_
     * Multi-digit integers ✅
     * Negative numbers ✅
-    * Plus ✅ / minus ⚠️
+    * Plus / minus ✅
     * Multiply/divide/modulus
     * Parenthesis
     * Tool- Expression generator
@@ -167,12 +167,27 @@ Output:
 >>> popq %r10
 >>> addq %r10, %rax
 
-Error Case "Sub"
+Test Case "Sub"
 Input:
 >>> 5 - 4
-Error Output:
+Output:
 >>> movq $5, %rax
->>> ## subtraction stub
+>>> pushq %rax
+>>> movq $4, %rax
+>>> popq %r10
+>>> subq %r10, %rax
+>>> negq %rax
 
-Passed 14 / 14 tests
+Test Case "Sub2"
+Input:
+>>> 10 - 15
+Output:
+>>> movq $10, %rax
+>>> pushq %rax
+>>> movq $15, %rax
+>>> popq %r10
+>>> subq %r10, %rax
+>>> negq %rax
+
+Passed 15 / 15 tests
 ```

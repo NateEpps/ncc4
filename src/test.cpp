@@ -20,7 +20,8 @@ TEST_CASE(Add, "1+2");
 TEST_CASE(JustPlus, "+");
 TEST_CASE(Add2, "123 + 456");
 
-ERROR_CASE(Sub, "5 - 4");
+TEST_CASE(Sub, "5 - 4");
+TEST_CASE(Sub2, "10 - 15");
 
 int main(int argc, const char** argv) {
     std::cout << argv[0] << " v" << NCC_VERSION << "\n\n";
@@ -40,6 +41,7 @@ int main(int argc, const char** argv) {
     ADD_TEST(Add2);
 
     ADD_TEST(Sub);
+    ADD_TEST(Sub2);
 
     RunTests();
 }
