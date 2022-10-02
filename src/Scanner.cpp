@@ -33,6 +33,12 @@ void Scanner::expected(std::string s) {
     throw std::runtime_error("expected " + s);
 }
 
+void Scanner::stub(std::string s) {
+    io::error(s + " stub");
+
+    throw std::runtime_error(s + " stub");
+}
+
 void Scanner::match(char c) {
     if (c == next) {
         next = io::read();
@@ -48,14 +54,10 @@ void Scanner::parseNumber() {
 
     token = "";
     
-#warning Should be do-while
-    token += next;
-    next = io::read();
-
-    while (isnumber(next)) {
+    do {
         token += next;
         next = io::read();
-    }
+    } while (isnumber(next));
 
     // input was just "-"
     if (token == "-")
@@ -104,8 +106,7 @@ void Scanner::add() {
 }
 
 void Scanner::sub() {
-#warning Todo- stub handling
-    expected("uhhh sub isn't implemented yet");
+    stub("subtraction");
 }
 
 void Scanner::t4() {

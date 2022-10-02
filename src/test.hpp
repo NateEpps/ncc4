@@ -15,6 +15,17 @@
 
 static std::vector<std::pair<std::string, std::function<void()>>> testVec;
 
+static void MultiLineOutput(std::stringstream& ss) {
+    std::string line;
+    while (std::getline(ss, line)) {
+        if (line.empty())
+            break;
+        std::cout << ">>> " << line << "\n";
+    }
+
+    std::cout << "\n";
+}
+
 static void TestCase(std::string name, std::string in) {
     std::stringstream input, output;
     input << in;
@@ -24,15 +35,8 @@ static void TestCase(std::string name, std::string in) {
     std::cout << "Test Case \"" << name << "\"\n";
     std::cout << "Input:\n>>> " << in << "\n";
     std::cout << "Output:\n";
-    
-    std::string line;
-    while (std::getline(output, line)) {
-        if (line.empty())
-            break;
-        std::cout << ">>> " << line << "\n";
-    }
-    
-    std::cout << "\n";
+
+    MultiLineOutput(output);
 }
 
 #define TEST_CASE(name, in) void testCase##name () { TestCase(#name, in); }
@@ -48,7 +52,8 @@ static void ErrorCase(std::string name, std::string in) {
     catch (std::exception& ex) {
         std::cout << "Error Case \"" << name << "\"\n";
         std::cout << "Input:\n>>> " << in << "\n";
-        std::cout << "Error Message:\n>>> " << output.str() << "\n";
+        std::cout << "Error Output:\n";
+        MultiLineOutput(output);
         return;
     }
     throw std::runtime_error("Test " + name + " was expected to fail, and didn't");

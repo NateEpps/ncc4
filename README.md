@@ -103,8 +103,8 @@ Output:
 Error Case "ParseNumberError"
 Input:
 >>> Error
-Error Message:
->>> expected operator [next = 'E']
+Error Output:
+>>> ## expected operator [next = 'E']
 
 Test Case "ParseLongNumber"
 Input:
@@ -133,14 +133,14 @@ Output:
 Error Case "MinusSign"
 Input:
 >>> -
-Error Message:
->>> expected number [next = '?']
+Error Output:
+>>> ## expected number [next = '?']
 
 Error Case "MinusSignExtra"
 Input:
 >>> -a
-Error Message:
->>> expected number [next = 'a']
+Error Output:
+>>> ## expected number [next = 'a']
 
 Test Case "JustPlus"
 Input:
@@ -167,5 +167,12 @@ Output:
 >>> popq %r10
 >>> addq %r10, %rax
 
-Passed 13 / 13 tests
+Error Case "Sub"
+Input:
+>>> 5 - 4
+Error Output:
+>>> movq $5, %rax
+>>> ## subtraction stub
+
+Passed 14 / 14 tests
 ```

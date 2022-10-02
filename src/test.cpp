@@ -14,12 +14,13 @@ TEST_CASE(MixedChars, "123abc456");
 TEST_CASE(NegativeInt, "-5");
 TEST_CASE(NegativeInt2, "-456");
 #warning Unary minus
-ERROR_CASE(MinusSign, "-"); // This is a fail case, and "JustPlus" is not...
+ERROR_CASE(MinusSign, "-"); // Note: this is a fail case, and "JustPlus" is not
 ERROR_CASE(MinusSignExtra, "-a");
-
 TEST_CASE(Add, "1+2");
 TEST_CASE(JustPlus, "+");
 TEST_CASE(Add2, "123 + 456");
+
+ERROR_CASE(Sub, "5 - 4");
 
 int main(int argc, const char** argv) {
     std::cout << argv[0] << " v" << NCC_VERSION << "\n\n";
@@ -37,6 +38,8 @@ int main(int argc, const char** argv) {
     ADD_TEST(JustPlus);
     ADD_TEST(Add);
     ADD_TEST(Add2);
-    
+
+    ADD_TEST(Sub);
+
     RunTests();
 }

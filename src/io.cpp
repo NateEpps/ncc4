@@ -144,9 +144,11 @@ void ncc::io::error(std::string mssg) {
     INIT_CHECK();
     
     WRITE_LOG("Error message: " + mssg);
+    
+    mssg = "## " + mssg;
 
     if (format)
-        mssg = TAB_STR + "## " + mssg;
+        mssg = TAB_STR + mssg;
     
     *pout << mssg << "\n";
 }
