@@ -16,7 +16,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * Multi-digit integers ✅
     * Negative numbers ✅
     * Plus / minus ✅
-    * Multiply / divide / modulus
+    * Multiply ✅ / divide / modulus
     * Parenthesis
     * Tool- Expression generator
     * Testing- Allow actual assembling of generated code! ✅
