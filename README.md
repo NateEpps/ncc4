@@ -16,65 +16,15 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * Multi-digit integers ✅
     * Negative numbers ✅
     * Plus / minus ✅
-    * Multiply/divide/modulus
+    * Multiply / divide / modulus
     * Parenthesis
     * Tool- Expression generator
+    * Testing- Allow actual assembling of generated code! ✅
 * **0.3** - General expressions, including function calls
 * **0.4** - Declaration and assignment
 * **0.5** - `if`/`else`, maybe loops too
 * ...
 * **1.0**
-
-## IO Logging
-
-This makes debugging the compiler a breeze
-
-```
-~$ echo "4" > input.c
-~$ ./ncc < input.c 
-    .globl   _main
-_main:
-    pushq    %rbp
-    movq     %rsp, %rbp
-    subq     $16, %rsp
-
-    movq     $4, %rax
-
-    leaq     S0(%rip), %rdi
-    movq     %rax, %rsi
-    callq    _printf
-    movq     $0, %rax
-    addq     $16, %rsp
-    popq     %rbp
-    retq
-S0:
-    .asciz "%ld\n"
-
-~$ cat ncc.log 
-void ncc::io::init(std::istream &, std::os...: Initialized
-                         char ncc::io::read(): Read '4' from input
-     ncc::Scanner::Scanner(ncc::Controller *): Scanner initialized, current = 52 (ascii)
-             void ncc::io::write(std::string): Writing instruction ".globl _main"
-               void ncc::io::put(std::string): Writing "_main:(newline)"
-             void ncc::io::write(std::string): Writing instruction "pushq %rbp"
-             void ncc::io::write(std::string): Writing instruction "movq %rsp, %rbp"
-             void ncc::io::write(std::string): Writing instruction "subq $16, %rsp"
-               void ncc::io::put(std::string): Writing "(newline)"
-                         char ncc::io::read(): Read '(newline)' from input
-                         char ncc::io::read(): Read '(EOF)' from input
-             void ncc::io::write(std::string): Writing instruction "movq $4, %rax"
-               void ncc::io::put(std::string): Writing "(newline)"
-             void ncc::io::write(std::string): Writing instruction "leaq S0(%rip), %rdi"
-             void ncc::io::write(std::string): Writing instruction "movq %rax, %rsi"
-             void ncc::io::write(std::string): Writing instruction "callq _printf"
-             void ncc::io::write(std::string): Writing instruction "movq $0, %rax"
-             void ncc::io::write(std::string): Writing instruction "addq $16, %rsp"
-             void ncc::io::write(std::string): Writing instruction "popq %rbp"
-             void ncc::io::write(std::string): Writing instruction "retq"
-               void ncc::io::put(std::string): Writing "S0:(newline)    .asciz "%ld\n"(newline)"
-                 int main(int, const char **): Exiting successfully
-
-```
 
 ## Test Suite
 
@@ -87,6 +37,16 @@ Input:
 >>> 5
 Output:
 >>> movq $5, %rax
+
+Assembled Test Case "ParseNumber2"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 5
+Output:
+>>> 5
+Cleaning up...
 
 Test Case "ParseNumberWithExtra"
 Input:
@@ -147,47 +107,55 @@ Input:
 >>> +
 Output:
 
-Test Case "Add"
+Assembled Test Case "Add"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
 Input:
 >>> 1+2
 Output:
->>> movq $1, %rax
->>> pushq %rax
->>> movq $2, %rax
->>> popq %r10
->>> addq %r10, %rax
+>>> 3
+Cleaning up...
 
-Test Case "Add2"
+Assembled Test Case "Add2"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
 Input:
 >>> 123 + 456
 Output:
->>> movq $123, %rax
->>> pushq %rax
->>> movq $456, %rax
->>> popq %r10
->>> addq %r10, %rax
+>>> 579
+Cleaning up...
 
-Test Case "Sub"
+Assembled Test Case "Sub"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
 Input:
 >>> 5 - 4
 Output:
->>> movq $5, %rax
->>> pushq %rax
->>> movq $4, %rax
->>> popq %r10
->>> subq %r10, %rax
->>> negq %rax
+>>> 1
+Cleaning up...
 
-Test Case "Sub2"
+Assembled Test Case "Sub2"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
 Input:
 >>> 10 - 15
 Output:
->>> movq $10, %rax
->>> pushq %rax
->>> movq $15, %rax
->>> popq %r10
->>> subq %r10, %rax
->>> negq %rax
+>>> -5
+Cleaning up...
 
-Passed 15 / 15 tests
+Assembled Test Case "AddAndSub"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 4 + 5 - 3
+Output:
+>>> 6
+Cleaning up...
+
+Passed 17 / 17 tests
 ```

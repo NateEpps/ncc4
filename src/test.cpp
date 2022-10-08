@@ -6,6 +6,7 @@
 #include "test.hpp"
 
 TEST_CASE(ParseNumber, "5");
+TEST_CASE_WITH_OUTPUT(ParseNumber2, "5", "5");
 TEST_CASE(ParseNumberWithExtra, "5a");
 TEST_CASE(ParseNumberLeadingWs, "     5");
 ERROR_CASE(ParseNumberError, "Error");
@@ -13,20 +14,25 @@ TEST_CASE(ParseLongNumber, "90210");
 TEST_CASE(MixedChars, "123abc456");
 TEST_CASE(NegativeInt, "-5");
 TEST_CASE(NegativeInt2, "-456");
-#warning Unary minus
-ERROR_CASE(MinusSign, "-"); // Note: this is a fail case, and "JustPlus" is not
+ERROR_CASE(MinusSign, "-"); // Todo: unary minus (see JustPlus)
 ERROR_CASE(MinusSignExtra, "-a");
-TEST_CASE(Add, "1+2");
+TEST_CASE_WITH_OUTPUT(Add, "1+2", "3");
 TEST_CASE(JustPlus, "+");
-TEST_CASE(Add2, "123 + 456");
-
-TEST_CASE(Sub, "5 - 4");
-TEST_CASE(Sub2, "10 - 15");
+TEST_CASE_WITH_OUTPUT(Add2, "123 + 456", "579");
+TEST_CASE_WITH_OUTPUT(Sub, "5 - 4", "1");
+TEST_CASE_WITH_OUTPUT(Sub2, "10 - 15", "-5");
+TEST_CASE_WITH_OUTPUT(AddAndSub, "4 + 5 - 3", "6");
 
 int main(int argc, const char** argv) {
     std::cout << argv[0] << " v" << NCC_VERSION << "\n\n";
     
+    if (system(nullptr) == 0) {
+        std::cerr << "\'system\' function unavailable\n";
+        return EXIT_FAILURE;
+    }
+    
     ADD_TEST(ParseNumber);
+    ADD_TEST(ParseNumber2);
     ADD_TEST(ParseNumberWithExtra);
     ADD_TEST(ParseNumberLeadingWs);
     ADD_TEST(ParseNumberError);
@@ -39,9 +45,11 @@ int main(int argc, const char** argv) {
     ADD_TEST(JustPlus);
     ADD_TEST(Add);
     ADD_TEST(Add2);
-
     ADD_TEST(Sub);
     ADD_TEST(Sub2);
+    ADD_TEST(AddAndSub);
 
     RunTests();
+    
+    return EXIT_SUCCESS;
 }
