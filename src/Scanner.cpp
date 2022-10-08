@@ -33,6 +33,11 @@ void Scanner::expected(std::string s) {
     throw std::runtime_error("expected " + s);
 }
 
+void Scanner::require(bool cond, std::string condStr) {
+    if (!cond)
+        expected(condStr);
+}
+
 void Scanner::stub(std::string s) {
     io::error(s + " stub");
 
@@ -80,6 +85,18 @@ void Scanner::parseOp() {
         match('-');
         token = "-";
         opType = OpType::Minus;
+    } else if (next == '*') {
+        match('*');
+        token = "*";
+        opType = OpType::Multiply;
+    } else if (next == '/') {
+        match('/');
+        token = "/";
+        opType = OpType::Division;
+    } else if (next == '%') {
+        match('%');
+        token = "%";
+        opType = OpType::Modulus;
     } else {
         expected("operator");
     }
@@ -94,23 +111,54 @@ void Scanner::parse() {
         parseOp();
 }
 
-void Scanner::add() {
-    io::write("pushq %rax");
-    
+void Scanner::mult() {
     parse();
-    if (tokenType != TokenType::NumberLiteral)
-        expected("number");
+    require(tokenType != TokenType::Operator, "NOT operator");
+    
+    io::write("popq " + r2);
+    io::write("imulq " + r2);
+}
+
+void Scanner::div() {
+    stub("division");
+}
+
+void Scanner::mod() {
+    stub("modulus");
+}
+
+void Scanner::t3() {
+    parse();
+    
+    if (next == '*' || next == '/' || next == '%') {
+        do {
+            io::write("pushq %rax");
+            
+            parseOp();
+            if (opType == OpType::Multiply)
+                mult();
+            else if (opType == OpType::Division)
+                div();
+            else if (opType == OpType::Modulus)
+                mod();
+            else
+                expected("multiplication, division, or modulus");
+
+        } while (next == '*' || next == '/' || next == '%');
+    }
+}
+
+void Scanner::add() {
+    t3();
+    require(tokenType != TokenType::Operator, "NOT operator");
 
     io::write("popq " + r2);
     io::write("addq " + r2 + ", %rax");
 }
 
 void Scanner::sub() {
-    io::write("pushq %rax");
-    
-    parse();
-    if (tokenType != TokenType::NumberLiteral)
-        expected("number");
+    t3();
+    require(tokenType != TokenType::Operator, "NOT operator");
 
     io::write("popq " + r2);
     io::write("subq " + r2 + ", %rax");
@@ -118,15 +166,20 @@ void Scanner::sub() {
 }
 
 void Scanner::t4() {
-    parse();
+    t3();
     
     if (next == '+' || next == '-') {
         do {
+            io::write("pushq %rax");
+            
             parseOp();
             if (opType == OpType::Plus)
                 add();
             else if (opType == OpType::Minus)
                 sub();
+            else
+                expected("addition or subtraction");
+
         } while (next == '+' || next == '-');
     }
 }

@@ -14,9 +14,10 @@ class Controller;
 
 /// @brief Operator types
 enum class OpType {
-    Plus, Minus, None
+    Plus, Minus, Multiply, Division, Modulus, None
 };
 
+/// @brief Token types
 enum class TokenType {
     NumberLiteral, Operator, None
 };
@@ -34,6 +35,9 @@ public:
     
     /// @brief Parser expected (argument)
     void expected(std::string);
+    
+    /// @brief Require a condition is true-- string passed to `expected` on failure
+    void require(bool, std::string);
 
     /// @brief We've encountered an unimplemented feature
     void stub(std::string);
@@ -49,6 +53,18 @@ public:
 
     /// @brief Parse numberes, identifiers, literals, etc
     void parse();
+    
+    /// @brief Multiplication
+    void mult();
+    
+    /// @brief Division
+    void div();
+    
+    /// @brief Modulus
+    void mod();
+    
+    /// @brief Tier 3 contains multiplication, division, and modulus
+    void t3();
 
     /// @brief Handle an add
     void add();

@@ -157,5 +157,59 @@ Output:
 >>> 6
 Cleaning up...
 
-Passed 17 / 17 tests
+Assembled Test Case "Mult"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 2 * 4
+Output:
+>>> 8
+Cleaning up...
+
+Error Case "AddAdd"
+Input:
+>>> 2 + +
+Error Output:
+>>> movq $2, %rax
+>>> pushq %rax
+>>> ## expected NOT operator [next = '?']
+
+Assembled Test Case "OrderOfOps"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 3 * 2 + 2 * 2
+Output:
+>>> 10
+Cleaning up...
+
+Error Case "Divide"
+Input:
+>>> 9 / 3
+Error Output:
+>>> movq $9, %rax
+>>> pushq %rax
+>>> ## division stub
+
+Error Case "Mod"
+Input:
+>>> 12 % 5
+Error Output:
+>>> movq $12, %rax
+>>> pushq %rax
+>>> ## modulus stub
+
+Assembled Test Case "MultiMult"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 5 * 4 * 3 * 2 * 1
+Output:
+>>> 120
+Cleaning up...
+
+Passed 23 / 23 tests
 ```

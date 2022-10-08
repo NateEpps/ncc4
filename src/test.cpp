@@ -23,6 +23,13 @@ TEST_CASE_WITH_OUTPUT(Sub, "5 - 4", "1");
 TEST_CASE_WITH_OUTPUT(Sub2, "10 - 15", "-5");
 TEST_CASE_WITH_OUTPUT(AddAndSub, "4 + 5 - 3", "6");
 
+TEST_CASE_WITH_OUTPUT(Mult, "2 * 4", "8");
+ERROR_CASE(AddAdd, "2 + +");
+TEST_CASE_WITH_OUTPUT(OrderOfOps, "3 * 2 + 2 * 2", "10");
+ERROR_CASE(Divide, "9 / 3");
+ERROR_CASE(Mod, "12 % 5");
+TEST_CASE_WITH_OUTPUT(MultiMult, "5 * 4 * 3 * 2 * 1", "120");
+
 int main(int argc, const char** argv) {
     std::cout << argv[0] << " v" << NCC_VERSION << "\n\n";
     
@@ -49,7 +56,14 @@ int main(int argc, const char** argv) {
     ADD_TEST(Sub2);
     ADD_TEST(AddAndSub);
 
+    ADD_TEST(Mult);
+    ADD_TEST(AddAdd);
+    ADD_TEST(OrderOfOps);
+    ADD_TEST(Divide);
+    ADD_TEST(Mod);
+    ADD_TEST(MultiMult);
+
     RunTests();
-    
+
     return EXIT_SUCCESS;
 }
