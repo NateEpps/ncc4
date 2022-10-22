@@ -18,12 +18,17 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * Plus / minus ✅
     * Multiply ✅ / divide / modulus
     * Parenthesis
-    * Tool- Expression generator
+    * Tool- Expression generator ❗️
     * Testing- Allow actual assembling of generated code! ✅
 * **0.3** - General expressions, including function calls
-* **0.4** - Declaration and assignment
-* **0.5** - `if`/`else`, maybe loops too
-* ...
+* **0.4** - Declaration and assignment (Types 1)
+* **0.5** - `if`/`else`
+    * Involve a new class at this point? `ncc::Scanner` will be handling expressions and declaration/assignment already. Something along the lines of "Parser", higher level then Scanner but member of `ncc::Controller`
+* **0.6** - `while`/`do-while`/`for` 😎
+* **0.7** - Functions ?
+* **0.8** - Types 2
+    * Types-parsing class?¿
+* **0.9** - Preprocessor, comments?
 * **1.0**
 
 ## Test Suite
