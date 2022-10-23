@@ -18,6 +18,12 @@
 
 static std::vector<std::pair<std::string, std::function<void()>>> testVec;
 
+struct TestAdder {
+    TestAdder(std::string name, std::function<void()> test) {
+        testVec.push_back(std::make_pair(name, test));
+    }
+};
+
 static void MultiLineOutput(std::stringstream& ss) {
     std::string line;
     while (std::getline(ss, line)) {
@@ -41,7 +47,7 @@ static void TestCase(std::string name, std::string in) {
     std::cout << "\n";
 }
 
-#define TEST_CASE(name, in) void testCase##name () { TestCase(#name, in); }
+#define TEST_CASE(name, in) void testCase##name () { TestCase(#name, in); } TestAdder name (#name, &testCase##name)
 
 static void ErrorCase(std::string name, std::string in) {
     std::stringstream input, output;
@@ -62,7 +68,7 @@ static void ErrorCase(std::string name, std::string in) {
     throw std::runtime_error("Test " + name + " was expected to fail, and didn't");
 }
 
-#define ERROR_CASE(name, in) void testCase##name () { ErrorCase(#name, in); }
+#define ERROR_CASE(name, in) void testCase##name () { ErrorCase(#name, in); } TestAdder name (#name, &testCase##name)
 
 static bool existsInCwd(std::string file) {
     return std::filesystem::exists(std::filesystem::current_path().concat(std::string("/") + file));
@@ -125,9 +131,7 @@ static void TestCaseWithOutput(std::string name, std::string in, std::string out
     std::cout << "\n";
 }
 
-#define TEST_CASE_WITH_OUTPUT(name, in, out) void testCase##name () { TestCaseWithOutput(#name, in, out); }
-
-#define ADD_TEST(name) testVec.push_back(std::make_pair(#name, &testCase##name));
+#define TEST_CASE_WITH_OUTPUT(name, in, out) void testCase##name () { TestCaseWithOutput(#name, in, out); } TestAdder name (#name, &testCase##name)
 
 static void RunTests() {
     int count = 0;

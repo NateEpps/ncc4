@@ -22,7 +22,6 @@ TEST_CASE_WITH_OUTPUT(Add2, "123 + 456", "579");
 TEST_CASE_WITH_OUTPUT(Sub, "5 - 4", "1");
 TEST_CASE_WITH_OUTPUT(Sub2, "10 - 15", "-5");
 TEST_CASE_WITH_OUTPUT(AddAndSub, "4 + 5 - 3", "6");
-
 TEST_CASE_WITH_OUTPUT(Mult, "2 * 4", "8");
 ERROR_CASE(AddAdd, "2 + +");
 TEST_CASE_WITH_OUTPUT(OrderOfOps, "3 * 2 + 2 * 2", "10");
@@ -37,31 +36,6 @@ int main(int argc, const char** argv) {
         std::cerr << "\'system\' function unavailable\n";
         return EXIT_FAILURE;
     }
-    
-    ADD_TEST(ParseNumber);
-    ADD_TEST(ParseNumber2);
-    ADD_TEST(ParseNumberWithExtra);
-    ADD_TEST(ParseNumberLeadingWs);
-    ADD_TEST(ParseNumberError);
-    ADD_TEST(ParseLongNumber);
-    ADD_TEST(MixedChars);
-    ADD_TEST(NegativeInt);
-    ADD_TEST(NegativeInt2);
-    ADD_TEST(MinusSign);
-    ADD_TEST(MinusSignExtra);
-    ADD_TEST(JustPlus);
-    ADD_TEST(Add);
-    ADD_TEST(Add2);
-    ADD_TEST(Sub);
-    ADD_TEST(Sub2);
-    ADD_TEST(AddAndSub);
-
-    ADD_TEST(Mult);
-    ADD_TEST(AddAdd);
-    ADD_TEST(OrderOfOps);
-    ADD_TEST(Divide);
-    ADD_TEST(Mod);
-    ADD_TEST(MultiMult);
 
     RunTests();
 
