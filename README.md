@@ -31,6 +31,48 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 * **0.9** - Preprocessor, comments?
 * **1.0**
 
+## Example
+
+```
+~$ echo "1 + 2 * 3 - 4" > input.c
+~$ ./ncc < input.c > output.s
+~$ cat output.s
+    .globl   _main
+_main:
+    pushq    %rbp
+    movq     %rsp, %rbp
+    subq     $16, %rsp
+
+    movq     $1, %rax
+    pushq    %rax
+    movq     $2, %rax
+    pushq    %rax
+    movq     $3, %rax
+    popq     %r10
+    imulq    %r10
+    popq     %r10
+    addq     %r10, %rax
+    pushq    %rax
+    movq     $4, %rax
+    popq     %r10
+    subq     %r10, %rax
+    negq     %rax
+
+    leaq     S0(%rip), %rdi
+    movq     %rax, %rsi
+    callq    _printf
+    movq     $0, %rax
+    addq     $16, %rsp
+    popq     %rbp
+    retq
+
+S0:
+    .asciz "%ld\n"
+
+~$ gcc output.s -o Output && ./Output
+3
+```
+
 ## Test Suite
 
 ```
