@@ -113,14 +113,22 @@ void Scanner::parse() {
 
 void Scanner::mult() {
     parse();
-    require(tokenType != TokenType::Operator, "NOT operator");
+    require(tokenType != TokenType::Operator, "something other than an operator");
     
     io::write("popq " + r2);
     io::write("imulq " + r2);
 }
 
 void Scanner::div() {
-    stub("division");
+    parse();
+    require(tokenType != TokenType::Operator, "something other than an operator");
+    
+    io::write("pushq %rax");
+    io::write("popq " + r2);
+    io::write("popq %rax");
+    
+    io::write("movq $0, %rdx\t\t## idivq OP => %rax = %rdx:%rax / OP");
+    io::write("idivq " + r2);
 }
 
 void Scanner::mod() {

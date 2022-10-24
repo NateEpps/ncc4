@@ -16,7 +16,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * Multi-digit integers ✅
     * Negative numbers ✅
     * Plus / minus ✅
-    * Multiply ✅ / divide / modulus
+    * Multiply ✅ / divide ✅ / modulus
     * Parenthesis
     * Tool- Expression generator ❗️
     * Testing- Allow actual assembling of generated code! ✅
@@ -24,7 +24,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 * **0.4** - Declaration and assignment (Types 1)
 * **0.5** - `if`/`else`
     * Involve a new class at this point? `ncc::Scanner` will be handling expressions and declaration/assignment already. Something along the lines of "Parser", higher level then Scanner but member of `ncc::Controller`
-* **0.6** - `while`/`do-while`/`for` 😎
+* **0.6** - `while` / `do-while` / `for` 😎
 * **0.7** - Functions ?
 * **0.8** - Types 2
     * Types-parsing class?¿
@@ -149,11 +149,6 @@ Input:
 Error Output:
 >>> ## expected number [next = 'a']
 
-Test Case "JustPlus"
-Input:
->>> +
-Output:
-
 Assembled Test Case "Add"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
@@ -163,6 +158,11 @@ Input:
 Output:
 >>> 3
 Cleaning up...
+
+Test Case "JustPlus"
+Input:
+>>> +
+Output:
 
 Assembled Test Case "Add2"
 Compiling...
@@ -232,14 +232,6 @@ Output:
 >>> 10
 Cleaning up...
 
-Error Case "Divide"
-Input:
->>> 9 / 3
-Error Output:
->>> movq $9, %rax
->>> pushq %rax
->>> ## division stub
-
 Error Case "Mod"
 Input:
 >>> 12 % 5
@@ -258,5 +250,25 @@ Output:
 >>> 120
 Cleaning up...
 
-Passed 23 / 23 tests
+Assembled Test Case "Divide"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 10 / 5
+Output:
+>>> 2
+Cleaning up...
+
+Assembled Test Case "NestedDiv"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 100 / 2 / 10 / 5
+Output:
+>>> 1
+Cleaning up...
+
+Passed 24 / 24 tests
 ```
