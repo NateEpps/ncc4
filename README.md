@@ -20,10 +20,10 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * Parenthesis
     * 🛠 Tool- Expression generator
     * 🧪 Testing- Allow actual assembling of generated code! ✅
-* **0.3** - General expressions, including function calls
+* **0.3** - General expressions, including function calls, and statements
+    * New class "Parser" was originally thought of for **0.5** to support `if`/`else`, but a lightweight version could be useful here to support statements
 * **0.4** - Declaration and assignment (Types 1)
 * **0.5** - `if`/`else`
-    * Involve a new class at this point? `ncc::Scanner` will be handling expressions and declaration/assignment already. Something along the lines of "Parser", higher level then Scanner but member of `ncc::Controller`
 * **0.6** - `while` / `do-while` / `for` 😎
 * **0.7** - Functions ?
 * **0.8** - Types 2
@@ -220,7 +220,7 @@ Input:
 Error Output:
 >>> movq $2, %rax
 >>> pushq %rax
->>> ## expected NOT operator [next = '?']
+>>> ## expected non-operator [next = '?']
 
 Assembled Test Case "OrderOfOps"
 Compiling...

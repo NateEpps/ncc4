@@ -113,7 +113,7 @@ void Scanner::parse() {
 
 void Scanner::mult() {
     parse();
-    require(tokenType != TokenType::Operator, "something other than an operator");
+    require(tokenType != TokenType::Operator, "non-operator");
     
     io::write("popq " + r2);
     io::write("imulq " + r2);
@@ -121,7 +121,7 @@ void Scanner::mult() {
 
 void Scanner::div() {
     parse();
-    require(tokenType != TokenType::Operator, "something other than an operator");
+    require(tokenType != TokenType::Operator, "non-operator");
     
     io::write("pushq %rax");
     io::write("popq " + r2);
@@ -158,7 +158,7 @@ void Scanner::t3() {
 
 void Scanner::add() {
     t3();
-    require(tokenType != TokenType::Operator, "NOT operator");
+    require(tokenType != TokenType::Operator, "non-operator");
 
     io::write("popq " + r2);
     io::write("addq " + r2 + ", %rax");
@@ -166,7 +166,7 @@ void Scanner::add() {
 
 void Scanner::sub() {
     t3();
-    require(tokenType != TokenType::Operator, "NOT operator");
+    require(tokenType != TokenType::Operator, "non-operator");
 
     io::write("popq " + r2);
     io::write("subq " + r2 + ", %rax");
