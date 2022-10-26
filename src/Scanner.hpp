@@ -46,6 +46,7 @@ public:
     void match(char);
 
     /// @brief Parse a number
+    /// @todo Issue 3 - Negative number handling
     void parseNumber();
 
     /// @brief Parse an operator
@@ -55,21 +56,28 @@ public:
     void parse();
     
     /// @brief Multiplication
+    /// @todo Issue 13 - "require"ments
     void mult();
     
     /// @brief Division
+    /// @todo Issue 13 - "require"ments
+    /// @todo Issue 10 - Improvements
     void div();
     
     /// @brief Modulus
+    /// @todo Issue 13 - "require"ments
     void mod();
     
     /// @brief Tier 3 contains multiplication, division, and modulus
     void t3();
 
     /// @brief Handle an add
+    /// @todo Issue 13 - "require"ments
     void add();
 
     /// @brief Handle subtraction
+    /// @todo Issue 13 - "require"ments
+    /// @todo Issue 12 - No negq?
     void sub();
 
     /// @brief Tier 4 contains addition and subtraction

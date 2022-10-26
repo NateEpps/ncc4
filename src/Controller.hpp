@@ -28,6 +28,7 @@ public:
     /// @brief Add a string literal to the data section, and return index
     ///
     /// Don't pass opening/closing quotes.
+    /// @todo Issue 4 - Avoid duplication
     size_t addStringData(std::string);
     
     /// @brief Retrieve writeable data section
