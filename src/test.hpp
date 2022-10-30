@@ -138,6 +138,7 @@ static void RunTests() {
 
     for (const auto& pair : testVec) {
         try {
+            std::cout << (count + 1) << ") ";
             pair.second();
             count++;
         }

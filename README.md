@@ -12,16 +12,16 @@ ncc v0.1
 Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_precedence)
 
 * **0.1** - General setup and parse a single-digit integer ✅
-* **0.2** - Integer parsing, mathematical expressions ⚠️ _70% Done_
+* **0.2** - Integer parsing, mathematical expressions ⚠️ _In Progress_
     * Multi-digit integers ✅
     * Negative numbers ✅
     * Plus / minus ✅
-    * Multiply ✅ / divide ✅ / modulus
+    * Multiply ✅ / divide ✅ / modulus ⚠️
     * Parenthesis
     * 🛠 Tool- Expression generator
     * 🧪 Testing- Allow actual assembling of generated code! ✅
 * **0.3** - General expressions, including function calls, and statements
-    * New class "Parser" was originally thought of for **0.5** to support `if`/`else`, but a lightweight version could be useful here to support statements
+    * New lightweight class "Parser" could be introduced here to support statements
 * **0.4** - Declaration and assignment (Types 1)
 * **0.5** - `if`/`else`
 * **0.6** - `while` / `do-while` / `for` 😎
@@ -79,13 +79,13 @@ S0:
 ~$ ./test 
 ./test v0.1
 
-Test Case "ParseNumber"
+1) Test Case "ParseNumber"
 Input:
 >>> 5
 Output:
 >>> movq $5, %rax
 
-Assembled Test Case "ParseNumber2"
+2) Assembled Test Case "ParseNumber2"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -95,61 +95,61 @@ Output:
 >>> 5
 Cleaning up...
 
-Test Case "ParseNumberWithExtra"
+3) Test Case "ParseNumberWithExtra"
 Input:
 >>> 5a
 Output:
 >>> movq $5, %rax
 
-Test Case "ParseNumberLeadingWs"
+4) Test Case "ParseNumberLeadingWs"
 Input:
 >>>      5
 Output:
 >>> movq $5, %rax
 
-Error Case "ParseNumberError"
+5) Error Case "ParseNumberError"
 Input:
 >>> Error
 Error Output:
 >>> ## expected operator [next = 'E']
 
-Test Case "ParseLongNumber"
+6) Test Case "ParseLongNumber"
 Input:
 >>> 90210
 Output:
 >>> movq $90210, %rax
 
-Test Case "MixedChars"
+7) Test Case "MixedChars"
 Input:
 >>> 123abc456
 Output:
 >>> movq $123, %rax
 
-Test Case "NegativeInt"
+8) Test Case "NegativeInt"
 Input:
 >>> -5
 Output:
 >>> movq $-5, %rax
 
-Test Case "NegativeInt2"
+9) Test Case "NegativeInt2"
 Input:
 >>> -456
 Output:
 >>> movq $-456, %rax
 
-Error Case "MinusSign"
+10) Error Case "UnaryMinus"
 Input:
 >>> -
 Error Output:
 >>> ## expected number [next = '?']
 
-Error Case "MinusSignExtra"
+11) Error Case "MinusSignExtra"
 Input:
 >>> -a
 Error Output:
 >>> ## expected number [next = 'a']
 
-Assembled Test Case "Add"
+12) Assembled Test Case "Add"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -159,12 +159,12 @@ Output:
 >>> 3
 Cleaning up...
 
-Test Case "JustPlus"
+13) Test Case "UnaryPlus"
 Input:
 >>> +
 Output:
 
-Assembled Test Case "Add2"
+14) Assembled Test Case "Add2"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -174,7 +174,7 @@ Output:
 >>> 579
 Cleaning up...
 
-Assembled Test Case "Sub"
+15) Assembled Test Case "Sub"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -184,7 +184,7 @@ Output:
 >>> 1
 Cleaning up...
 
-Assembled Test Case "Sub2"
+16) Assembled Test Case "Sub2"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -194,7 +194,7 @@ Output:
 >>> -5
 Cleaning up...
 
-Assembled Test Case "AddAndSub"
+17) Assembled Test Case "AddAndSub"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -204,7 +204,7 @@ Output:
 >>> 6
 Cleaning up...
 
-Assembled Test Case "Mult"
+18) Assembled Test Case "Mult"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -214,7 +214,7 @@ Output:
 >>> 8
 Cleaning up...
 
-Error Case "AddAdd"
+19) Error Case "AddAdd"
 Input:
 >>> 2 + +
 Error Output:
@@ -222,7 +222,7 @@ Error Output:
 >>> pushq %rax
 >>> ## expected non-operator [next = '?']
 
-Assembled Test Case "OrderOfOps"
+20) Assembled Test Case "OrderOfOps"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -232,15 +232,7 @@ Output:
 >>> 10
 Cleaning up...
 
-Error Case "Mod"
-Input:
->>> 12 % 5
-Error Output:
->>> movq $12, %rax
->>> pushq %rax
->>> ## modulus stub
-
-Assembled Test Case "MultiMult"
+21) Assembled Test Case "MultiMult"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -250,7 +242,7 @@ Output:
 >>> 120
 Cleaning up...
 
-Assembled Test Case "Divide"
+22) Assembled Test Case "Divide"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -260,7 +252,7 @@ Output:
 >>> 2
 Cleaning up...
 
-Assembled Test Case "NestedDiv"
+23) Assembled Test Case "NestedDiv"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -270,5 +262,8 @@ Output:
 >>> 1
 Cleaning up...
 
-Passed 24 / 24 tests
+24) Assembled Test Case "Mod"
+Compiling...
+Test "Mod" threw an exception: modulus stub
+Passed 23 / 24 tests
 ```
