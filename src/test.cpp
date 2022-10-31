@@ -24,13 +24,17 @@ TEST_CASE_WITH_OUTPUT(Sub2, "10 - 15", "-5");
 TEST_CASE_WITH_OUTPUT(AddAndSub, "4 + 5 - 3", "6");
 TEST_CASE_WITH_OUTPUT(Mult, "2 * 4", "8");
 ERROR_CASE(AddAdd, "2 + +");
-TEST_CASE_WITH_OUTPUT(OrderOfOps, "3 * 2 + 2 * 2", "10");
 TEST_CASE_WITH_OUTPUT(MultiMult, "5 * 4 * 3 * 2 * 1", "120");
 TEST_CASE_WITH_OUTPUT(Divide, "10 / 5", "2");
 TEST_CASE_WITH_OUTPUT(NestedDiv, "100 / 2 / 10 / 5", "1");
-
 TEST_CASE_WITH_OUTPUT(Mod, "12 % 5", "2");
 TEST_CASE_WITH_OUTPUT(Mod2, "19 % 10 % 7", "2");
+
+TEST_CASE_WITH_OUTPUT(OrderOfOps, "3 * 2 + 2 * 2", "10");
+TEST_CASE_WITH_OUTPUT(OrderOfOps2, "3 * (2 + 2) * 2", "24");
+ERROR_CASE(UnmatchedParen, "2 * (3 + 4");
+ERROR_CASE(UnmatchedParen2, "(2 *");
+ERROR_CASE(UnmatchedParen3, "(2");
 
 int main(int argc, const char** argv) {
     std::cout << argv[0] << " v" << NCC_VERSION << "\n\n";

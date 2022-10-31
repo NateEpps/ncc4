@@ -19,7 +19,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * Negative numbers ✅
     * Plus / minus ✅
     * Multiply / divide / modulus ✅
-    * Parenthesis
+    * Parenthesis ✅
     * 🛠 Tool- Expression generator
     * 🧪 Testing- Allow actual assembling of generated code! ✅
 * **0.3** - General expressions, including function calls, and statements
@@ -143,7 +143,7 @@ Output:
 Input:
 >>> -
 Error Output:
->>> ## expected number [next = '?']
+>>> ## expected number [next = 'ˇ']
 
 11) Error Case "MinusSignExtra"
 Input:
@@ -222,19 +222,9 @@ Input:
 Error Output:
 >>> movq $2, %rax
 >>> pushq %rax
->>> ## expected non-operator [next = '?']
+>>> ## expected non-operator [next = 'ˇ']
 
-20) Assembled Test Case "OrderOfOps"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 3 * 2 + 2 * 2
-Output:
->>> 10
-Cleaning up...
-
-21) Assembled Test Case "MultiMult"
+20) Assembled Test Case "MultiMult"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -244,7 +234,7 @@ Output:
 >>> 120
 Cleaning up...
 
-22) Assembled Test Case "Divide"
+21) Assembled Test Case "Divide"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -254,7 +244,7 @@ Output:
 >>> 2
 Cleaning up...
 
-23) Assembled Test Case "NestedDiv"
+22) Assembled Test Case "NestedDiv"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -264,7 +254,7 @@ Output:
 >>> 1
 Cleaning up...
 
-24) Assembled Test Case "Mod"
+23) Assembled Test Case "Mod"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -274,7 +264,7 @@ Output:
 >>> 2
 Cleaning up...
 
-25) Assembled Test Case "Mod2"
+24) Assembled Test Case "Mod2"
 Compiling...
 Assembling... [gcc tmp.s -o Tmp]
 Running... [./Tmp > tmp_output.txt]
@@ -284,5 +274,56 @@ Output:
 >>> 2
 Cleaning up...
 
-Passed 25 / 25 tests
+25) Assembled Test Case "OrderOfOps"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 3 * 2 + 2 * 2
+Output:
+>>> 10
+Cleaning up...
+
+26) Assembled Test Case "OrderOfOps2"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 3 * (2 + 2) * 2
+Output:
+>>> 24
+Cleaning up...
+
+27) Error Case "UnmatchedParen"
+Input:
+>>> 2 * (3 + 4
+Error Output:
+>>> movq $2, %rax
+>>> pushq %rax
+>>> movq $3, %rax
+>>> pushq %rax
+>>> movq $4, %rax
+>>> popq %r10
+>>> addq %r10, %rax
+>>> ## expected ) [next = 'ˇ']
+
+28) Error Case "UnmatchedParen2"
+Input:
+>>> (2 *
+Error Output:
+>>> movq $2, %rax
+>>> pushq %rax
+>>> ## expected operator [next = 'ˇ']
+
+29) Error Case "UnmatchedParen3"
+Input:
+>>> (2
+Error Output:
+>>> movq $2, %rax
+>>> ## expected ) [next = 'ˇ']
+
+Passed 29 / 29 tests
+
 ```
+
+_Will be relying on `expgen` tool for more thorough stress testing_

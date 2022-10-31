@@ -105,10 +105,15 @@ void Scanner::parseOp() {
 }
 
 void Scanner::parse() {
-    if (isnumber(next) || next == '-')
+    if (isnumber(next) || next == '-') {
         parseNumber();
-    else
+    } else if (next == '(') {
+        match('(');
+        expression();
+        match(')');
+    } else {
         parseOp();
+    }
 }
 
 void Scanner::mult() {
