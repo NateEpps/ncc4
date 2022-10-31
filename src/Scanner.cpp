@@ -132,7 +132,16 @@ void Scanner::div() {
 }
 
 void Scanner::mod() {
-    stub("modulus");
+    parse();
+    require(tokenType != TokenType::Operator, "non-operator");
+
+    io::write("pushq %rax");
+    io::write("popq " + r2);
+    io::write("popq %rax");
+
+    io::write("movq $0, %rdx");
+    io::write("idivq " + r2);
+    io::write("movq %rdx, %rax\t\t## idivq OP => %rdx = %rdx:%rax % OP");
 }
 
 void Scanner::t3() {

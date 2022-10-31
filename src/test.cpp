@@ -30,6 +30,7 @@ TEST_CASE_WITH_OUTPUT(Divide, "10 / 5", "2");
 TEST_CASE_WITH_OUTPUT(NestedDiv, "100 / 2 / 10 / 5", "1");
 
 TEST_CASE_WITH_OUTPUT(Mod, "12 % 5", "2");
+TEST_CASE_WITH_OUTPUT(Mod2, "19 % 10 % 7", "2");
 
 int main(int argc, const char** argv) {
     std::cout << argv[0] << " v" << NCC_VERSION << "\n\n";

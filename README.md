@@ -7,23 +7,25 @@ $ ./ncc --version
 ncc v0.1
 ```
 
-## Version Planning
+This project wouldn't exist without [Jack Crenshaw's compiler tutorial](https://compilers.iecc.com/crenshaw/). Although the compiled language and target assembly language differ, I've applied a lot of the conceptual structure Crenshaw presents.
 
 Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_precedence)
+
+## Version Planning
 
 * **0.1** - General setup and parse a single-digit integer ✅
 * **0.2** - Integer parsing, mathematical expressions ⚠️ _In Progress_
     * Multi-digit integers ✅
     * Negative numbers ✅
     * Plus / minus ✅
-    * Multiply ✅ / divide ✅ / modulus ⚠️
+    * Multiply / divide / modulus ✅
     * Parenthesis
     * 🛠 Tool- Expression generator
     * 🧪 Testing- Allow actual assembling of generated code! ✅
 * **0.3** - General expressions, including function calls, and statements
     * New lightweight class "Parser" could be introduced here to support statements
 * **0.4** - Declaration and assignment (Types 1)
-* **0.5** - `if`/`else`
+* **0.5** - `if` / `else`
 * **0.6** - `while` / `do-while` / `for` 😎
 * **0.7** - Functions ?
 * **0.8** - Types 2
@@ -264,6 +266,23 @@ Cleaning up...
 
 24) Assembled Test Case "Mod"
 Compiling...
-Test "Mod" threw an exception: modulus stub
-Passed 23 / 24 tests
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 12 % 5
+Output:
+>>> 2
+Cleaning up...
+
+25) Assembled Test Case "Mod2"
+Compiling...
+Assembling... [gcc tmp.s -o Tmp]
+Running... [./Tmp > tmp_output.txt]
+Input:
+>>> 19 % 10 % 7
+Output:
+>>> 2
+Cleaning up...
+
+Passed 25 / 25 tests
 ```
