@@ -7,7 +7,16 @@ $ ./ncc --version
 ncc v0.1
 ```
 
-This project wouldn't exist without [Jack Crenshaw's compiler tutorial](https://compilers.iecc.com/crenshaw/). Although the compiled language and target assembly language differ, I've applied a lot of the conceptual structure Crenshaw presents.
+This project wouldn't exist without [Jack Crenshaw's compiler tutorial](https://compilers.iecc.com/crenshaw/).
+
+`ncc` differs from Crenshaw's example `tiny` compiler, in that
+    * `ncc` is written in C++, `tiny` is written in Pascal
+    * `ncc` outputs x86 assembly, `tiny` outputs 68000
+    * `ncc`'s goal is to parse a subset C code, `tiny` parses a toy language called "KISS" (keep it simple, sydney)
+
+However, they both
+    * Use the [recursive-descent](https://en.wikipedia.org/wiki/Recursive_descent_parser) algorithm
+    * Use a similar structure
 
 Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_precedence)
 
@@ -20,10 +29,10 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * Plus / minus ✅
     * Multiply / divide / modulus ✅
     * Parenthesis ✅
-    * 🛠 Tool- Expression generator
+    * 🛠 Tool- Expression generator ⚠️
     * 🧪 Testing- Allow actual assembling of generated code! ✅
 * **0.3** - General expressions, including function calls, and statements
-    * New lightweight class "Parser" could be introduced here to support statements
+    * New lightweight class "Parser" could be introduced here to support multiple statements
 * **0.4** - Declaration and assignment (Types 1)
 * **0.5** - `if` / `else`
 * **0.6** - `while` / `do-while` / `for` 😎
@@ -74,6 +83,10 @@ S0:
 ~$ gcc output.s -o Output && ./Output
 3
 ```
+
+## Expression Generator
+
+_In progress_
 
 ## Test Suite
 
