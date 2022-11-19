@@ -7,17 +7,6 @@ $ ./ncc --version
 ncc v0.1
 ```
 
-This project wouldn't exist without [Jack Crenshaw's compiler tutorial](https://compilers.iecc.com/crenshaw/).
-
-`ncc` differs from Crenshaw's example `tiny` compiler, in that
-* `ncc` is written in C++, `tiny` is written in Pascal
-* `ncc` outputs x86 assembly, `tiny` outputs 68000
-* `ncc`'s goal is to parse C code, `tiny` parses tutorial-specific "kiss" (keep it simple, stupid)
-
-However, they both
-* Use the [recursive descent](https://en.wikipedia.org/wiki/Recursive_descent_parser) algorithm
-* Use a similar structure
-
 Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_precedence)
 
 ## Version Planning
@@ -87,6 +76,19 @@ S0:
 ## Expression Generator
 
 _In progress_
+
+## Acknowledgements
+
+This project wouldn't exist without [Jack Crenshaw's compiler tutorial](https://compilers.iecc.com/crenshaw/).
+
+`ncc` differs from Crenshaw's example `tiny` compiler, in that
+* `ncc` is written in C++, `tiny` is written in Pascal
+* `ncc` outputs x86 assembly, `tiny` outputs 68000
+* `ncc`'s goal is to parse C code, `tiny` parses tutorial-specific "kiss" (keep it simple, stupid)
+
+However, they both
+* Use the [recursive descent](https://en.wikipedia.org/wiki/Recursive_descent_parser) algorithm
+* Use a similar structure
 
 ## Test Suite
 
