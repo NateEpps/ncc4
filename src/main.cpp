@@ -3,15 +3,15 @@
 // Nathanael Epps
 //
 
-#include "io.hpp"
 #include "Controller.hpp"
+#include "io.hpp"
+#include "Util.hpp"
 
 int main(int argc, const char** argv) {
-    for (int x = 0; x < argc; x++) {
-        if (strcmp(argv[x], "--version") == 0 || strcmp(argv[x], "-v") == 0) {
-            std::cout << NCC_NAME << " v" << NCC_VERSION << "\n";
-            return EXIT_SUCCESS;
-        }
+    auto args = ncc::util::bundle(argc, argv);
+    if (ncc::util::getOpt(args, "--version", "-v") != args.end()) {
+        std::cout << NCC_NAME << " v" << NCC_VERSION << "\n";
+        return EXIT_SUCCESS;
     }
     
     try {

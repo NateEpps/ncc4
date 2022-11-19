@@ -40,6 +40,6 @@ std::string getTab();
 /// Params are source, message
 void misc(std::string, std::string);
 
-}
+} // end namespace ncc::io
 
 #endif

@@ -47,12 +47,14 @@ public:
 
     /// @brief Parse a number
     /// @todo Issue 3 - Negative number handling
+    /// @todo Issue 15 - Specific error handling for floats
     void parseNumber();
 
     /// @brief Parse an operator
     void parseOp();
 
-    /// @brief Parse numberes, identifiers, literals, etc
+    /// @brief Parse numberes, identifiers, literals, parenthesis, etc
+    /// @todo Issue 14 - Parenthesis handling
     void parse();
     
     /// @brief Multiplication
@@ -61,7 +63,7 @@ public:
     
     /// @brief Division
     /// @todo Issue 13 - "require"ments
-    /// @todo Issue 10 - Improvements
+    /// @todo Issue 10 - Division Improvements
     void div();
     
     /// @brief Modulus

@@ -12,7 +12,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 ## Version Planning
 
 * **0.1** - General setup and parse a single-digit integer ✅
-* **0.2** - Integer parsing, mathematical expressions ⚠️ _In Progress_
+* **0.2** - Integer parsing, mathematical expressions ⚠️ _86% done_
     * Multi-digit integers ✅
     * Negative numbers ✅
     * Plus / minus ✅
@@ -75,7 +75,30 @@ S0:
 
 ## Expression Generator
 
-_In progress_
+```
+~$ ./expgen --help
+Usage:
+    ./expgen (seed) (iterations)
+~$ ./expgen 5 3
+(((-13 + 8) + (1 + 4)) + ((0 + 2) + (-4 + 7)))
+```
+
+Given a _seed_ and a number of _iterations_, randomly generate a mathematical expression that evaluates to _seed_.
+
+⚠️ As of right now, only generates expressions involving addition.
+
+`expgen` in action:
+```
+~$ ./expgen 5 10 > input.c 
+~$ cat input.c | wc -c
+    6614
+~$ ./ncc < input.c > output.s 
+~$ cat output.s | wc -l
+    4110
+~$ gcc output.s -o Output && ./Output 
+5
+```
+_4110 lines of assembly... I'd hate to have to debug that!_
 
 ## Acknowledgements
 
