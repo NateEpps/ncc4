@@ -8,7 +8,7 @@
 #include "Util.hpp"
 
 int main(int argc, const char** argv) {
-    auto args = ncc::util::bundle(argc, argv);
+    ncc::args_t args = ncc::util::bundle(argc, argv);
     if (ncc::util::getOpt(args, "--version", "-v") != args.end()) {
         std::cout << NCC_NAME << " v" << NCC_VERSION << "\n";
         return EXIT_SUCCESS;

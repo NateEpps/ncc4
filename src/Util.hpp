@@ -9,18 +9,23 @@
 #include <string>
 #include <vector>
 
-namespace ncc::util {
+namespace ncc {
+
+typedef std::vector<std::string> args_t;
+typedef std::vector<std::string>::iterator args_itr_t;
+
+namespace util {
 
 /// @brief Bundle args
-std::vector<std::string> bundle(int, const char**);
+args_t bundle(int, const char**);
 
 /// @brief Return an iterator to the given arg from the arg list
-std::vector<std::string>::iterator getOpt(std::vector<std::string>&, std::string);
+args_itr_t getOpt(args_t&, std::string);
 
 /// @brief Given `args`, search for and return an iterator for the first parameter found
 template <class... Args>
-std::vector<std::string>::iterator getOpt(std::vector<std::string>& args, std::string target, Args... extra) {
-    auto itr = getOpt(args, target);
+args_itr_t getOpt(args_t& args, std::string target, Args... extra) {
+    args_itr_t itr = getOpt(args, target);
     
     if (itr == args.end())
         return getOpt(args, extra...);
@@ -28,6 +33,7 @@ std::vector<std::string>::iterator getOpt(std::vector<std::string>& args, std::s
         return itr;
 }
 
-} // end namespace ncc::util
+} // end namespace util
+} // end namespace ncc
 
 #endif

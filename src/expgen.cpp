@@ -76,23 +76,43 @@ public:
     
     Element(int value) : Element(std::to_string(value)) {}
     
-    std::list<Element> expand() const {
-        if (type != ElementType::Number)
-            throw MakeException("Cannot expand non-number (data: \"" + data + "\")");
-
+    static std::list<Element> generateNextSeq(int next0, int next1, std::string opStr) {
+        std::list<Element> next;
+        next.emplace_back("(");
+        next.emplace_back(next0);
+        next.emplace_back(opStr);
+        next.emplace_back(next1);
+        next.emplace_back(")");
+        return next;
+    }
+    
+    std::list<Element> expandAdd() const {
         int value = convert<int>(data);
 
         int next0 = randInt(value - 10, value);
         int next1 = value - next0;
 
-        std::list<Element> nextSeq;
-        nextSeq.emplace_back("(");
-        nextSeq.emplace_back(next0);
-        nextSeq.emplace_back("+");
-        nextSeq.emplace_back(next1);
-        nextSeq.emplace_back(")");
+        return generateNextSeq(next0, next1, "+");
+    }
+    
+    std::list<Element> expandSub() const {
+        int value = convert<int>(data);
+        
+        int next0 = randInt(value, value + 10);
+        int next1 = next0 - value;
+        
+        return generateNextSeq(next0, next1, "-");
+    }
+    
+    std::list<Element> expand() const {
+        if (type != ElementType::Number)
+            throw MakeException("Cannot expand non-number (data: \"" + data + "\")");
 
-        return nextSeq;
+        switch(randInt(0, 1)) {
+            case 0: return expandAdd();
+            case 1: return expandSub();
+            default: throw MakeException("randInt is broken");
+        }
     }
     
     inline std::string toString() const {
@@ -128,7 +148,7 @@ std::ostream& operator<<(std::ostream& stream, std::list<Element> list) {
     return stream;
 }
 
-int main2(std::vector<std::string> args) {
+int main2(ncc::args_t args) {
     if (ncc::util::getOpt(args, "--help", "-h") != args.end()) {
         usage(args[0]);
         return EXIT_SUCCESS;

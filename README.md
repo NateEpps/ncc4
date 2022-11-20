@@ -80,25 +80,25 @@ S0:
 Usage:
     ./expgen (seed) (iterations)
 ~$ ./expgen 5 3
-(((-13 + 8) + (1 + 4)) + ((0 + 2) + (-4 + 7)))
+(((-7 + 2) + (2 + 5)) + ((-4 - 2) + (15 - 6)))
 ```
 
 Given a _seed_ and a number of _iterations_, randomly generate a mathematical expression that evaluates to _seed_.
 
-⚠️ As of right now, only generates expressions involving addition.
+⚠️ As of right now, only generates expressions involving addition and subtraction.
 
 `expgen` in action:
 ```
-~$ ./expgen 5 10 > input.c 
+~$ ./expgen 10 10 > input.c
 ~$ cat input.c | wc -c
-    6614
-~$ ./ncc < input.c > output.s 
+    6500
+~$ ./ncc < input.c > output.s
 ~$ cat output.s | wc -l
-    4110
+    4600
 ~$ gcc output.s -o Output && ./Output 
-5
+10
 ```
-_4110 lines of assembly... I'd hate to have to debug that!_
+_4600 lines of assembly... I'd hate to have to debug that!_
 
 ## Acknowledgements
 
