@@ -35,11 +35,11 @@ int randInt(int lo, int hi) {
         srand(time(nullptr));
         init = true;
     }
-    
+
     if (lo >= hi)
         throw MakeException("Invalid parameters: " + std::to_string(lo) + ", " + std::to_string(hi));
-    else
-        return rand() % (hi - lo + 1) + lo;
+
+    return rand() % (hi - lo + 1) + lo;
 }
 
 void usage(std::string args0) {
@@ -56,7 +56,7 @@ public:
     Element(std::string str) : data(str) {
         if (str.empty())
             throw MakeException("Received empty string");
-        
+
         if (str == "(" || str == ")") {
             type = ElementType::Parenthesis;
         } else if (str == "+" || str == "-" || str == "/" || str == "*") {
@@ -64,18 +64,18 @@ public:
         } else {
             if (!isnumber(str[0]) && str[0] != '-')
                 throw MakeException("Expected number");
-            
+
             for (int x = 1; x < str.size(); x++) {
                 if (!isnumber(str[x]))
                     throw MakeException("Expected number");
             }
-            
+
             type = ElementType::Number;
         }
     }
-    
+
     Element(int value) : Element(std::to_string(value)) {}
-    
+
     static std::list<Element> generateNextSeq(int next0, int next1, std::string opStr) {
         std::list<Element> next;
         next.emplace_back("(");
@@ -85,7 +85,7 @@ public:
         next.emplace_back(")");
         return next;
     }
-    
+
     std::list<Element> expandAdd() const {
         int value = convert<int>(data);
 
@@ -94,7 +94,7 @@ public:
 
         return generateNextSeq(next0, next1, "+");
     }
-    
+
     std::list<Element> expandSub() const {
         int value = convert<int>(data);
         
@@ -103,7 +103,17 @@ public:
         
         return generateNextSeq(next0, next1, "-");
     }
-    
+
+#warning Implement expandMult
+    std::list<Element> expandMult() const {
+        int value = convert<int>(data);
+        
+        int next0;
+        int next1;
+        
+        return generateNextSeq(next0, next1, "*");
+    }
+
     std::list<Element> expand() const {
         if (type != ElementType::Number)
             throw MakeException("Cannot expand non-number (data: \"" + data + "\")");
@@ -111,14 +121,15 @@ public:
         switch(randInt(0, 1)) {
             case 0: return expandAdd();
             case 1: return expandSub();
+#warning Todo- add mult case
             default: throw MakeException("randInt is broken");
         }
     }
-    
+
     inline std::string toString() const {
         return data;
     }
-    
+
     inline ElementType getType() const {
         return type;
     }
@@ -127,15 +138,15 @@ public:
 std::ostream& operator<<(std::ostream& stream, std::list<Element> list) {
     if (list.size() == 0)
         return stream;
-    
+
     std::list<Element>::iterator itr, next;
     itr = list.begin();
     next = itr;
     next++;
-    
+
     while (itr != list.end()) {
         stream << itr->toString();
-        
+
         if (next->getType() == ElementType::Operator ||
             itr->getType() == ElementType::Operator)
             stream << " ";
@@ -144,7 +155,7 @@ std::ostream& operator<<(std::ostream& stream, std::list<Element> list) {
         if (next != list.end())
             next++;
     }
-    
+
     return stream;
 }
 
@@ -154,9 +165,9 @@ int main2(ncc::args_t args) {
         return EXIT_SUCCESS;
     } else if (args.size() < 3) {
         usage(args[0]);
-        throw std::runtime_error("Not enough args");
+        return EXIT_FAILURE;
     }
-    
+
     int seed = convert<int>(args[1]);
     int iterAmt = convert<int>(args[2]);
 
@@ -169,7 +180,7 @@ int main2(ncc::args_t args) {
 #endif
     for (int x = 0; x < iterAmt; x++) {
         std::list<Element> nextExpr;
-        
+
         for (auto itr = expr.begin(); itr != expr.end(); itr++) {
             if (itr->getType() != ElementType::Number) {
                 nextExpr.push_back(*itr);
@@ -177,7 +188,7 @@ int main2(ncc::args_t args) {
                 nextExpr.splice(nextExpr.end(), itr->expand());
             }
         }
-        
+
         expr = std::move(nextExpr);
 #ifdef EXPGEN_DEBUG
         std::cout << ">> " << expr << "\n";
@@ -187,7 +198,7 @@ int main2(ncc::args_t args) {
     std::cout << "\n";
 #endif
     std::cout << expr << "\n";
-    
+
     return EXIT_SUCCESS;
 }
 
