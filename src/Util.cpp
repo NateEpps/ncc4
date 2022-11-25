@@ -4,6 +4,7 @@
 //
 
 #include "Util.hpp"
+#include <algorithm>
 
 ncc::args_t ncc::util::bundle(int argc, const char** argv) {
     return std::vector<std::string>(argv, argv + argc);

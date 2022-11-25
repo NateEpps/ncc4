@@ -5,6 +5,7 @@
 
 #include "io.hpp"
 #include <fstream>
+#include <iomanip>
 #include <stdexcept>
 #include <stack>
 

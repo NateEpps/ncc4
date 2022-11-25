@@ -6,6 +6,7 @@
  */
 
 #include "Util.hpp"
+#include <cctype>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -62,11 +63,12 @@ public:
         } else if (str == "+" || str == "-" || str == "/" || str == "*") {
             type = ElementType::Operator;
         } else {
-            if (!isnumber(str[0]) && str[0] != '-')
+#warning Use convert<int> here?
+            if (!isdigit(str[0]) && str[0] != '-')
                 throw MakeException("Expected number");
 
             for (int x = 1; x < str.size(); x++) {
-                if (!isnumber(str[x]))
+                if (!isdigit(str[x]))
                     throw MakeException("Expected number");
             }
 

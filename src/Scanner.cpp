@@ -6,6 +6,7 @@
 #include "Scanner.hpp"
 #include "Controller.hpp"
 #include "io.hpp"
+#include <cctype>
 #include <sstream>
 using namespace ncc;
 
@@ -54,7 +55,7 @@ void Scanner::match(char c) {
 }
 
 void Scanner::parseNumber() {
-    if (!isnumber(next) && next != '-')
+    if (!isdigit(next) && next != '-')
         expected("number");
 
     token = "";
@@ -62,7 +63,7 @@ void Scanner::parseNumber() {
     do {
         token += next;
         next = io::read();
-    } while (isnumber(next));
+    } while (isdigit(next));
 
     // input was just "-"
     if (token == "-")
@@ -105,7 +106,7 @@ void Scanner::parseOp() {
 }
 
 void Scanner::parse() {
-    if (isnumber(next) || next == '-') {
+    if (isdigit(next) || next == '-') {
         parseNumber();
     } else if (next == '(') {
         match('(');
