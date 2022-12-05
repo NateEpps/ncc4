@@ -7,6 +7,7 @@
 
 #include "Util.hpp"
 #include <cctype>
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -47,12 +48,13 @@ void usage(std::string args0) {
     std::cerr << "Usage:\n\t" << args0 << " (seed) (iterations)\n";
 }
 
+int nearestInt(double d) {
+    return (int)(d + 0.5);
+}
+
 enum class ElementType { Number, Operator, Parenthesis };
 
 class Element {
-    std::string data;
-    ElementType type;
-
 public:
     Element(std::string str) : data(str) {
         if (str.empty())
@@ -63,14 +65,8 @@ public:
         } else if (str == "+" || str == "-" || str == "/" || str == "*") {
             type = ElementType::Operator;
         } else {
-#warning Use convert<int> here?
-            if (!isdigit(str[0]) && str[0] != '-')
-                throw MakeException("Expected number");
-
-            for (int x = 1; x < str.size(); x++) {
-                if (!isdigit(str[x]))
-                    throw MakeException("Expected number");
-            }
+            // Input string converts to int, or an exception is thrown
+            (void) convert<int>(str);
 
             type = ElementType::Number;
         }
@@ -78,16 +74,27 @@ public:
 
     Element(int value) : Element(std::to_string(value)) {}
 
-    static std::list<Element> generateNextSeq(int next0, int next1, std::string opStr) {
-        std::list<Element> next;
-        next.emplace_back("(");
-        next.emplace_back(next0);
-        next.emplace_back(opStr);
-        next.emplace_back(next1);
-        next.emplace_back(")");
-        return next;
+    std::list<Element> expand() const {
+        if (type != ElementType::Number)
+            throw MakeException("Cannot expand non-number (data: \"" + data + "\")");
+
+        switch(randInt(0, 2)) {
+            case 0: return expandAdd();
+            case 1: return expandSub();
+            case 2: return expandMult();
+            default: throw MakeException("randInt is broken");
+        }
     }
 
+    inline std::string toString() const {
+        return data;
+    }
+
+    inline ElementType getType() const {
+        return type;
+    }
+
+private:
     std::list<Element> expandAdd() const {
         int value = convert<int>(data);
 
@@ -106,35 +113,40 @@ public:
         return generateNextSeq(next0, next1, "-");
     }
 
-#warning Implement expandMult
     std::list<Element> expandMult() const {
         int value = convert<int>(data);
+        const int Limit = nearestInt(sqrt(value));
         
-        int next0;
-        int next1;
+        bool found = false;
+        int next0, next1;
+        for (next0 = 2; next0 < Limit; next0++) {
+            if (value % next0 == 0) {
+                next1 = value / next0;
+                found = true;
+                break;
+            }
+        }
+        
+        if (!found) {
+            next0 = 1;
+            next1 = value;
+        }
         
         return generateNextSeq(next0, next1, "*");
     }
-
-    std::list<Element> expand() const {
-        if (type != ElementType::Number)
-            throw MakeException("Cannot expand non-number (data: \"" + data + "\")");
-
-        switch(randInt(0, 1)) {
-            case 0: return expandAdd();
-            case 1: return expandSub();
-#warning Todo- add mult case
-            default: throw MakeException("randInt is broken");
-        }
+    
+    static std::list<Element> generateNextSeq(int next0, int next1, std::string opStr) {
+        std::list<Element> next;
+        next.emplace_back("(");
+        next.emplace_back(next0);
+        next.emplace_back(opStr);
+        next.emplace_back(next1);
+        next.emplace_back(")");
+        return next;
     }
-
-    inline std::string toString() const {
-        return data;
-    }
-
-    inline ElementType getType() const {
-        return type;
-    }
+    
+    std::string data;
+    ElementType type;
 };
 
 std::ostream& operator<<(std::ostream& stream, std::list<Element> list) {

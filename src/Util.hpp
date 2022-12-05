@@ -11,7 +11,10 @@
 
 namespace ncc {
 
+/// @brief Vector of strings convenience typedef
 typedef std::vector<std::string> args_t;
+
+/// @brief `args_t` iterator
 typedef std::vector<std::string>::iterator args_itr_t;
 
 namespace util {

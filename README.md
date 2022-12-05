@@ -80,26 +80,27 @@ S0:
 ~$ ./expgen --help
 Usage:
     ./expgen (seed) (iterations)
-~$ ./expgen 5 3
-(((-7 + 2) + (2 + 5)) + ((-4 - 2) + (15 - 6)))
+~$ ./expgen 50 3
+(((1 * 2) * (28 - 3)) + ((1 * -10) + (11 - 1)))
 ```
 
 Given a _seed_ and a number of _iterations_, randomly generate a mathematical expression that evaluates to _seed_.
 
-⚠️ As of right now, only generates expressions involving addition and subtraction.
+⚠️ Addition, subtraction, and multiplication are implemented-- Division up next
 
 `expgen` in action:
 ```
-~$ ./expgen 10 10 > input.c
-~$ cat input.c | wc -c
-    6500
+~$ ./expgen 50 10 > input.c
 ~$ ./ncc < input.c > output.s
+~$ cat input.c | wc -c
+    6418
 ~$ cat output.s | wc -l
-    4600
-~$ gcc output.s -o Output && ./Output 
-10
+    4475
+~$ gcc output.s -o Output && ./Output
+50
+
 ```
-_4600 lines of assembly... I'd hate to have to debug that!_
+_4475 lines of assembly... I'd hate to have to debug that!_
 
 ## Acknowledgements
 
@@ -364,4 +365,4 @@ Error Output:
 Passed 29 / 29 tests
 ```
 
-_Will be relying on `expgen` tool for more thorough stress testing_
+⚠️ _Will be relying on `expgen` tool for more thorough stress testing_
