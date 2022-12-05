@@ -98,7 +98,6 @@ Given a _seed_ and a number of _iterations_, randomly generate a mathematical ex
     4475
 ~$ gcc output.s -o Output && ./Output
 50
-
 ```
 _4475 lines of assembly... I'd hate to have to debug that!_
 
