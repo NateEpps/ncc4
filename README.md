@@ -1,10 +1,23 @@
 # ncc4
 
-Four strikes, you're out, or something... 👽
+Fourth time's the charm, right? 👽
 
 ```
-$ ./ncc --version
+~$ ./ncc --version
 ncc v0.1
+```
+```
+~$ ./ncc --help
+ncc v0.1
+Usage:
+    ./ncc [options OR see explanation]
+
+ -h / --help            Bring up this help info
+ -v / --version         Print version info
+
+When options are not present, ncc reads from standard input and
+writes to standard output. ncc can be run interactively, but file
+redirection is generally used for normal operation.
 ```
 
 Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_precedence)
@@ -12,7 +25,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 ## Version Planning
 
 * **0.1** - General setup and parse a single-digit integer ✅
-* **0.2** - Integer parsing, mathematical expressions ⚠️ _75% done_
+* **0.2** - Integer parsing, mathematical expressions ⚠️ _88% done_
     * Multi-digit integers ✅
     * Negative numbers ✅
     * Plus / minus ✅
@@ -80,6 +93,7 @@ S0:
 ~$ ./expgen --help
 Usage:
     ./expgen (seed) (iterations)
+
 ~$ ./expgen 50 3
 (((5 * 19) + (10 / 2)) / ((4 + 0) / (8 - 6)))
 ```
@@ -184,7 +198,7 @@ Output:
 Input:
 >>> -
 Error Output:
->>> ## expected number [next = 'ˇ']
+>>> ## expected number [next = '?']
 
 11) Error Case "MinusSignExtra"
 Input:
@@ -263,7 +277,7 @@ Input:
 Error Output:
 >>> movq $2, %rax
 >>> pushq %rax
->>> ## expected non-operator [next = 'ˇ']
+>>> ## expected non-operator [next = '?']
 
 20) Assembled Test Case "MultiMult"
 Compiling...
@@ -346,7 +360,7 @@ Error Output:
 >>> movq $4, %rax
 >>> popq %r10
 >>> addq %r10, %rax
->>> ## expected ) [next = 'ˇ']
+>>> ## expected ) [next = '?']
 
 28) Error Case "UnmatchedParen2"
 Input:
@@ -354,14 +368,14 @@ Input:
 Error Output:
 >>> movq $2, %rax
 >>> pushq %rax
->>> ## expected operator [next = 'ˇ']
+>>> ## expected operator [next = '?']
 
 29) Error Case "UnmatchedParen3"
 Input:
 >>> (2
 Error Output:
 >>> movq $2, %rax
->>> ## expected ) [next = 'ˇ']
+>>> ## expected ) [next = '?']
 
 Passed 29 / 29 tests
 ```

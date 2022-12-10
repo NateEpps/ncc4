@@ -202,6 +202,9 @@ int main2(ncc::args_t args) {
     if (ncc::util::getOpt(args, "--help", "-h") != args.end()) {
         usage(args[0]);
         return EXIT_SUCCESS;
+    } else if (ncc::util::getOpt(args, "--version", "-v") != args.end()) {
+        std::cout << args.at(0) << " v" << NCC_VERSION << "\n";
+        return EXIT_SUCCESS;
     } else if (args.size() < 3) {
         usage(args[0]);
         return EXIT_FAILURE;

@@ -93,12 +93,14 @@ static void TestCaseWithOutput(std::string name, std::string in, std::string out
     
     std::string assembleCommand = "gcc tmp.s -o Tmp";
     std::cout << "Assembling... [" << assembleCommand << "]\n";
+    std::cout << std::flush;
     system(assembleCommand.c_str());
     if (!existsInCwd("Tmp"))
         throw std::runtime_error("Error assembling executable");
     
     std::string runCommand = "./Tmp > tmp_output.txt";
     std::cout << "Running... [" << runCommand << "]\n";
+    std::cout << std::flush;
     system(runCommand.c_str());
     if (!existsInCwd("tmp_output.txt"))
         throw std::runtime_error("Error running generated executable");
@@ -149,6 +151,14 @@ static void RunTests() {
     }
 
     std::cout << "Passed " << count << " / " << testVec.size() << " tests\n";
+}
+
+void help(std::string command) {
+    std::cout << "Usage:\n\t" << command << " [option]\n\n";
+    
+    std::cout << " -h / --help           Bring up this help info\n";
+    std::cout << " -v / --version        Exit after printing version info\n";
+    std::cout << " (no option)           Run the test suite\n";
 }
 
 #endif

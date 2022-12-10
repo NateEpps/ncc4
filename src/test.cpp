@@ -4,6 +4,7 @@
 //
 
 #include "test.hpp"
+#include "Util.hpp"
 
 TEST_CASE(ParseNumber, "5");
 TEST_CASE_WITH_OUTPUT(ParseNumber2, "5", "5");
@@ -37,13 +38,22 @@ ERROR_CASE(UnmatchedParen2, "(2 *");
 ERROR_CASE(UnmatchedParen3, "(2");
 
 int main(int argc, const char** argv) {
-    std::cout << argv[0] << " v" << NCC_VERSION << "\n\n";
-    
     if (system(nullptr) == 0) {
-        std::cerr << "\'system\' function unavailable\n";
+        std::cerr << "Error: \'system\' function unavailable\n";
         return EXIT_FAILURE;
     }
+    
+    std::cout << argv[0] << " v" << NCC_VERSION << "\n";
+    
+    ncc::args_t args = ncc::util::bundle(argc, argv);
+    if (ncc::util::getOpt(args, "-v", "--version") != args.end()) {
+        return EXIT_SUCCESS;
+    } else if (ncc::util::getOpt(args, "-h", "--help") != args.end()) {
+        help(args.at(0));
+        return EXIT_SUCCESS;
+    }
 
+    std::cout << "\n";
     RunTests();
 
     return EXIT_SUCCESS;
