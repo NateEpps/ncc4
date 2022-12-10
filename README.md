@@ -19,7 +19,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * Multiply / divide / modulus ✅
     * Parenthesis ✅
     * [🧪] Testing- Allow actual assembling of generated code! ✅
-    * [🛠] Expression Generator ⚠️ _In Progress_
+    * [🛠] Expression Generator ✅
     * [🧪][🛠] Integrate `expgen` and tests
 * **0.3** - General expressions, including function calls, and statements
     * New lightweight class "Parser" could be introduced here to support multiple statements
@@ -81,25 +81,27 @@ S0:
 Usage:
     ./expgen (seed) (iterations)
 ~$ ./expgen 50 3
-(((1 * 2) * (28 - 3)) + ((1 * -10) + (11 - 1)))
+(((5 * 19) + (10 / 2)) / ((4 + 0) / (8 - 6)))
 ```
 
 Given a _seed_ and a number of _iterations_, randomly generate a mathematical expression that evaluates to _seed_.
 
-⚠️ Addition, subtraction, and multiplication are implemented-- Division up next
-
 `expgen` in action:
 ```
-~$ ./expgen 50 10 > input.c
+~$ ./expgen 100 10 > input.c
 ~$ ./ncc < input.c > output.s
-~$ cat input.c | wc -c
-    6418
-~$ cat output.s | wc -l
-    4475
 ~$ gcc output.s -o Output && ./Output
-50
+100
 ```
-_4475 lines of assembly... I'd hate to have to debug that!_
+```
+~$ cat input.c | wc -c
+    6413
+~$ cat output.s | wc -l
+    5107
+~$ cat ncc.log | wc -l
+   11522
+```
+_5107 lines of assembly... I'd hate to have to debug that!_
 
 ## Acknowledgements
 

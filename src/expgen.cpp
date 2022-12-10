@@ -31,19 +31,6 @@ T convert(std::string str) {
         throw MakeException("Conversion error for string \"" + str + "\"");
 }
 
-int randInt(int lo, int hi) {
-    static bool init = false;
-    if (!init) {
-        srand(time(nullptr));
-        init = true;
-    }
-
-    if (lo >= hi)
-        throw MakeException("Invalid parameters: " + std::to_string(lo) + ", " + std::to_string(hi));
-
-    return rand() % (hi - lo + 1) + lo;
-}
-
 void usage(std::string args0) {
     std::cerr << "Usage:\n\t" << args0 << " (seed) (iterations)\n";
 }
@@ -72,16 +59,20 @@ public:
         }
     }
 
-    Element(int value) : Element(std::to_string(value)) {}
+    Element(int value) {
+        data = std::to_string(value);
+        type = ElementType::Number;
+    }
 
     std::list<Element> expand() const {
         if (type != ElementType::Number)
             throw MakeException("Cannot expand non-number (data: \"" + data + "\")");
 
-        switch(randInt(0, 2)) {
+        switch(ncc::util::randInt(0, 3)) {
             case 0: return expandAdd();
             case 1: return expandSub();
             case 2: return expandMult();
+            case 3: return expandDiv();
             default: throw MakeException("randInt is broken");
         }
     }
@@ -98,7 +89,7 @@ private:
     std::list<Element> expandAdd() const {
         int value = convert<int>(data);
 
-        int next0 = randInt(value - 10, value);
+        int next0 = ncc::util::randInt(value - 10, value);
         int next1 = value - next0;
 
         return generateNextSeq(next0, next1, "+");
@@ -107,7 +98,7 @@ private:
     std::list<Element> expandSub() const {
         int value = convert<int>(data);
         
-        int next0 = randInt(value, value + 10);
+        int next0 = ncc::util::randInt(value, value + 10);
         int next1 = next0 - value;
         
         return generateNextSeq(next0, next1, "-");
@@ -133,6 +124,40 @@ private:
         }
         
         return generateNextSeq(next0, next1, "*");
+    }
+    
+    std::list<Element> expandDiv() const {
+        int value = convert<int>(data);
+        
+        // let's not have divide by zero errors
+        if (value == 0)
+            return expandMult();
+        
+        const int Limit = value * value;
+        
+        bool found = false;
+        int next0, next1;
+        for (next0 = value + 1; next0 <= Limit; next0++) {
+            for (next1 = 2; next1 <= next0; next1++) {
+                if (next0 % next1 == 0 && next0 / next1 == value) {
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (found)
+                break;
+        }
+        
+        if (!found) {
+#ifdef EXPGEN_DEBUG
+            std::cerr << __PRETTY_FUNCTION__ << ": !found case\n";
+#endif
+            next0 = Limit;
+            next1 = value;
+        }
+        
+        return generateNextSeq(next0, next1, "/");
     }
     
     static std::list<Element> generateNextSeq(int next0, int next1, std::string opStr) {

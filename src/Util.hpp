@@ -9,6 +9,10 @@
 #include <string>
 #include <vector>
 
+// This and the associated source file are mainly used for things that need
+// to be shared between the compiler, tests, and/or expgen-- this isn't really
+// for compiler-specific code
+
 namespace ncc {
 
 /// @brief Vector of strings convenience typedef
@@ -18,6 +22,11 @@ typedef std::vector<std::string> args_t;
 typedef std::vector<std::string>::iterator args_itr_t;
 
 namespace util {
+
+/// @brief Return random integer in range [lo, hi]
+///
+/// Return 0 on error
+int randInt(int lo, int hi);
 
 /// @brief Bundle args
 args_t bundle(int, const char**);
