@@ -45,6 +45,14 @@ args_itr_t getOpt(args_t& args, std::string target, Args... extra) {
         return itr;
 }
 
+/// @brief Read and return file contents, given a file name.
+///
+/// Exception on error
+std::string readFile(std::string);
+
+/// @brief Write `contents` to file named `name`, replace contents if the file exists
+void writeFile(std::string name, std::string contents);
+
 } // end namespace util
 } // end namespace ncc
 

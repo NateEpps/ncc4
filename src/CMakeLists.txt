@@ -22,6 +22,7 @@ add_library(${PROJECT_NAME}-sources SHARED ${SOURCES} ${HEADERS})
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}-sources)
 
+add_compile_definitions(EXPGEN_NAME="expgen")
 add_executable(expgen ${CMAKE_CURRENT_SOURCE_DIR}/expgen.cpp)
 target_link_libraries(expgen ${PROJECT_NAME}-sources)
 
