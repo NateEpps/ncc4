@@ -146,7 +146,32 @@ static bool ExpgenTest() {
     std::cout << "Expgen test...\n";
     std::cout << "==============\n\n";
     
-#warning Todo- implement expgen test...
+    std::vector<std::pair<int, int>> args = {
+        {5, 0},
+        {5, 1},
+        {5, 1},
+        {5, 1},
+        {5, 4},
+        {5, 4},
+        {ncc::util::randInt(3, 20), 3},
+        {ncc::util::randInt(3, 20), 4},
+        {ncc::util::randInt(3, 20), 5}
+    };
+    
+    for (auto [seed, iterations] : args) {
+        std::string command = std::string("./") + EXPGEN_NAME + " " + std::to_string(seed) + " " + std::to_string(iterations) + " > tmp.txt";
+        std::cout << ">>> expgen " << seed << " " << iterations << "\n";
+        system(command.c_str());
+        
+        std::string expression = ncc::util::readFile("tmp.txt");
+        std::cout << expression << "\n";
+        
+#warning Left off...
+        //...
+        
+        std::filesystem::remove("tmp.txt");
+        std::cout << "\n";
+    }
 
     return true;
 }

@@ -7,19 +7,19 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
+#include <random>
 #include <sstream>
 
 int ncc::util::randInt(int lo, int hi) {
-    static bool init = false;
-    if (!init) {
-        srand(time(nullptr));
-        init = true;
-    }
-    
-    if (lo < hi)
-        return rand() % (hi - lo + 1) + lo;
-    else
+    if (lo >= hi)
         return 0;
+    
+    // This is disgusting and I hate it but it works a lot better then rand()
+    std::random_device device;
+    std::mt19937 generator(device());
+    std::uniform_int_distribution<> distribution(lo, hi);
+    
+    return distribution(generator);
 }
 
 ncc::args_t ncc::util::bundle(int argc, const char** argv) {
