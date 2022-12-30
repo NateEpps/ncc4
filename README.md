@@ -4,11 +4,11 @@ Fourth time's the charm, right? 👽
 
 ```
 ~$ ./ncc --version
-ncc v0.1
+ncc v0.2
 ```
 ```
 ~$ ./ncc --help
-ncc v0.1
+ncc v0.2
 Usage:
     ./ncc [options OR see explanation]
 
@@ -25,7 +25,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 ## Version Planning
 
 * **0.1** - General setup and parse a single-digit integer ✅
-* **0.2** - Integer parsing, mathematical expressions ⚠️
+* **0.2** - Integer parsing, mathematical expressions ✅
     * Multi-digit integers ✅
     * Negative numbers ✅
     * Plus / minus ✅
@@ -134,7 +134,7 @@ However, they both
 
 ```
 ~$ ./test --help
-./test v0.1
+./test v0.2
 Usage:
         ./test [option]
 
@@ -147,7 +147,7 @@ Usage:
 _Part of an example run..._
 ```
 ~$ ./test 
-./test v0.1
+./test v0.2
 
 1) Test Case "ParseNumber"
 Input:
