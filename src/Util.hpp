@@ -8,6 +8,8 @@
 
 #include <string>
 #include <vector>
+#include <stdexcept>
+#include <sstream>
 
 // This and the associated source file are mainly used for things that need
 // to be shared between the compiler, tests, and/or expgen-- this isn't really
@@ -22,6 +24,23 @@ typedef std::vector<std::string> args_t;
 typedef std::vector<std::string>::iterator args_itr_t;
 
 namespace util {
+
+/// @brief Convert a string to a value via a stringstream
+/// @tparam T 
+/// @param str 
+/// @return Converted value
+template <class T>
+T convert(std::string str) {
+    if (str.empty())
+        throw std::runtime_error("convert: Can't convert empty string");
+    
+    std::stringstream ss(str);
+    T data;
+    if (ss >> data)
+        return data;
+    else
+        throw std::runtime_error("convert: Conversion error for string \"" + str + "\"");
+}
 
 /// @brief Return random integer in range [lo, hi]
 ///

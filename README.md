@@ -25,7 +25,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 ## Version Planning
 
 * **0.1** - General setup and parse a single-digit integer ✅
-* **0.2** - Integer parsing, mathematical expressions ⚠️ _88% done_
+* **0.2** - Integer parsing, mathematical expressions ⚠️
     * Multi-digit integers ✅
     * Negative numbers ✅
     * Plus / minus ✅
@@ -33,7 +33,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * Parenthesis ✅
     * [🧪] Testing- Allow actual assembling of generated code! ✅
     * [🛠] Expression Generator ✅
-    * [🧪][🛠] Integrate `expgen` and tests ⚠️ _In Progress_
+    * [🧪][🛠] Integrate `expgen` and tests ✅
 * **0.3** - General expressions, including function calls, and statements
     * New lightweight class "Parser" could be introduced here to support multiple statements
 * **0.4** - Declaration and assignment (Types 1)
@@ -133,6 +133,19 @@ However, they both
 ## Test Suite
 
 ```
+~$ ./test --help
+./test v0.1
+Usage:
+        ./test [option]
+
+ -h / --help           Bring up this help info
+ -v / --version        Exit after printing version info
+ --expgen              Run just the expgen test
+ (no option)           Run the full test suite
+```
+
+_Part of an example run..._
+```
 ~$ ./test 
 ./test v0.1
 
@@ -170,214 +183,41 @@ Input:
 Error Output:
 >>> ## expected operator [next = 'E']
 
-6) Test Case "ParseLongNumber"
-Input:
->>> 90210
-Output:
->>> movq $90210, %rax
-
-7) Test Case "MixedChars"
-Input:
->>> 123abc456
-Output:
->>> movq $123, %rax
-
-8) Test Case "NegativeInt"
-Input:
->>> -5
-Output:
->>> movq $-5, %rax
-
-9) Test Case "NegativeInt2"
-Input:
->>> -456
-Output:
->>> movq $-456, %rax
-
-10) Error Case "UnaryMinus"
-Input:
->>> -
-Error Output:
->>> ## expected number [next = '?']
-
-11) Error Case "MinusSignExtra"
-Input:
->>> -a
-Error Output:
->>> ## expected number [next = 'a']
-
-12) Assembled Test Case "Add"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 1+2
-Output:
->>> 3
-Cleaning up...
-
-13) Test Case "UnaryPlus"
-Input:
->>> +
-Output:
-
-14) Assembled Test Case "Add2"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 123 + 456
-Output:
->>> 579
-Cleaning up...
-
-15) Assembled Test Case "Sub"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 5 - 4
-Output:
->>> 1
-Cleaning up...
-
-16) Assembled Test Case "Sub2"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 10 - 15
-Output:
->>> -5
-Cleaning up...
-
-17) Assembled Test Case "AddAndSub"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 4 + 5 - 3
-Output:
->>> 6
-Cleaning up...
-
-18) Assembled Test Case "Mult"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 2 * 4
-Output:
->>> 8
-Cleaning up...
-
-19) Error Case "AddAdd"
-Input:
->>> 2 + +
-Error Output:
->>> movq $2, %rax
->>> pushq %rax
->>> ## expected non-operator [next = '?']
-
-20) Assembled Test Case "MultiMult"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 5 * 4 * 3 * 2 * 1
-Output:
->>> 120
-Cleaning up...
-
-21) Assembled Test Case "Divide"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 10 / 5
-Output:
->>> 2
-Cleaning up...
-
-22) Assembled Test Case "NestedDiv"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 100 / 2 / 10 / 5
-Output:
->>> 1
-Cleaning up...
-
-23) Assembled Test Case "Mod"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 12 % 5
-Output:
->>> 2
-Cleaning up...
-
-24) Assembled Test Case "Mod2"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 19 % 10 % 7
-Output:
->>> 2
-Cleaning up...
-
-25) Assembled Test Case "OrderOfOps"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 3 * 2 + 2 * 2
-Output:
->>> 10
-Cleaning up...
-
-26) Assembled Test Case "OrderOfOps2"
-Compiling...
-Assembling... [gcc tmp.s -o Tmp]
-Running... [./Tmp > tmp_output.txt]
-Input:
->>> 3 * (2 + 2) * 2
-Output:
->>> 24
-Cleaning up...
-
-27) Error Case "UnmatchedParen"
-Input:
->>> 2 * (3 + 4
-Error Output:
->>> movq $2, %rax
->>> pushq %rax
->>> movq $3, %rax
->>> pushq %rax
->>> movq $4, %rax
->>> popq %r10
->>> addq %r10, %rax
->>> ## expected ) [next = '?']
-
-28) Error Case "UnmatchedParen2"
-Input:
->>> (2 *
-Error Output:
->>> movq $2, %rax
->>> pushq %rax
->>> ## expected operator [next = '?']
-
-29) Error Case "UnmatchedParen3"
-Input:
->>> (2
-Error Output:
->>> movq $2, %rax
->>> ## expected ) [next = '?']
+...
 
 Passed 29 / 29 tests
-```
 
-⚠️ _Will be relying on `expgen` tool for more thorough stress testing_
+Expgen test...
+==============
+
+>>> expgen 5 0
+5
+>>> Running ncc...
+>>> Assembling with gcc...
+>>> Running and getting output...
+>>> Result: 5
+>>> Expected: 5
+>>> PASS
+
+>>> expgen 5 1
+(-5 + 10)
+>>> Running ncc...
+>>> Assembling with gcc...
+>>> Running and getting output...
+>>> Result: 5
+>>> Expected: 5
+>>> PASS
+
+...
+
+>>> expgen 8 8
+((((((((22 / 2) - (10 / 2)) - ((0 + 5) + (-8 + 8))) * (((12 / 2) / (12 - 10)) - ((25 / -5) + (13 - 6)))) * ((((70 / 2) - (3 + 6)) + ((1 * 9) - (-2 + 3))) / (((1 * 9) - (5 + 3)) * ((8 / 2) / (4 - 2))))) - (((((-8 + 9) * (1 / 1)) * ((1 * 4) / (-5 + 7))) - (((1 * 1) * (1 * 1)) * ((-3 + 4) / (1 * 1)))) * ((((20 / 2) / (4 - 2)) - ((1 * 3) + (-2 + 9))) + (((8 - 7) / (11 - 10)) * ((2 * 6) / (9 - 7)))))) + ((((((11 - 9) * (14 - 7)) + ((8 / 2) + (-2 + 8))) - (((2 * 5) / (4 / 2)) + ((1 * 3) - (-2 + 4)))) / ((((10 - 10) + (-8 + 10)) - ((16 / -4) + (-3 + 7))) - (((6 / 2) - (4 / 2)) * ((9 - 8) * (1 * 0))))) - (((((124 / 2) / (-2 + 4)) - ((2 * 7) / (4 / 2))) / (((7 - 6) * (8 / 2)) - ((-1 + 7) - (1 * 4)))) - ((((21 - 7) / (4 / 2)) - ((-6 + 7) * (2 + 7))) + (((16 + 5) - (20 / 2)) - ((24 / 2) / (4 / 2))))))) / (((((((1 * 2) * (18 / 2)) - ((-1 - 5) + (17 - 7))) - (((-6 + 8) * (2 * 4)) / ((1 * 2) + (1 * 0)))) - ((((4 - 3) * (1 * 1)) * ((24 / 2) / (2 + 0))) - (((9 - 8) * (4 / 2)) - ((7 - 6) / (1 / 1))))) * (((((1 * 7) + (1 * 3)) - ((1 / 1) * (-1 + 10))) * (((18 - 0) / (4 / 2)) - ((2 + 5) - (11 - 7)))) / ((((2 * 8) / (4 / 2)) / ((8 - 0) - (8 - 2))) / (((1 / 1) * (9 - 5)) / ((1 * -5) + (-2 + 9)))))) - ((((((64 / -8) + (3 + 6)) / ((-1 - 8) + (2 * 5))) * (((-8 + 9) * (1 * 17)) - ((21 - 6) - (17 - 10)))) - ((((2 - 1) * (1 * 1)) * ((4 + 3) - (-2 + 8))) * (((28 - 4) / (-4 + 6)) / ((19 - 9) - (16 / 2))))) - (((((1 * 1) * (1 * -12)) + ((3 * 5) - (8 + 0))) + (((26 - 6) - (4 + 4)) / ((2 + 0) - (1 * 0)))) + ((((12 - 1) - (2 * 5)) * ((1 * 1) * (1 * -2))) + (((-11 + 0) + (1 * 9)) + ((-8 + 5) + (-1 + 9))))))))
+>>> Running ncc...
+>>> Assembling with gcc...
+>>> Running and getting output...
+>>> Result: 8
+>>> Expected: 8
+>>> PASS
+
+expgen test succeeded
+```

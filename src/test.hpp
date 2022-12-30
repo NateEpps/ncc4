@@ -155,25 +155,65 @@ static bool ExpgenTest() {
         {5, 4},
         {ncc::util::randInt(3, 20), 3},
         {ncc::util::randInt(3, 20), 4},
-        {ncc::util::randInt(3, 20), 5}
+        {ncc::util::randInt(3, 20), 5},
+        {8, 8}
     };
+
+    bool success = true;
     
     for (auto [seed, iterations] : args) {
+        // run expgen, read results
         std::string command = std::string("./") + EXPGEN_NAME + " " + std::to_string(seed) + " " + std::to_string(iterations) + " > tmp.txt";
         std::cout << ">>> expgen " << seed << " " << iterations << "\n";
         system(command.c_str());
         
         std::string expression = ncc::util::readFile("tmp.txt");
         std::cout << expression << "\n";
-        
-#warning Left off...
-        //...
-        
         std::filesystem::remove("tmp.txt");
+        
+        // run compiler
+        std::cout << ">>> Running ncc...\n";
+        std::stringstream input(expression);
+        std::stringstream output;
+
+        ncc::io::init(input, output);
+        ncc::Controller ctrl;
+        ctrl.run();
+        ncc::util::writeFile("tmp.s", output.str());
+
+        // run gcc
+        std::cout << ">>> Assembling with gcc...\n";
+        system("gcc tmp.s -o Tmp");
+        std::filesystem::remove("tmp.s");
+
+        // run program
+        std::cout << ">>> Running and getting output...\n";
+        system("./Tmp > tmp-output.txt");
+        std::string resultStr = ncc::util::readFile("tmp-output.txt");
+        std::filesystem::remove("Tmp");
+        std::filesystem::remove("tmp-output.txt");
+        int result = ncc::util::convert<int>(resultStr);
+        std::cout << ">>> Result: " << result << "\n";
+        std::cout << ">>> Expected: " << seed << "\n";
+
+        if (result == seed) {
+            std::cout << ">>> PASS\n";
+        } else {
+            std::cout << ">>> FAIL\n";
+            success = false;
+            break;
+        }
+        
         std::cout << "\n";
     }
 
-    return true;
+    if (success) {
+        std::cout << "expgen test succeeded\n";
+    } else {
+        std::cout << "expgen test failed\n";
+    }
+
+    return success;
 }
 
 static bool RunTests() {
@@ -201,7 +241,8 @@ void help(std::string command) {
     
     std::cout << " -h / --help           Bring up this help info\n";
     std::cout << " -v / --version        Exit after printing version info\n";
-    std::cout << " (no option)           Run the test suite\n";
+    std::cout << " --expgen              Run just the expgen test\n";
+    std::cout << " (no option)           Run the full test suite\n";
 }
 
 #endif

@@ -18,19 +18,6 @@
 // Comment/uncomment to toggle debug mode
 // #define EXPGEN_DEBUG
 
-template <class T>
-T convert(std::string str) {
-    if (str.empty())
-        throw MakeException("Can't convert empty string");
-    
-    std::stringstream ss(str);
-    T data;
-    if (ss >> data)
-        return data;
-    else
-        throw MakeException("Conversion error for string \"" + str + "\"");
-}
-
 void usage(std::string args0) {
     std::cerr << "Usage:\n\t" << args0 << " (seed) (iterations)\n";
 }
@@ -53,7 +40,7 @@ public:
             type = ElementType::Operator;
         } else {
             // Input string converts to int, or an exception is thrown
-            (void) convert<int>(str);
+            (void) ncc::util::convert<int>(str);
 
             type = ElementType::Number;
         }
@@ -87,7 +74,7 @@ public:
 
 private:
     std::list<Element> expandAdd() const {
-        int value = convert<int>(data);
+        int value = ncc::util::convert<int>(data);
 
         int next0 = ncc::util::randInt(value - 10, value);
         int next1 = value - next0;
@@ -96,7 +83,7 @@ private:
     }
 
     std::list<Element> expandSub() const {
-        int value = convert<int>(data);
+        int value = ncc::util::convert<int>(data);
         
         int next0 = ncc::util::randInt(value, value + 10);
         int next1 = next0 - value;
@@ -105,7 +92,7 @@ private:
     }
 
     std::list<Element> expandMult() const {
-        int value = convert<int>(data);
+        int value = ncc::util::convert<int>(data);
         const int Limit = nearestInt(sqrt(value));
         
         bool found = false;
@@ -127,7 +114,7 @@ private:
     }
     
     std::list<Element> expandDiv() const {
-        int value = convert<int>(data);
+        int value = ncc::util::convert<int>(data);
         
         // let's not have divide by zero errors
         if (value == 0)
@@ -210,8 +197,8 @@ int main2(ncc::args_t args) {
         return EXIT_FAILURE;
     }
 
-    int seed = convert<int>(args[1]);
-    int iterAmt = convert<int>(args[2]);
+    int seed = ncc::util::convert<int>(args[1]);
+    int iterAmt = ncc::util::convert<int>(args[2]);
 
     std::list<Element> expr;
     expr.emplace_back(seed);
