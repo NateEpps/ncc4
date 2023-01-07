@@ -54,6 +54,16 @@ void Scanner::match(char c) {
     }
 }
 
+void Scanner::parseFunctionArgs() {
+    if (next != '(')
+        expected("open-(");
+    
+    std::string funcName = token;
+
+#warning Left off...
+    stub("function arguments (function named \"" + funcName + "\")");
+}
+
 void Scanner::parseNumber() {
     if (!isdigit(next) && next != '-')
         expected("number");
@@ -73,6 +83,29 @@ void Scanner::parseNumber() {
     io::write("movq $" + token + ", %rax");
 
     tokenType = TokenType::NumberLiteral;
+}
+
+void Scanner::parseIdent() {
+    if (!isalpha(next))
+        expected("identifier");
+    
+    token = "";
+
+    do {
+        token += next;
+        next = io::read();
+    } while (isalpha(next));
+
+    skipWs();
+    tokenType = TokenType::Identifier;
+}
+
+void Scanner::parseStringLiteral() {
+    if (next != '\"')
+        expected("string literal");
+    
+    stub("string literal");
+    tokenType = TokenType::StringLiteral;
 }
 
 void Scanner::parseOp() {
@@ -108,10 +141,19 @@ void Scanner::parseOp() {
 void Scanner::parse() {
     if (isdigit(next) || next == '-') {
         parseNumber();
+    } else if (isalpha(next)) {
+        parseIdent();
+        if (next == '(') {
+            parseFunctionArgs();
+        } else {
+            stub("variable");
+        }
     } else if (next == '(') {
         match('(');
         expression();
         match(')');
+    } else if (next == '\"') {
+        parseStringLiteral();
     } else {
         parseOp();
     }

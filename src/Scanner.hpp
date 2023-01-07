@@ -14,12 +14,12 @@ class Controller;
 
 /// @brief Operator types
 enum class OpType {
-    Plus, Minus, Multiply, Division, Modulus, None
+    None, Plus, Minus, Multiply, Division, Modulus
 };
 
 /// @brief Token types
 enum class TokenType {
-    NumberLiteral, Operator, None
+    None, NumberLiteral, Operator, Identifier, StringLiteral
 };
 
 /**
@@ -45,10 +45,21 @@ public:
     /// @brief Match given character against `current`, and advance, skipping whitespace.
     void match(char);
 
+    /// @brief Parse and evaluate function arguments.
+    /// 
+    /// `next` should be the opening "("
+    void parseFunctionArgs();
+
     /// @brief Parse a number
     /// @todo Issue 3 - Negative number handling
     /// @todo Issue 15 - Specific error handling for floats
     void parseNumber();
+
+    /// @brief Parse an identifier (variable or function call)
+    void parseIdent();
+
+    /// @brief Parse a string literal
+    void parseStringLiteral();
 
     /// @brief Parse an operator
     void parseOp();

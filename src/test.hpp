@@ -135,7 +135,7 @@ static void TestCaseWithOutput(std::string name, std::string in, std::string out
 
 #define TEST_CASE_WITH_OUTPUT(name, in, out) void testCase##name () { TestCaseWithOutput(#name, in, out); } TestAdder name (#name, &testCase##name)
 
-static bool ExpgenTest() {
+static bool ExpgenTest(std::vector<std::pair<int, int>> args) {
     /// @todo Should look into `std::filesystem::status(...)` at some point, to check executable status
 
     if (!existsInCwd(EXPGEN_NAME)) {
@@ -145,19 +145,6 @@ static bool ExpgenTest() {
 
     std::cout << "Expgen test...\n";
     std::cout << "==============\n\n";
-    
-    std::vector<std::pair<int, int>> args = {
-        {5, 0},
-        {5, 1},
-        {5, 1},
-        {5, 1},
-        {5, 4},
-        {5, 4},
-        {ncc::util::randInt(3, 20), 3},
-        {ncc::util::randInt(3, 20), 4},
-        {ncc::util::randInt(3, 20), 5},
-        {8, 8}
-    };
 
     bool success = true;
     
