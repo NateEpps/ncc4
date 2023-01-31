@@ -3,6 +3,10 @@
 # Nathanael Epps
 #
 
+## Source code ##
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/io.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Scanner.cpp
@@ -19,15 +23,23 @@ set(HEADERS
 
 add_library(${PROJECT_NAME}-sources SHARED ${SOURCES} ${HEADERS})
 
+## ncc ##
+
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}-sources)
 
+## expgen ##
+
 add_compile_definitions(EXPGEN_NAME="expgen")
-add_executable(expgen ${CMAKE_CURRENT_SOURCE_DIR}/expgen.cpp)
+
+add_executable(expgen ${CMAKE_CURRENT_SOURCE_DIR}/tools/expgen.cpp)
 target_link_libraries(expgen ${PROJECT_NAME}-sources)
 
-add_executable(test ${CMAKE_CURRENT_SOURCE_DIR}/test.cpp
-               ${CMAKE_CURRENT_SOURCE_DIR}/test.hpp)
+## test ##
+
+add_executable(test
+               ${CMAKE_CURRENT_SOURCE_DIR}/test/test.cpp
+               ${CMAKE_CURRENT_SOURCE_DIR}/test/test.hpp)
 add_dependencies(test ${PROJECT_NAME} expgen)
 target_link_libraries(test ${PROJECT_NAME}-sources)
 
