@@ -20,7 +20,7 @@ Scanner::Scanner(Controller* pc) :
     parent(pc), next(io::read()), opType(OpType::None), tokenType(TokenType::None) {
 
     skipWs();
-    io::misc(__PRETTY_FUNCTION__, "Scanner initialized, next = \'" + std::string(1, next) + "\'");
+    io::metadata(__PRETTY_FUNCTION__, "Scanner initialized, next = \'" + std::string(1, next) + "\'");
 }
 
 void Scanner::skipWs() {

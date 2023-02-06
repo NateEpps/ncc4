@@ -39,7 +39,7 @@ int main(int argc, const char** argv) {
         ncc::Controller ctrl;
         ctrl.run();
 
-        ncc::io::misc(__PRETTY_FUNCTION__, "Exiting successfully");
+        ncc::io::metadata(__PRETTY_FUNCTION__, "Exiting successfully");
         return EXIT_SUCCESS;
     } catch (std::exception& ex) {
         std::cerr << "*** " << ex.what() << "\n";

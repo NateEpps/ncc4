@@ -158,6 +158,6 @@ std::string ncc::io::getTab() {
     return TAB;
 }
 
-void ncc::io::misc(std::string src, std::string mssg) {
+void ncc::io::metadata(std::string src, std::string mssg) {
     log(src, mssg);
 }
