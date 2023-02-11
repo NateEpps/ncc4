@@ -4,6 +4,7 @@
 //
 
 #include "test.hpp"
+#include <chrono>
 
 static bool expgenFlag = false;
 
@@ -31,7 +32,7 @@ ERROR_CASE(UnmatchedParen, "2 * (3 + 4");
 ERROR_CASE(UnmatchedParen2, "(2 *");
 ERROR_CASE(UnmatchedParen3, "(2");
 
-int main(int argc, const char** argv) {
+int main2(int argc, const char** argv) {
     // make sure "system" is available
     if (system(nullptr) == 0) {
         std::cerr << "Error: \'system\' function unavailable\n";
@@ -79,4 +80,14 @@ int main(int argc, const char** argv) {
         return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
+}
+
+int main(int argc, const char** argv) {
+    auto start = std::chrono::system_clock::now();
+    int rcode = main2(argc, argv);
+    auto end = std::chrono::system_clock::now();
+
+    auto timeMs = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "Test time: " << timeMs << "ms\n";
+    return rcode;
 }
