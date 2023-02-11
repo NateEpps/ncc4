@@ -91,7 +91,7 @@ static void TestCaseWithOutput(std::string name, std::string in, std::string out
     std::cout << "Compiling...\n";
     ncc::io::init(input, asmStream, true);
     ncc::Controller ctrl;
-    ctrl.run();
+    ctrl.run(ncc::ScaffoldType::PRINT_RAX);
     asmStream.close();
 
     // Assemble output to executable
@@ -165,7 +165,7 @@ static bool ExpgenTest(std::vector<std::pair<int, int>> args) {
 
         ncc::io::init(input, output);
         ncc::Controller ctrl;
-        ctrl.run();
+        ctrl.run(ncc::ScaffoldType::PRINT_RAX);
         ncc::util::writeFile("tmp.s", output.str());
 
         // run gcc

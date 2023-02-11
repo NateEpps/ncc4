@@ -57,11 +57,9 @@ void Scanner::match(char c) {
 void Scanner::parseFunctionArgs() {
     if (next != '(')
         expected("open-(");
-    
-    std::string funcName = token;
 
-#warning Left off...
-    stub("function arguments (function named \"" + funcName + "\")");
+#warning parseFunctionArgs stub
+    //...
 }
 
 void Scanner::parseNumber() {
@@ -103,7 +101,8 @@ void Scanner::parseIdent() {
 void Scanner::parseStringLiteral() {
     if (next != '\"')
         expected("string literal");
-    
+
+#warning Will need a new "main" scaffold to support this
     stub("string literal");
     tokenType = TokenType::StringLiteral;
 }
@@ -144,7 +143,9 @@ void Scanner::parse() {
     } else if (isalpha(next)) {
         parseIdent();
         if (next == '(') {
+            std::string functionName = token;
             parseFunctionArgs();
+            stub("functions (function call to \"" + functionName + "\")");
         } else {
             stub("variable");
         }

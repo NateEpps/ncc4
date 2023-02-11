@@ -10,10 +10,12 @@ ncc v0.2
 ~$ ./ncc --help
 ncc v0.2
 Usage:
-    ./ncc [options OR see explanation]
+	./ncc [options OR see explanation]
 
  -h / --help            Bring up this help info
  -v / --version         Print version info
+ --print-rax            Use PRINT_RAX scaffold. Defaults to MAIN
+                        without this option.
 
 When options are not present, ncc reads from standard input and
 writes to standard output. ncc can be run interactively, but file
@@ -27,13 +29,13 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 * **0.1** - General setup and parse a single-digit integer ✅
 * **0.2** - Integer parsing, mathematical expressions ✅
 * **0.3** - General expressions, including function calls, and statements ⚠️
+    * [Scaffold] Scaffolding adjustments ✅
     * [Scanner] String literals ⚠️ _In Progress_
     * [Scanner] Function call ⚠️ _In Progress_
         * Note: don't forget to align the stack (16 bytes?)
-    * [Scaffold] Scaffolding adjustments
     * [Scanner] Assignment, sort of
     * [NEW Parser] Statements
-    * [🧪] Test adjustments / additions
+    * [🧪] Test adjustments / additions ⚠️ _In progress_
 * **0.4** - Declaration and assignment (Types 1)
 * **0.5** - `if` / `else`
 * **0.6** - `while` / `do-while` / `for` 😎
@@ -47,8 +49,8 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 
 ```
 ~$ echo "1 + 2 * 3 - 4" > input.c
-~$ ./ncc < input.c > output.s
-~$ cat output.s
+~$ ./ncc --print-rax < input.c > output.s
+~$ cat output.s 
     .globl   _main
 _main:
     pushq    %rbp
@@ -73,6 +75,7 @@ _main:
     leaq     S0(%rip), %rdi
     movq     %rax, %rsi
     callq    _printf
+
     movq     $0, %rax
     addq     $16, %rsp
     popq     %rbp
@@ -101,7 +104,7 @@ Given a _seed_ and a number of _iterations_, randomly generate a mathematical ex
 `expgen` in action:
 ```
 ~$ ./expgen 100 10 > input.c
-~$ ./ncc < input.c > output.s
+~$ ./ncc --print-rax < input.c > output.s
 ~$ gcc output.s -o Output && ./Output
 100
 ```

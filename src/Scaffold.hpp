@@ -14,7 +14,8 @@ class Controller;
  */
 enum class ScaffoldType {
     NONE, // No extra scaffolding
-    PRINT_RAX // Print contents of `%rax` register
+    MAIN, // Main function scaffolding
+    PRINT_RAX // Main, plus print contents of `%rax` register
 };
 
 /**
