@@ -13,7 +13,7 @@ Scaffold::Scaffold(Controller* pc) : parent(pc) {}
 
 void Scaffold::start(ScaffoldType type) {
     scaffoldType = type;
-    
+
     if (scaffoldType >= ScaffoldType::MAIN) {
         io::write(".globl _main");
         io::put("_main:\n");
@@ -33,7 +33,7 @@ void Scaffold::end() {
         io::write("callq _printf");
     }
 
-    if (scaffoldType >= ScaffoldType::MAIN) { 
+    if (scaffoldType >= ScaffoldType::MAIN) {
         io::put("\n");
         io::write("movq $0, %rax");
         io::write("addq $16, %rsp");

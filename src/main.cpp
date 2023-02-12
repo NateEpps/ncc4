@@ -4,9 +4,10 @@
 //
 
 #include "Controller.hpp"
-#include "io.hpp"
 #include "Util.hpp"
+#include "io.hpp"
 
+// clang-format off
 static void version() {
     std::cout << NCC_NAME << " v" << NCC_VERSION << "\n";
 }
@@ -24,6 +25,7 @@ static void help(std::string command) {
     std::cout << "writes to standard output. " << NCC_NAME << " can be run interactively, but file\n";
     std::cout << "redirection is generally used for normal operation.\n\n";
 }
+// clang-format on
 
 int main(int argc, const char** argv) {
     ncc::args_t args = ncc::util::bundle(argc, argv);
@@ -37,10 +39,10 @@ int main(int argc, const char** argv) {
     } else if (ncc::util::getOpt(args, "--print-rax") != args.end()) {
         forcePrintRax = true;
     }
-    
+
     try {
         ncc::io::init(std::cin, std::cout);
-        
+
         ncc::Controller ctrl;
         auto scaffoldType = forcePrintRax ? ncc::ScaffoldType::PRINT_RAX : ncc::ScaffoldType::MAIN;
         ctrl.run(scaffoldType);
@@ -52,7 +54,6 @@ int main(int argc, const char** argv) {
     } catch (...) {
         std::cerr << "*** Unknown exception\n";
     }
-    
+
     return EXIT_FAILURE;
 }
-

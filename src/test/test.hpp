@@ -7,8 +7,8 @@
 #define TEST_HPP
 
 #include "Controller.hpp"
-#include "io.hpp"
 #include "Util.hpp"
+#include "io.hpp"
 #include <filesystem>
 #include <fstream>
 #include <functional>
@@ -48,7 +48,9 @@ static void TestCase(std::string name, std::string in) {
     std::cout << "\n";
 }
 
-#define TEST_CASE(name, in) void testCase##name () { TestCase(#name, in); } TestAdder name (#name, &testCase##name)
+#define TEST_CASE(name, in)                                                                        \
+    void testCase##name() { TestCase(#name, in); }                                                 \
+    TestAdder name(#name, &testCase##name)
 
 static void ErrorCase(std::string name, std::string in) {
     std::stringstream input, output;
@@ -57,8 +59,7 @@ static void ErrorCase(std::string name, std::string in) {
     ncc::Controller ctrl;
     try {
         ctrl.run(ncc::ScaffoldType::NONE);
-    }
-    catch (std::exception& ex) {
+    } catch (std::exception& ex) {
         std::cout << "Error Case \"" << name << "\"\n";
         std::cout << "Input:\n>>> " << in << "\n";
         std::cout << "Error Output:\n";
@@ -69,7 +70,9 @@ static void ErrorCase(std::string name, std::string in) {
     throw std::runtime_error("Test " + name + " was expected to fail, and didn't");
 }
 
-#define ERROR_CASE(name, in) void testCase##name () { ErrorCase(#name, in); } TestAdder name (#name, &testCase##name)
+#define ERROR_CASE(name, in)                                                                       \
+    void testCase##name() { ErrorCase(#name, in); }                                                \
+    TestAdder name(#name, &testCase##name)
 
 static bool existsInCwd(std::string file) {
     return std::filesystem::exists(std::filesystem::current_path().concat(std::string("/") + file));
@@ -83,7 +86,7 @@ static void TestCaseWithOutput(std::string name, std::string in, std::string out
 
     // Create stream for assembly file
     std::ofstream asmStream;
-    asmStream.open("tmp.s", std::ios::out|std::ios::trunc);
+    asmStream.open("tmp.s", std::ios::out | std::ios::trunc);
     if (!asmStream.is_open())
         throw std::runtime_error("Test \"" + name + "\" unable to create assembly file");
 
@@ -122,7 +125,8 @@ static void TestCaseWithOutput(std::string name, std::string in, std::string out
     // Check output
     for (int x = 0; x < out.size(); x++) {
         if (out.at(x) != finalResult.at(x))
-            throw std::runtime_error("Actual output did not match expected (expected: \"" + out + "\")");
+            throw std::runtime_error("Actual output did not match expected (expected: \"" + out +
+                                     "\")");
     }
 
     // Cleanup
@@ -133,10 +137,13 @@ static void TestCaseWithOutput(std::string name, std::string in, std::string out
     std::cout << "\n";
 }
 
-#define TEST_CASE_WITH_OUTPUT(name, in, out) void testCase##name () { TestCaseWithOutput(#name, in, out); } TestAdder name (#name, &testCase##name)
+#define TEST_CASE_WITH_OUTPUT(name, in, out)                                                       \
+    void testCase##name() { TestCaseWithOutput(#name, in, out); }                                  \
+    TestAdder name(#name, &testCase##name)
 
 static bool ExpgenTest(std::vector<std::pair<int, int>> args) {
-    /// @todo Should look into `std::filesystem::status(...)` at some point, to check executable status
+    /// @todo Should look into `std::filesystem::status(...)` at some point, to check executable
+    /// status
 
     if (!existsInCwd(EXPGEN_NAME)) {
         std::cerr << EXPGEN_NAME << " program file does not exist in CWD\n";
@@ -147,17 +154,18 @@ static bool ExpgenTest(std::vector<std::pair<int, int>> args) {
     std::cout << "==============\n\n";
 
     bool success = true;
-    
+
     for (auto [seed, iterations] : args) {
         // run expgen, read results
-        std::string command = std::string("./") + EXPGEN_NAME + " " + std::to_string(seed) + " " + std::to_string(iterations) + " > tmp.txt";
+        std::string command = std::string("./") + EXPGEN_NAME + " " + std::to_string(seed) + " " +
+                              std::to_string(iterations) + " > tmp.txt";
         std::cout << ">>> expgen " << seed << " " << iterations << "\n";
         system(command.c_str());
-        
+
         std::string expression = ncc::util::readFile("tmp.txt");
         std::cout << expression << "\n";
         std::filesystem::remove("tmp.txt");
-        
+
         // run compiler
         std::cout << ">>> Running ncc...\n";
         std::stringstream input(expression);
@@ -190,7 +198,7 @@ static bool ExpgenTest(std::vector<std::pair<int, int>> args) {
             success = false;
             break;
         }
-        
+
         std::cout << "\n";
     }
 
@@ -211,8 +219,7 @@ static bool RunTests() {
             std::cout << (count + 1) << ") ";
             pair.second();
             count++;
-        }
-        catch (std::exception& ex) {
+        } catch (std::exception& ex) {
             std::cerr << "Test \"" << pair.first << "\" threw an exception: " << ex.what() << "\n";
             break;
         }
@@ -225,7 +232,7 @@ static bool RunTests() {
 
 void help(std::string command) {
     std::cout << "Usage:\n\t" << command << " [option]\n\n";
-    
+
     std::cout << " -h / --help           Bring up this help info\n";
     std::cout << " -v / --version        Exit after printing version info\n";
     std::cout << " --expgen              Run just the expgen test\n";

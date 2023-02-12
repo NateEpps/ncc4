@@ -1,0 +1,16 @@
+#
+# linter.sh(.in)
+# Nathanael Epps
+#
+
+echo "*****************"
+echo "* Linter Script *"
+echo "*****************"
+echo
+
+echo ">> clang-format: Starting..."
+
+cd ${CMAKE_SOURCE_DIR}
+git ls-files | egrep ".cpp$|.hpp$" | xargs clang-format -i --style='file:style.clang-format'
+
+echo ">> clang-format: Done"

@@ -12,11 +12,11 @@ Controller::Controller() : scanner(this), scaffold(this) {}
 
 void Controller::run(ScaffoldType type) {
     scaffold.start(type);
-    
+
     scanner.expression();
-    
+
     scaffold.end();
-    
+
     io::put(getDataSection());
 }
 

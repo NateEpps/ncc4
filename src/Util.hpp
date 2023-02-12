@@ -6,10 +6,10 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
+#include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
-#include <stdexcept>
-#include <sstream>
 
 // This and the associated source file are mainly used for things that need
 // to be shared between the compiler, tests, and/or expgen-- this isn't really
@@ -26,14 +26,14 @@ typedef std::vector<std::string>::iterator args_itr_t;
 namespace util {
 
 /// @brief Convert a string to a value via a stringstream
-/// @tparam T 
-/// @param str 
+/// @tparam T
+/// @param str
 /// @return Converted value
 template <class T>
 T convert(std::string str) {
     if (str.empty())
         throw std::runtime_error("convert: Can't convert empty string");
-    
+
     std::stringstream ss(str);
     T data;
     if (ss >> data)
@@ -57,7 +57,7 @@ args_itr_t getOpt(args_t&, std::string);
 template <class... Args>
 args_itr_t getOpt(args_t& args, std::string target, Args... extra) {
     args_itr_t itr = getOpt(args, target);
-    
+
     if (itr == args.end())
         return getOpt(args, extra...);
     else

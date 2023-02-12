@@ -13,8 +13,8 @@ class Controller;
  * @brief What kind of scaffold are we using?
  */
 enum class ScaffoldType {
-    NONE, // No extra scaffolding
-    MAIN, // Main function scaffolding
+    NONE,     // No extra scaffolding
+    MAIN,     // Main function scaffolding
     PRINT_RAX // Main, plus print contents of `%rax` register
 };
 
@@ -22,21 +22,21 @@ enum class ScaffoldType {
  * @brief Handle setup / teardown code needed
  */
 class Scaffold {
-public:
+  public:
     /// @brief Constructor
     Scaffold(Controller*);
-    
+
     /// @brief Emit starting scaffold
     void start(ScaffoldType);
-    
+
     /// @brief Emit ending scaffold
     void end();
 
-private:
+  private:
     Controller* parent;
-    
+
     ScaffoldType scaffoldType;
 };
-}
+} // namespace ncc
 
 #endif

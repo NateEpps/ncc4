@@ -16,11 +16,12 @@ using namespace ncc;
 // %rax, and... this
 static const std::string r2 = "%r10";
 
-Scanner::Scanner(Controller* pc) :
-    parent(pc), next(io::read()), opType(OpType::None), tokenType(TokenType::None) {
+Scanner::Scanner(Controller* pc)
+    : parent(pc), next(io::read()), opType(OpType::None), tokenType(TokenType::None) {
 
     skipWs();
-    io::metadata(__PRETTY_FUNCTION__, "Scanner initialized, next = \'" + std::string(1, next) + "\'");
+    io::metadata(__PRETTY_FUNCTION__,
+                 "Scanner initialized, next = \'" + std::string(1, next) + "\'");
 }
 
 void Scanner::skipWs() {
@@ -67,7 +68,7 @@ void Scanner::parseNumber() {
         expected("number");
 
     token = "";
-    
+
     do {
         token += next;
         next = io::read();
@@ -86,7 +87,7 @@ void Scanner::parseNumber() {
 void Scanner::parseIdent() {
     if (!isalpha(next))
         expected("identifier");
-    
+
     token = "";
 
     do {
@@ -133,7 +134,7 @@ void Scanner::parseOp() {
     } else {
         expected("operator");
     }
-    
+
     tokenType = TokenType::Operator;
 }
 
@@ -163,7 +164,7 @@ void Scanner::parse() {
 void Scanner::mult() {
     parse();
     require(tokenType != TokenType::Operator, "non-operator");
-    
+
     io::write("popq " + r2);
     io::write("imulq " + r2);
 }
@@ -171,11 +172,11 @@ void Scanner::mult() {
 void Scanner::div() {
     parse();
     require(tokenType != TokenType::Operator, "non-operator");
-    
+
     io::write("pushq %rax");
     io::write("popq " + r2);
     io::write("popq %rax");
-    
+
     io::write("movq $0, %rdx\t\t## idivq OP => %rax = %rdx:%rax / OP");
     io::write("idivq " + r2);
 }
@@ -195,11 +196,11 @@ void Scanner::mod() {
 
 void Scanner::t3() {
     parse();
-    
+
     if (next == '*' || next == '/' || next == '%') {
         do {
             io::write("pushq %rax");
-            
+
             parseOp();
             if (opType == OpType::Multiply)
                 mult();
@@ -233,11 +234,11 @@ void Scanner::sub() {
 
 void Scanner::t4() {
     t3();
-    
+
     if (next == '+' || next == '-') {
         do {
             io::write("pushq %rax");
-            
+
             parseOp();
             if (opType == OpType::Plus)
                 add();
@@ -250,6 +251,4 @@ void Scanner::t4() {
     }
 }
 
-void Scanner::expression() {
-    t4();
-}
+void Scanner::expression() { t4(); }

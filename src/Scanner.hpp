@@ -13,29 +13,25 @@ namespace ncc {
 class Controller;
 
 /// @brief Operator types
-enum class OpType {
-    None, Plus, Minus, Multiply, Division, Modulus
-};
+enum class OpType { None, Plus, Minus, Multiply, Division, Modulus };
 
 /// @brief Token types
-enum class TokenType {
-    None, NumberLiteral, Operator, Identifier, StringLiteral
-};
+enum class TokenType { None, NumberLiteral, Operator, Identifier, StringLiteral };
 
 /**
  * @brief Handle expressions
  */
 class Scanner {
-public:
+  public:
     /// @brief Constructor, store parent controller
     Scanner(Controller*);
-    
+
     /// @brief Skip whitespace
     void skipWs();
-    
+
     /// @brief Parser expected (argument)
     void expected(std::string);
-    
+
     /// @brief Require a condition is true-- string passed to `expected` on failure
     void require(bool, std::string);
 
@@ -46,7 +42,7 @@ public:
     void match(char);
 
     /// @brief Parse and evaluate function arguments.
-    /// 
+    ///
     /// `next` should be the opening "("
     void parseFunctionArgs();
 
@@ -67,20 +63,20 @@ public:
     /// @brief Parse numberes, identifiers, literals, parenthesis, etc
     /// @todo Issue 14 - Parenthesis handling
     void parse();
-    
+
     /// @brief Multiplication
     /// @todo Issue 13 - "require"ments
     void mult();
-    
+
     /// @brief Division
     /// @todo Issue 13 - "require"ments
     /// @todo Issue 10 - Division Improvements
     void div();
-    
+
     /// @brief Modulus
     /// @todo Issue 13 - "require"ments
     void mod();
-    
+
     /// @brief Tier 3 contains multiplication, division, and modulus
     void t3();
 
@@ -99,7 +95,7 @@ public:
     /// @brief Parse an expression
     void expression();
 
-protected:
+  protected:
     /// @brief Parent controller
     Controller* parent;
 
@@ -116,6 +112,6 @@ protected:
     TokenType tokenType;
 };
 
-}
+} // namespace ncc
 
 #endif

@@ -21,6 +21,10 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 message(STATUS "Configuring ${CMAKE_BINARY_DIR}/Doxyfile...")
 configure_file(${CMAKE_SOURCE_DIR}/Doxyfile.in ${CMAKE_BINARY_DIR}/Doxyfile)
 
+# reference: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+message(STATUS "Configuring ${CMAKE_BINARY_DIR}/linter.sh...")
+configure_file(${CMAKE_SOURCE_DIR}/linter.sh.in ${CMAKE_BINARY_DIR}/linter.sh)
+
 add_custom_target(docs
                   COMMAND doxygen ${CMAKE_BINARY_DIR}/Doxyfile
                   BYPRODUCTS ${CMAKE_BINARY_DIR}/docs)

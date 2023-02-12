@@ -9,27 +9,23 @@
 #include <cctype>
 #include <cmath>
 #include <iostream>
+#include <list>
 #include <sstream>
 #include <stdexcept>
-#include <list>
 
 #define MakeException(mssg) std::runtime_error(std::string(__PRETTY_FUNCTION__) + ": " + mssg)
 
 // Comment/uncomment to toggle debug mode
 // #define EXPGEN_DEBUG
 
-void usage(std::string args0) {
-    std::cerr << "Usage:\n\t" << args0 << " (seed) (iterations)\n";
-}
+void usage(std::string args0) { std::cerr << "Usage:\n\t" << args0 << " (seed) (iterations)\n"; }
 
-int nearestInt(double d) {
-    return (int)(d + 0.5);
-}
+int nearestInt(double d) { return (int)(d + 0.5); }
 
 enum class ElementType { Number, Operator, Parenthesis };
 
 class Element {
-public:
+  public:
     Element(std::string str) : data(str) {
         if (str.empty())
             throw MakeException("Received empty string");
@@ -40,7 +36,7 @@ public:
             type = ElementType::Operator;
         } else {
             // Input string converts to int, or an exception is thrown
-            (void) ncc::util::convert<int>(str);
+            (void)ncc::util::convert<int>(str);
 
             type = ElementType::Number;
         }
@@ -55,24 +51,25 @@ public:
         if (type != ElementType::Number)
             throw MakeException("Cannot expand non-number (data: \"" + data + "\")");
 
-        switch(ncc::util::randInt(0, 3)) {
-            case 0: return expandAdd();
-            case 1: return expandSub();
-            case 2: return expandMult();
-            case 3: return expandDiv();
-            default: throw MakeException("randInt is broken");
+        switch (ncc::util::randInt(0, 3)) {
+        case 0:
+            return expandAdd();
+        case 1:
+            return expandSub();
+        case 2:
+            return expandMult();
+        case 3:
+            return expandDiv();
+        default:
+            throw MakeException("randInt is broken");
         }
     }
 
-    inline std::string toString() const {
-        return data;
-    }
+    inline std::string toString() const { return data; }
 
-    inline ElementType getType() const {
-        return type;
-    }
+    inline ElementType getType() const { return type; }
 
-private:
+  private:
     std::list<Element> expandAdd() const {
         int value = ncc::util::convert<int>(data);
 
@@ -84,17 +81,17 @@ private:
 
     std::list<Element> expandSub() const {
         int value = ncc::util::convert<int>(data);
-        
+
         int next0 = ncc::util::randInt(value, value + 10);
         int next1 = next0 - value;
-        
+
         return generateNextSeq(next0, next1, "-");
     }
 
     std::list<Element> expandMult() const {
         int value = ncc::util::convert<int>(data);
         const int Limit = nearestInt(sqrt(value));
-        
+
         bool found = false;
         int next0, next1;
         for (next0 = 2; next0 < Limit; next0++) {
@@ -104,24 +101,24 @@ private:
                 break;
             }
         }
-        
+
         if (!found) {
             next0 = 1;
             next1 = value;
         }
-        
+
         return generateNextSeq(next0, next1, "*");
     }
-    
+
     std::list<Element> expandDiv() const {
         int value = ncc::util::convert<int>(data);
-        
+
         // let's not have divide by zero errors
         if (value == 0)
             return expandMult();
-        
+
         const int Limit = value * value;
-        
+
         bool found = false;
         int next0, next1;
         for (next0 = value + 1; next0 <= Limit; next0++) {
@@ -131,11 +128,11 @@ private:
                     break;
                 }
             }
-            
+
             if (found)
                 break;
         }
-        
+
         if (!found) {
 #ifdef EXPGEN_DEBUG
             std::cerr << __PRETTY_FUNCTION__ << ": !found case\n";
@@ -143,10 +140,10 @@ private:
             next0 = Limit;
             next1 = value;
         }
-        
+
         return generateNextSeq(next0, next1, "/");
     }
-    
+
     static std::list<Element> generateNextSeq(int next0, int next1, std::string opStr) {
         std::list<Element> next;
         next.emplace_back("(");
@@ -156,7 +153,7 @@ private:
         next.emplace_back(")");
         return next;
     }
-    
+
     std::string data;
     ElementType type;
 };
@@ -173,8 +170,7 @@ std::ostream& operator<<(std::ostream& stream, std::list<Element> list) {
     while (itr != list.end()) {
         stream << itr->toString();
 
-        if (next->getType() == ElementType::Operator ||
-            itr->getType() == ElementType::Operator)
+        if (next->getType() == ElementType::Operator || itr->getType() == ElementType::Operator)
             stream << " ";
 
         itr++;

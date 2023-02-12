@@ -38,10 +38,10 @@ int main2(int argc, const char** argv) {
         std::cerr << "Error: \'system\' function unavailable\n";
         return EXIT_FAILURE;
     }
-    
+
     // header
     std::cout << argv[0] << " v" << NCC_VERSION << "\n";
-    
+
     // parse command line args
     ncc::args_t args = ncc::util::bundle(argc, argv);
     if (ncc::util::getOpt(args, "-v", "--version") != args.end()) {
@@ -61,20 +61,18 @@ int main2(int argc, const char** argv) {
         std::cout << "\n";
     }
 
-    std::vector<std::pair<int, int>> expgenArgs = {
-        {5, 0},
-        {5, 1},
-        {5, 1},
-        {5, 1},
-        {5, 4},
-        {5, 4},
-        {5, 5},
-        {5, 5},
-        {ncc::util::randInt(3, 20), 3},
-        {ncc::util::randInt(3, 20), 4},
-        {ncc::util::randInt(3, 20), 5},
-        {8, 8}
-    };
+    std::vector<std::pair<int, int>> expgenArgs = {{5, 0},
+                                                   {5, 1},
+                                                   {5, 1},
+                                                   {5, 1},
+                                                   {5, 4},
+                                                   {5, 4},
+                                                   {5, 5},
+                                                   {5, 5},
+                                                   {ncc::util::randInt(3, 20), 3},
+                                                   {ncc::util::randInt(3, 20), 4},
+                                                   {ncc::util::randInt(3, 20), 5},
+                                                   {8, 8}};
 
     if (!ExpgenTest(expgenArgs))
         return EXIT_FAILURE;
