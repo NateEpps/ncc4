@@ -118,15 +118,6 @@ void ncc::io::unread(char c) {
     pushback.push(c);
 }
 
-/* void ncc::io::unread(std::string s) {
-    INIT_CHECK();
-
-    WRITE_LOG("Unreading \"" + s + "\"");
-
-    for (int x = s.size() - 1; x >= 0; x--)
-        pushback.push(s[x]);
-} */
-
 void ncc::io::write(std::string instr) {
     INIT_CHECK();
 
