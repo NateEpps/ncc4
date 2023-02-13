@@ -22,6 +22,8 @@ void Controller::run(ScaffoldType type) {
 
 size_t Controller::addStringData(std::string str) {
     data.push_back(str);
+    io::metadata(__PRETTY_FUNCTION__, "Adding string literal <<<" + str + ">>>");
+
     return data.size() - 1;
 }
 
