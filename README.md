@@ -30,7 +30,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 * **0.2** - Integer parsing, mathematical expressions ✅
 * **0.3** - General expressions, including function calls, and statements ⚠️
     * [Scaffold] Scaffolding adjustments ✅
-    * [Scanner] String literals ⚠️ _In Progress_
+    * [Scanner] String literals ✅
     * [Scanner] Function call ⚠️ _In Progress_
         * Note: don't forget to align the stack (16 bytes?)
     * [Scanner] Assignment, sort of
@@ -50,7 +50,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 ```
 ~$ echo "1 + 2 * 3 - 4" > input.c
 ~$ ./ncc --print-rax < input.c > output.s
-~$ cat output.s 
+~$ cat output.s
     .globl   _main
 _main:
     pushq    %rbp

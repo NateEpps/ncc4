@@ -27,10 +27,11 @@ TEST_CASE_WITH_OUTPUT(Sub2, "10 - 15", "-5");
 TEST_CASE_WITH_OUTPUT(AddAndSub, "4 + 5 - 3", "6");
 TEST_CASE_WITH_OUTPUT(Mult, "2 * 4", "8");
 ERROR_CASE(AddAdd, "2 + +");
-
 ERROR_CASE(UnmatchedParen, "2 * (3 + 4");
 ERROR_CASE(UnmatchedParen2, "(2 *");
 ERROR_CASE(UnmatchedParen3, "(2");
+
+TEST_CASE(String, "\"Hello world\"");
 
 int main2(int argc, const char** argv) {
     // make sure "system" is available

@@ -59,6 +59,8 @@ void Scanner::parseFunctionArgs() {
     if (next != '(')
         expected("open-(");
 
+    match('(');
+
 #warning parseFunctionArgs stub
     //...
 }
@@ -108,29 +110,18 @@ void Scanner::parseStringLiteral() {
     char prev = next;
     next = io::read();
 
-    if (prev == '\"' && next == '\"') {
+    while (next != '\"' || (next == '\"' && prev == '\\')) {
+        token += next;
+        prev = next;
         next = io::read();
-        skipWs();
-        io::metadata(__PRETTY_FUNCTION__, "Parsed empty string");
-    } else {
-#warning Todo- handle escaped quotes
-        while (next != '\"') {
-            token += next;
-            next = io::read();
-        }
-
-        next = io::read();
-        skipWs();
-
-        io::metadata(__PRETTY_FUNCTION__, "Parsed string <<<" + token + ">>>");
     }
+
+    next = io::read();
+    skipWs();
 
     size_t index = parent->addStringData(token);
     io::write("leaq S" + std::to_string(index) + "(%rip), %rax");
     tokenType = TokenType::StringLiteral;
-
-    io::metadata(__PRETTY_FUNCTION__,
-                 "prev = " + std::string(1, prev) + ", next = " + std::string(1, next));
 }
 
 void Scanner::parseOp() {
