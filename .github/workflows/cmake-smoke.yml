@@ -1,4 +1,4 @@
-name: CMake
+name: CMake Smoke Test
 
 on:
   push:
