@@ -32,8 +32,12 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * [Scaffold] Scaffolding adjustments ✅
     * [Scanner] String literals ✅
     * [Scanner] Function call ⚠️ _In Progress_
-        * Note: don't forget to align the stack (16 bytes?)
+        * Function arguments
+        * Function call
+        * Nested function calls (_Note: don't forget to align the stack- 16 bytes?_)
     * [Scanner] Assignment, sort of
+        * Recognize non-function identifiers, some sort of stub
+        * Assignment operator (_Remember to filter out rvalues_)
     * [NEW Parser] Statements
     * [🧪] Test adjustments / additions ⚠️ _In progress_
 * **0.4** - Declaration and assignment (Types 1)
