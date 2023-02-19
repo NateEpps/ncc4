@@ -32,9 +32,10 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * [Scaffold] Scaffolding adjustments ✅
     * [Scanner] String literals ✅
     * [Scanner] Function call ⚠️ _In Progress_
-        * Function arguments
-        * Function call
-        * Nested function calls (_Note: don't forget to align the stack- 16 bytes?_)
+        * Function arguments ⚠️ _First draft_
+        * Function call ✅
+        * Nested function calls ❌ _Not yet_
+            * _Note: don't forget to align the stack- 16 bytes?_
     * [Scanner] Assignment, sort of
         * Recognize non-function identifiers, some sort of stub
         * Assignment operator (_Remember to filter out rvalues_)
@@ -49,7 +50,34 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 * **0.9** - Miscellaneous things, preprocessor, comments?
 * **1.0**
 
-## Example
+## Examples
+
+```
+~$ cat input.c
+printf("Hello, world!\n");
+~$ ./ncc < input.c > output.s
+~$ cat output.s
+    .globl   _main
+_main:
+    pushq    %rbp
+    movq     %rsp, %rbp
+    subq     $16, %rsp
+
+    leaq     S0(%rip), %rax
+    movq     %rax, %rdi
+    callq    _printf
+
+    movq     $0, %rax
+    addq     $16, %rsp
+    popq     %rbp
+    retq
+
+S0:
+    .asciz "Hello, world!\n"
+
+~$ gcc output.s -o Output && ./Output
+Hello, world!
+```
 
 ```
 ~$ echo "1 + 2 * 3 - 4" > input.c
@@ -79,7 +107,6 @@ _main:
     leaq     S0(%rip), %rdi
     movq     %rax, %rsi
     callq    _printf
-
     movq     $0, %rax
     addq     $16, %rsp
     popq     %rbp

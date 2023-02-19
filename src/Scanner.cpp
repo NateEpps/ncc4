@@ -55,16 +55,6 @@ void Scanner::match(char c) {
     }
 }
 
-void Scanner::parseFunctionArgs() {
-    if (next != '(')
-        expected("open-(");
-
-    match('(');
-
-#warning parseFunctionArgs stub
-    //...
-}
-
 void Scanner::parseNumber() {
     if (!isdigit(next) && next != '-')
         expected("number");
@@ -154,17 +144,43 @@ void Scanner::parseOp() {
     tokenType = TokenType::Operator;
 }
 
+void Scanner::parseFunctionArgs() {
+    if (next != '(')
+        expected("open-(");
+
+    match('(');
+
+    static const std::vector<std::string> argRegs = {"%rdi", "%rsi", "%rdx", "%rcx", "%r8", "%r9"};
+
+    // first draft
+    int regIndex = 0;
+    while (next != ')') {
+        if (regIndex >= argRegs.size())
+            expected("less arguments");
+
+        expression();
+        io::write("movq %rax, " + argRegs[regIndex]);
+        regIndex++;
+
+        if (next == ',')
+            match(',');
+    }
+
+    match(')');
+}
+
 void Scanner::parse() {
     if (isdigit(next) || next == '-') {
         parseNumber();
     } else if (isalpha(next)) {
         parseIdent();
+        std::string identifier = token;
+
         if (next == '(') {
-            std::string functionName = token;
             parseFunctionArgs();
-            stub("functions (function call to \"" + functionName + "\")");
+            io::write("callq _" + identifier);
         } else {
-            stub("variable");
+            stub("variable (named \"" + identifier + "\")");
         }
     } else if (next == '(') {
         match('(');

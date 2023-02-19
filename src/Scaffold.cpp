@@ -25,8 +25,16 @@ void Scaffold::start(ScaffoldType type) {
 }
 
 void Scaffold::end() {
+    auto printSeparator = []() {
+        static bool printed = false;
+        if (!printed) {
+            io::put("\n");
+            printed = true;
+        }
+    };
+
     if (scaffoldType == ScaffoldType::PRINT_RAX) {
-        io::put("\n");
+        printSeparator();
         size_t index = parent->addStringData("%ld\\n");
         io::write("leaq S" + std::to_string(index) + "(%rip), %rdi");
         io::write("movq %rax, %rsi");
@@ -34,7 +42,7 @@ void Scaffold::end() {
     }
 
     if (scaffoldType >= ScaffoldType::MAIN) {
-        io::put("\n");
+        printSeparator();
         io::write("movq $0, %rax");
         io::write("addq $16, %rsp");
         io::write("popq %rbp");

@@ -41,11 +41,6 @@ class Scanner {
     /// @brief Match given character against `current`, and advance, skipping whitespace.
     void match(char);
 
-    /// @brief Parse and evaluate function arguments.
-    ///
-    /// `next` should be the opening "("
-    void parseFunctionArgs();
-
     /// @brief Parse a number
     /// @todo Issue 3 - Negative number handling
     /// @todo Issue 15 - Specific error handling for floats
@@ -59,6 +54,11 @@ class Scanner {
 
     /// @brief Parse an operator
     void parseOp();
+
+    /// @brief Parse and evaluate function arguments.
+    ///
+    /// `next` should be the opening "("
+    void parseFunctionArgs();
 
     /// @brief Parse numberes, identifiers, literals, parenthesis, etc
     /// @todo Issue 14 - Parenthesis handling

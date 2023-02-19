@@ -3,11 +3,6 @@
 # Nathanael Epps
 #
 
-echo "*****************"
-echo "* Linter Script *"
-echo "*****************"
-echo
-
 echo ">> clang-format: Starting..."
 
 cd ${CMAKE_SOURCE_DIR}
