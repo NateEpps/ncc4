@@ -31,7 +31,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 * **0.3** - General expressions, including function calls, and statements ⚠️
     * [Scaffold] Scaffolding adjustments ✅
     * [Scanner] String literals ✅
-    * [Scanner] Function call ⚠️ _In Progress_
+    * [Scanner] Function call ⚠️
         * Function arguments ⚠️ _First draft_
         * Function call ✅
         * Nested function calls ❌ _Not yet_
@@ -40,7 +40,22 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
         * Recognize non-function identifiers, some sort of stub
         * Assignment operator (_Remember to filter out rvalues_)
     * [NEW Parser] Statements
-    * [🧪] Test adjustments / additions ⚠️ _In progress_
+    * [🧪] Test refactor ⚠️ _In progress_
+        * Central class `ncc::test::System` ⚠️
+            * Core logic ✅
+            * Error handling ❌ _Not yet_
+        * Test fixture base class `ncc::test::Fixture` ✅
+        * Fixtures ⚠️
+            * `ncc::test::BasicFixture` ✅
+            * Will carry over:
+                * `ncc::test::ErrorFixture`
+                * `ncc::test::FullPrintRaxFixture`
+                * `ncc::test::ExpgenFixture`
+            * New:
+                * `ncc::test::FullMainFixture`
+            * If needed:
+                * `ncc::test::ExceptionFixture`
+    * [🧪] Test additions - _Added as needed_
 * **0.4** - Declaration and assignment (Types 1)
 * **0.5** - `if` / `else`
 * **0.6** - `while` / `do-while` / `for` 😎
@@ -151,7 +166,7 @@ _5107 lines of assembly... I'd hate to have to debug that!_
 
 ## Test Suite
 
-_Major overhaul in progress. Check back soon!_
+_Major overhaul in progress. See_ **Version Planning** _for more info._
 
 ## Acknowledgements
 
