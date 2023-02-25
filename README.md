@@ -151,24 +151,7 @@ _5107 lines of assembly... I'd hate to have to debug that!_
 
 ## Test Suite
 
-```
-~$ ./test --help
-./test v0.2
-Usage:
-        ./test [option]
-
- -h / --help           Bring up this help info
- -v / --version        Exit after printing version info
- --expgen              Run just the expgen test
- (no option)           Run the full test suite
-```
-
-The test suite consists of two parts, the first being a series of hard-coded strings given to the compiler, that fall into three categories:
-* _Test cases_ are ran, and the output is shown, to manually confirm correctness
-* _Error cases_ are expected to fail. _Not_ failing causes the error case to fail
-* _Test cases with output_ are ran, assembled, and the resulting executable is run and output is compared against a hard-coded expected output.
-
-The other piece of the test suite utilizes the `expgen` program to randomly generate mathematical expression input for the compiler.
+_Major overhaul in progress. Check back soon!_
 
 ## Acknowledgements
 

@@ -37,11 +37,7 @@ target_link_libraries(expgen ${PROJECT_NAME}-sources)
 
 ## test ##
 
-add_executable(test
-               ${CMAKE_CURRENT_SOURCE_DIR}/test/test.cpp
-               ${CMAKE_CURRENT_SOURCE_DIR}/test/test.hpp)
-add_dependencies(test ${PROJECT_NAME} expgen)
-target_link_libraries(test ${PROJECT_NAME}-sources)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 # For the IDE's...
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
