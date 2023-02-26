@@ -1,7 +1,7 @@
-//
-// Fixture.hpp
-// Nathanael Epps
-//
+/**
+ * @file
+ * @author Nathanael Epps
+ */
 
 #ifndef FIXTURE_HPP
 #define FIXTURE_HPP

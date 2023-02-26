@@ -104,6 +104,9 @@ void Scanner::parseStringLiteral() {
         token += next;
         prev = next;
         next = io::read();
+
+        if (next == EOF)
+            expected("end-of-string, not EOF");
     }
 
     next = io::read();

@@ -3,25 +3,25 @@
  * @author Nathanael Epps
  */
 
-#ifndef BASIC_FIXTURE
-#define BASIC_FIXTURE
+#ifndef ERROR_FIXTURE_HPP
+#define ERROR_FIXTURE_HPP
 
 #include "Fixture.hpp"
 
 namespace ncc::test {
 
 /**
- * @brief Simplest fixture. No scaffolding, simply print resulting assembly.
+ * @brief No scaffolding. Inputs are expected to fail, NOT failing is considered an error.
  */
-class BasicFixture : public Fixture {
+class ErrorFixture : public Fixture {
   public:
     /// @brief Constructor
-    BasicFixture();
+    ErrorFixture();
 
-    /// @brief Run test given input
+    /// @brief Run a test case
     virtual bool run(std::string input, std::optional<std::string> output = std::nullopt) override;
 
-    /// @brief Get inputs associated with the test
+    /// @brief Get test inputs
     virtual std::vector<std::string> getInput() const override;
 };
 

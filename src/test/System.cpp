@@ -5,6 +5,7 @@
 
 #include "System.hpp"
 #include "BasicFixture.hpp"
+#include "ErrorFixture.hpp"
 #include <iostream>
 
 using namespace ncc::test;
@@ -14,7 +15,7 @@ static const std::string separator =
 
 System::System() {
     add<BasicFixture>();
-    // add more fixtures as they're created
+    add<ErrorFixture>();
 }
 
 static void printHeader(std::string name) {
@@ -38,15 +39,27 @@ int System::run(args_t cmd) {
         if (!inputs.empty()) {
             for (auto input : inputs) {
                 TestResult res = runImpl(fixture, input);
-                //...
+
+                if (res != TestResult::Success) {
+                    if (res == TestResult::Failure)
+                        std::cerr << "*** Test Failed ***\n";
+                    else if (res == TestResult::Exception)
+                        std::cerr << "*** Test threw unexpected exception ***\n";
+
+                    return EXIT_FAILURE;
+                }
+
                 std::cout << separator << "\n";
             }
         } else if (!inputOutputs.empty()) {
-            for (auto [input, output] : inputOutputs) {
+            std::cerr << cmd[0] << ": IO tests not yet supported\n";
+            return EXIT_FAILURE;
+
+            /* for (auto [input, output] : inputOutputs) {
                 TestResult res = runImpl(fixture, input, output);
                 //...
                 std::cout << separator << "\n";
-            }
+            } */
         } else {
             std::cerr << cmd[0] << ": Test fixture \"" << fixture->name
                       << "\" does not provide IO data\n";
@@ -58,14 +71,24 @@ int System::run(args_t cmd) {
 }
 
 System::TestResult System::runImpl(std::shared_ptr<Fixture> fixture, std::string input) {
-    fixture->run(input);
-    //...
-    return TestResult::Success;
+    try {
+        if (fixture->run(input))
+            return TestResult::Success;
+        else
+            return TestResult::Failure;
+    } catch (...) {
+        return TestResult::Exception;
+    }
 }
 
 System::TestResult System::runImpl(std::shared_ptr<Fixture> fixture, std::string input,
                                    std::string output) {
-    fixture->run(input, output);
-    //...
-    return TestResult::Success;
+    try {
+        if (fixture->run(input, output))
+            return TestResult::Success;
+        else
+            return TestResult::Failure;
+    } catch (...) {
+        return TestResult::Exception;
+    }
 }

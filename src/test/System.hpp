@@ -1,7 +1,7 @@
-//
-// System.hpp
-// Nathanael Epps
-//
+/**
+ * @file
+ * @author Nathanael Epps
+ */
 
 #ifndef SYSTEM_HPP
 #define SYSTEM_HPP
@@ -25,7 +25,7 @@ class System {
     System();
 
     /**
-     * @brief Run tests, given command line args
+     * @brief Run tests at the higest conceptual level, given command line args
      *
      * @return Return code suitable for main's return value
      */
@@ -33,7 +33,7 @@ class System {
 
   private:
     /// @todo Detect test timeout, and add value here
-    enum class TestResult { Success, Fail, Exception };
+    enum class TestResult { Success, Failure, Exception };
 
     TestResult runImpl(std::shared_ptr<Fixture>, std::string);
     TestResult runImpl(std::shared_ptr<Fixture>, std::string, std::string);
