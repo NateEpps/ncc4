@@ -14,9 +14,12 @@ namespace ncc::test {
  * @brief No scaffolding. Inputs are expected to fail, NOT failing is considered an error.
  */
 class ErrorFixture : public Fixture {
-  public:
-    /// @brief Constructor
+  private:
     ErrorFixture();
+
+  public:
+    /// @brief Create `ErrorFixture` instances
+    static std::shared_ptr<ErrorFixture> factory();
 
     /// @brief Run a test case
     virtual bool run(std::string input, std::optional<std::string> output = std::nullopt) override;

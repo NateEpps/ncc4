@@ -141,7 +141,7 @@ void Scanner::parseOp() {
         token = "%";
         opType = OpType::Modulus;
     } else {
-        expected("operator");
+        expected("operator (next = \'" + std::string(1, next) + "\')");
     }
 
     tokenType = TokenType::Operator;

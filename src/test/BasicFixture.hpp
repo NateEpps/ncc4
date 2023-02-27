@@ -14,9 +14,12 @@ namespace ncc::test {
  * @brief Simplest fixture. No scaffolding, simply print resulting assembly.
  */
 class BasicFixture : public Fixture {
-  public:
-    /// @brief Constructor
+  private:
     BasicFixture();
+
+  public:
+    /// @brief Create `BasicFixture` instances
+    static std::shared_ptr<BasicFixture> factory();
 
     /// @brief Run test given input
     virtual bool run(std::string input, std::optional<std::string> output = std::nullopt) override;

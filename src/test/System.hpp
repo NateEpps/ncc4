@@ -16,11 +16,12 @@ class Fixture;
  * @brief Central test class
  *
  * Maintain the list of fixtures and test cases, support active testing
+ * @todo `System::add` should enforce type traits
  */
 class System {
   public:
     /**
-     * @brief Constructor-- set everything up
+     * @brief Constructor-- add fixtures to list
      */
     System();
 
@@ -32,16 +33,9 @@ class System {
     int run(args_t);
 
   private:
-    /// @todo Detect test timeout, and add value here
-    enum class TestResult { Success, Failure, Exception };
-
-    TestResult runImpl(std::shared_ptr<Fixture>, std::string);
-    TestResult runImpl(std::shared_ptr<Fixture>, std::string, std::string);
-
-    /// @brief static_assert some type traits
     template <class T>
     void add() {
-        testFixtures.push_back(std::make_shared<T>());
+        testFixtures.push_back(T::factory());
     }
 
     std::vector<std::shared_ptr<Fixture>> testFixtures;

@@ -13,6 +13,10 @@ using namespace ncc::test;
 
 BasicFixture::BasicFixture() : Fixture("Basic") {}
 
+std::shared_ptr<BasicFixture> BasicFixture::factory() {
+    return std::shared_ptr<BasicFixture>(new BasicFixture);
+}
+
 bool BasicFixture::run(std::string input, std::optional<std::string>) {
     std::cout << "Input:\n" << testFormat(input) << "\n";
 

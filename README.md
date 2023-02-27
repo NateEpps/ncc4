@@ -41,20 +41,20 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
         * Assignment operator (_Remember to filter out rvalues_)
     * [NEW Parser] Statements
     * [🧪] Test refactor ⚠️ _In progress_
-        * Central class `ncc::test::System` ⚠️
-            * Core logic ✅
-            * Error handling ❌ _Not yet_
+        * Central class `ncc::test::System` ✅
         * Test fixture base class `ncc::test::Fixture` ✅
+        * Iterate over a fixture with new `ncc::test::FixtureIterator` ✅
         * Fixtures ⚠️
             * `ncc::test::BasicFixture` ✅
+            * `ncc::test::ErrorFixture` ✅
             * Will carry over:
-                * `ncc::test::ErrorFixture`
-                * `ncc::test::FullPrintRaxFixture`
-                * `ncc::test::ExpgenFixture`
+                * `ncc::test::FullPrintRaxFixture` - Original `TEST_CASE_WITH_OUTPUT`'s
+                * `ncc::test::ExpgenFixture` - `expgen` test will convert to this
             * New:
-                * `ncc::test::FullMainFixture`
+                * `ncc::test::FullMainFixture` - Newer `TEST_CASE_WITH_OUTPUT`'s
             * If needed:
-                * `ncc::test::ExceptionFixture`
+                * `ncc::test::ExceptionFixture` - I don't think we'll need this
+                * `ncc::test::TimeoutFixture` - I think I've covered these sorts of cases already, but if I can find anything...
     * [🧪] Test additions - _Added as needed_
 * **0.4** - Declaration and assignment (Types 1)
 * **0.5** - `if` / `else`

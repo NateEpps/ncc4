@@ -12,6 +12,10 @@ using namespace ncc::test;
 
 ErrorFixture::ErrorFixture() : Fixture("Error") {}
 
+std::shared_ptr<ErrorFixture> ErrorFixture::factory() {
+    return std::shared_ptr<ErrorFixture>(new ErrorFixture);
+}
+
 bool ErrorFixture::run(std::string input, std::optional<std::string>) {
     std::cout << "Input:\n" << testFormat(input) << "\n";
 
