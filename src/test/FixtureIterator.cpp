@@ -6,6 +6,7 @@
 #include "FixtureIterator.hpp"
 #include "Fixture.hpp"
 #include <iostream>
+#include <stdexcept>
 using namespace ncc::test;
 
 FixtureIterator::FixtureIterator(std::weak_ptr<Fixture> wp, std::vector<std::string>::iterator itr)
@@ -36,6 +37,9 @@ FixtureIterator FixtureIterator::operator++(int) {
 }
 
 bool FixtureIterator::operator==(const FixtureIterator& that) {
+    if (inputOnly != that.inputOnly)
+        throw std::runtime_error("Cannot compare input-only and IO fixture iterators");
+
     if (inputOnly)
         return inputItr == that.inputItr;
     else
