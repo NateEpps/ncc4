@@ -9,6 +9,8 @@
 #include <stdexcept>
 using namespace ncc::test;
 
+#warning This class works with vector's, but doesn't play nice with maps
+
 FixtureIterator::FixtureIterator(std::weak_ptr<Fixture> wp, std::vector<std::string>::iterator itr)
     : inputOnly(true), parentFixture(wp), inputItr(itr) {}
 
