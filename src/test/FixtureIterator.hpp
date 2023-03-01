@@ -24,11 +24,11 @@ enum class TestResult { Success, Failure, Exception };
  */
 class FixtureIterator {
   public:
-    /// @brief Create an input-only fixture iterator
-    FixtureIterator(std::weak_ptr<Fixture>, std::vector<std::string>::iterator);
+    /// @brief FixtureIterator's can be created at the beginning or end of a sequence
+    enum Position { Begin, End };
 
-    /// @brief Create an input/output fixture iterator
-    FixtureIterator(std::weak_ptr<Fixture>, std::map<std::string, std::string>::iterator);
+    /// @brief Create a fixture iterator
+    FixtureIterator(std::weak_ptr<Fixture>, Position);
 
     /// @brief Prefix increment
     FixtureIterator& operator++();

@@ -9,14 +9,31 @@
 #include <stdexcept>
 using namespace ncc::test;
 
-#warning This class works with vector's, but doesn't play nice with maps
+static std::map<std::string, std::vector<std::string>> inputRecords;
+static std::map<std::string, std::map<std::string, std::string>> inputOutputRecords;
 
-FixtureIterator::FixtureIterator(std::weak_ptr<Fixture> wp, std::vector<std::string>::iterator itr)
-    : inputOnly(true), parentFixture(wp), inputItr(itr) {}
+FixtureIterator::FixtureIterator(std::weak_ptr<Fixture> wp, Position pos)
+    : inputOnly(!wp.lock()->getInput().empty()), parentFixture(wp) {
 
-FixtureIterator::FixtureIterator(std::weak_ptr<Fixture> wp,
-                                 std::map<std::string, std::string>::iterator itr)
-    : inputOnly(false), parentFixture(wp), inputOutputItr(itr) {}
+    std::shared_ptr<Fixture> parent = parentFixture.lock();
+    if (inputOnly) {
+        if (inputRecords.find(parent->name) == inputRecords.end())
+            inputRecords[parent->name] = parent->getInput();
+
+        if (pos == FixtureIterator::Begin)
+            inputItr = inputRecords.at(parent->name).begin();
+        else if (pos == FixtureIterator::End)
+            inputItr = inputRecords.at(parent->name).end();
+    } else {
+        if (inputOutputRecords.find(parent->name) == inputOutputRecords.end())
+            inputOutputRecords[parent->name] = parent->getInputOutput();
+
+        if (pos == FixtureIterator::Begin)
+            inputOutputItr = inputOutputRecords.at(parent->name).begin();
+        else if (pos == FixtureIterator::End)
+            inputOutputItr = inputOutputRecords.at(parent->name).end();
+    }
+}
 
 // prefix
 FixtureIterator& FixtureIterator::operator++() {

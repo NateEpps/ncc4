@@ -6,6 +6,7 @@
 #include "System.hpp"
 #include "BasicFixture.hpp"
 #include "ErrorFixture.hpp"
+#include "FullPrintRaxFixture.hpp"
 #include <iostream>
 #include <thread>
 
@@ -26,6 +27,7 @@ static void printHeader(std::string name) {
 System::System() {
     add<BasicFixture>();
     add<ErrorFixture>();
+    add<FullPrintRaxFixture>();
 }
 
 int System::run(args_t cmd) {

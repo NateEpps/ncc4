@@ -40,21 +40,15 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
         * Recognize non-function identifiers, some sort of stub
         * Assignment operator (_Remember to filter out rvalues_)
     * [NEW Parser] Statements
-    * [🧪] Test refactor ⚠️ _In progress_
+    * [🧪] Test refactor ⚠️ _In progress,_ see __Test Suite__ section for more details
         * Central class `ncc::test::System` ✅
         * Test fixture base class `ncc::test::Fixture` ✅
-        * Iterate over a fixture with new `ncc::test::FixtureIterator` ✅ - _Keep an eye out for instability_
-        * Fixtures ⚠️
-            * `ncc::test::BasicFixture` ✅
-            * `ncc::test::ErrorFixture` ✅
-            * Will carry over:
-                * `ncc::test::FullPrintRaxFixture` - Original `TEST_CASE_WITH_OUTPUT`'s
-                * `ncc::test::ExpgenFixture` - `expgen` test will convert to this
-            * New:
-                * `ncc::test::FullMainFixture` - Newer `TEST_CASE_WITH_OUTPUT`'s
-            * If needed:
-                * `ncc::test::ExceptionFixture` - I don't think we'll need this
-                * `ncc::test::TimeoutFixture` - I think I've covered these sorts of cases already, but if I can find anything...
+        * Iterate over a fixture with new `ncc::test::FixtureIterator` ✅
+        * `ncc::test::BasicFixture` ✅
+        * `ncc::test::ErrorFixture` ✅
+        * `ncc::test::FullPrintRaxFixture` ✅
+        * `ncc::test::ExpgenFixture` - Next up...
+        * `ncc::test::FullMainFixture`
     * [🧪] Test additions - _Added as needed_
 * **0.4** - Declaration and assignment (Types 1)
 * **0.5** - `if` / `else`
@@ -166,7 +160,24 @@ _5107 lines of assembly... I'd hate to have to debug that!_
 
 ## Test Suite
 
-_Major overhaul in progress. See_ **Version Planning** _for more info._
+```
+~$ ./test
+...
+```
+
+The central test class is `ncc::test::System`, which contains various fixtures and runs the test suite (_and will eventually parse command-line arguments_).
+
+A _fixture_ is a specific type of test, and is defined by base class `ncc::test::Fixture`. Individual fixtures inherit from this base class, override the `ncc::test::Fixture::run` method to define how the test works, and override either `ncc::test::Fixture::getInput` or `ncc::test::Fixture::getInputOutput` to define what will be passed to the test when it's run.
+
+Fixtures so far:
+* `ncc::test::BasicFixture`
+* `ncc::test::ErrorFixture`
+* `ncc::test::FullPrintRaxFixture`
+
+TBD:
+* `ncc::test::ExpgenFixture` - Will replace what used to be the `expgen` test
+* `ncc::test::FullMainFixture` - Will replace newer former `TEST_CASE_WITH_OUTPUT`'s, older ones were covered by `ncc::test::FullPrintRaxFixture`
+* `ncc::test::TimeoutFixture` - Not sure if this will be needed. Inputs that would cause the compiler to time out are probably indications of a deeper problem, which should likely be fixed and handled elsewhere.
 
 ## Acknowledgements
 

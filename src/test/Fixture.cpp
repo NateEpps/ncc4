@@ -14,31 +14,15 @@ std::vector<std::string> Fixture::getInput() const { return {}; }
 
 std::map<std::string, std::string> Fixture::getInputOutput() const { return {}; }
 
+// clang-format off
 FixtureIterator Fixture::begin() {
-    auto input = this->getInput();
-    if (input.empty()) {
-        auto inputOutput = this->getInputOutput();
-        if (inputOutput.empty())
-            throw std::runtime_error("Fixture::begin failed");
-
-        return FixtureIterator(shared_from_this(), inputOutput.begin());
-    }
-
-    return FixtureIterator(shared_from_this(), input.begin());
+    return FixtureIterator(shared_from_this(), FixtureIterator::Begin);
 }
 
 FixtureIterator Fixture::end() {
-    auto input = this->getInput();
-    if (input.empty()) {
-        auto inputOutput = this->getInputOutput();
-        if (inputOutput.empty())
-            throw std::runtime_error("Fixture::end failed");
-
-        return FixtureIterator(shared_from_this(), inputOutput.end());
-    }
-
-    return FixtureIterator(shared_from_this(), input.end());
+    return FixtureIterator(shared_from_this(), FixtureIterator::End);
 }
+// clang-format on
 
 std::string Fixture::testFormat(std::string input) {
     static const std::string prompt = ">> ";
