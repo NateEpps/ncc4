@@ -8,6 +8,7 @@
 
 #include "Util.hpp"
 #include <memory>
+#include <type_traits>
 
 namespace ncc::test {
 class Fixture;
@@ -35,6 +36,7 @@ class System {
   private:
     template <class T>
     void add() {
+        static_assert(std::is_base_of<Fixture, T>::value);
         testFixtures.push_back(T::factory());
     }
 

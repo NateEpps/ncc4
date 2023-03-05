@@ -70,21 +70,21 @@ bool FullPrintRaxFixture::run(std::string input, std::optional<std::string> optO
         std::cerr << "Unable to create assembly file\n";
         return false;
     }
-    ::FileDeleter asmGuard("tmp.s");
+    FileDeleter asmGuard("tmp.s");
 
     // Turn assembled file into an executable
     std::cout << prompt << "Assembling with gcc...\n";
     system("gcc tmp.s -o Tmp");
     if (!std::filesystem::exists("Tmp"))
         throw std::runtime_error("Invoking gcc failed, output program does not exist");
-    ::FileDeleter exeGuard("Tmp");
+    FileDeleter exeGuard("Tmp");
 
     // Run program and retrieve output
     std::cout << prompt << "Running executable...\n";
     system("./Tmp &> tmp-output.txt");
     if (!std::filesystem::exists("tmp-output.txt"))
         throw std::runtime_error("Error running executable, output text file does not exist");
-    ::FileDeleter txtGuard("tmp-output.txt");
+    FileDeleter txtGuard("tmp-output.txt");
 
     std::string realOutput = ncc::util::readFile("tmp-output.txt");
 

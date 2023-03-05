@@ -6,6 +6,7 @@
 #include "System.hpp"
 #include "BasicFixture.hpp"
 #include "ErrorFixture.hpp"
+#include "ExpgenFixture.hpp"
 #include "FullPrintRaxFixture.hpp"
 #include <iostream>
 #include <thread>
@@ -28,10 +29,10 @@ System::System() {
     add<BasicFixture>();
     add<ErrorFixture>();
     add<FullPrintRaxFixture>();
+    add<ExpgenFixture>();
 }
 
 int System::run(args_t cmd) {
-    // for each fixture...
     for (std::shared_ptr<Fixture> fixture : testFixtures) {
         printHeader(fixture->name);
 

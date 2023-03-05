@@ -6,6 +6,7 @@
 set(TEST_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/BasicFixture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ErrorFixture.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ExpgenFixture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Fixture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FixtureIterator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FullPrintRaxFixture.cpp
