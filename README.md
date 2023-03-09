@@ -47,7 +47,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
         * `ncc::test::BasicFixture` ✅
         * `ncc::test::ErrorFixture` ✅
         * `ncc::test::FullPrintRaxFixture` ✅
-        * `ncc::test::ExpgenFixture` - Next up...
+        * `ncc::test::ExpgenFixture` ⚠️ _In Progress_
         * `ncc::test::FullMainFixture`
     * [🧪] Test additions - _Added as needed_
 * **0.4** - Declaration and assignment (Types 1)
@@ -165,19 +165,16 @@ _5107 lines of assembly... I'd hate to have to debug that!_
 ...
 ```
 
-The central test class is `ncc::test::System`, which contains various fixtures and runs the test suite (_and will eventually parse command-line arguments_).
+The test suite is comprised of various _fixtures_ (see `ncc::test::Fixture`), each fixture representing a type of test. Each fixture has associated test cases. Fixtures that run actual executables on hardware require C `system` function availability, fairly basic `gcc` functionality, and a sane shell. Currently developing on MacOS 12.5.1. May expand support to Linux in some form eventually-- see Github issue #20. Command line arguments will eventually be implemented, maybe even [CTest](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Testing%20With%20CMake%20and%20CTest.html) integration...
 
-A _fixture_ is a specific type of test, and is defined by base class `ncc::test::Fixture`. Individual fixtures inherit from this base class, override the `ncc::test::Fixture::run` method to define how the test works, and override either `ncc::test::Fixture::getInput` or `ncc::test::Fixture::getInputOutput` to define what will be passed to the test when it's run.
+### Fixtures
 
-Fixtures so far:
-* `ncc::test::BasicFixture`
-* `ncc::test::ErrorFixture`
-* `ncc::test::FullPrintRaxFixture`
-
-TBD:
-* `ncc::test::ExpgenFixture` - Will replace what used to be the `expgen` test
+* `ncc::test::BasicFixture` ✅ - Run valid input through compiler and print generated assembly
+* `ncc::test::ErrorFixture` ✅ - Run invalid input through compiler. Running valid code is an error.
+* `ncc::test::FullPrintRaxFixture` ✅ - Run valid input through compiler with `--print-rax` option, create and run resulting executable on hardware, and check result.
+* `ncc::test::ExpgenFixture` ⚠️ _In Progress_ - Will replace what used to be the `expgen` test
 * `ncc::test::FullMainFixture` - Will replace newer former `TEST_CASE_WITH_OUTPUT`'s, older ones were covered by `ncc::test::FullPrintRaxFixture`
-* `ncc::test::TimeoutFixture` - Not sure if this will be needed. Inputs that would cause the compiler to time out are probably indications of a deeper problem, which should likely be fixed and handled elsewhere.
+* `ncc::test::TimeoutFixture` - Not sure if this will be needed. Inputs that would cause the compiler to time out are probably indications of a deeper problem, which should likely be fixed and handled elsewhere. Might be useful to have and interesting to implement though.
 
 ## Acknowledgements
 
