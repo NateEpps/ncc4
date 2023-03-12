@@ -3,15 +3,17 @@
 // Nathanael Epps
 //
 
-#include "System.hpp"
+#include "TestController.hpp"
 #include <chrono>
 #include <iostream>
 
 int main(int argc, const char** argv) {
-    ncc::test::System system;
+    ncc::test::TestController ctrl;
 
     auto start = std::chrono::system_clock::now();
-    int rval = system.run(ncc::util::bundle(argc, argv));
+
+    int rval = ctrl.run(ncc::util::bundle(argc, argv));
+
     auto end = std::chrono::system_clock::now();
 
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();

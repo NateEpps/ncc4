@@ -1,9 +1,9 @@
 //
-// System.cpp
+// TestController.cpp
 // Nathanael Epps
 //
 
-#include "System.hpp"
+#include "TestController.hpp"
 #include "BasicFixture.hpp"
 #include "ErrorFixture.hpp"
 #include "ExpgenFixture.hpp"
@@ -25,14 +25,14 @@ static void printHeader(std::string name) {
     std::cout << buf << "\n" << header << "\n" << buf << "\n\n";
 }
 
-System::System() {
+TestController::TestController() {
     add<BasicFixture>();
     add<ErrorFixture>();
     add<FullPrintRaxFixture>();
     add<ExpgenFixture>();
 }
 
-int System::run(args_t cmd) {
+int TestController::run(args_t cmd) {
     for (std::shared_ptr<Fixture> fixture : testFixtures) {
         printHeader(fixture->name);
 

@@ -6,8 +6,8 @@
 #ifndef TESTTYPES_HPP
 #define TESTTYPES_HPP
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace ncc::test::types {
 
@@ -23,6 +23,6 @@ typedef std::vector<std::pair<std::string, std::string>> inputOutput_t;
 /// @brief `inputOutput_t` itertator
 typedef std::vector<std::pair<std::string, std::string>>::iterator inputOutput_iterator_t;
 
-}
+} // namespace ncc::test::types
 
 #endif

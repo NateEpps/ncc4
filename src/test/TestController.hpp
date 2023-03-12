@@ -3,8 +3,8 @@
  * @author Nathanael Epps
  */
 
-#ifndef SYSTEM_HPP
-#define SYSTEM_HPP
+#ifndef TEST_CONTROL_HPP
+#define TEST_CONTROL_HPP
 
 #include "Util.hpp"
 #include <memory>
@@ -17,14 +17,13 @@ class Fixture;
  * @brief Central test class
  *
  * Maintain the list of fixtures and test cases, support active testing
- * @todo `System::add` should enforce type traits
  */
-class System {
+class TestController {
   public:
     /**
      * @brief Constructor-- add fixtures to list
      */
-    System();
+    TestController();
 
     /**
      * @brief Run tests at the higest conceptual level, given command line args
