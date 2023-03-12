@@ -25,7 +25,7 @@ class ErrorFixture : public Fixture {
     virtual bool run(std::string input, std::optional<std::string> output = std::nullopt) override;
 
     /// @brief Get test inputs
-    virtual std::vector<std::string> getInput() const override;
+    virtual types::input_t getInput() const override;
 };
 
 } // namespace ncc::test

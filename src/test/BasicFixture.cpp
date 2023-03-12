@@ -31,7 +31,7 @@ bool BasicFixture::run(std::string input, std::optional<std::string>) {
     return true;
 }
 
-std::vector<std::string> BasicFixture::getInput() const {
+types::input_t BasicFixture::getInput() const {
     return {"5",  "5a",   "    5", "90210",           "123abc456",
             "-5", "-456", "+",     "\"Hello world\"", "rand()"};
 }

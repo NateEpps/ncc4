@@ -25,7 +25,7 @@ class ExpgenFixture : public Fixture {
     virtual bool run(std::string input, std::optional<std::string> output = std::nullopt) override;
 
     /// @brief Get IO associated with the test
-    virtual std::map<std::string, std::string> getInputOutput() const override;
+    virtual types::inputOutput_t getInputOutput() const override;
 };
 
 } // namespace ncc::test

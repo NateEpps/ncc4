@@ -9,8 +9,8 @@
 #include <stdexcept>
 using namespace ncc::test;
 
-static std::map<std::string, std::vector<std::string>> inputRecords;
-static std::map<std::string, std::map<std::string, std::string>> inputOutputRecords;
+static std::map<std::string, types::input_t> inputRecords;
+static std::map<std::string, types::inputOutput_t> inputOutputRecords;
 
 FixtureIterator::FixtureIterator(std::weak_ptr<Fixture> wp, Position pos)
     : inputOnly(!wp.lock()->getInput().empty()), parentFixture(wp) {
@@ -70,10 +70,12 @@ bool FixtureIterator::operator!=(const FixtureIterator& that) { return !(*this =
 TestResult FixtureIterator::runTest() {
     try {
         bool b;
+        auto parent = parentFixture.lock();
+
         if (inputOnly)
-            b = parentFixture.lock()->run(*inputItr);
+            b = parent->run(*inputItr);
         else
-            b = parentFixture.lock()->run(inputOutputItr->first, inputOutputItr->second);
+            b = parent->run(inputOutputItr->first, inputOutputItr->second);
 
         if (b)
             return TestResult::Success;

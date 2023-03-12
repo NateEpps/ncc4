@@ -4,15 +4,25 @@
 //
 
 #include "Fixture.hpp"
+#include <filesystem>
 #include <iostream>
 
 using namespace ncc::test;
 
+FileDeleter::FileDeleter(std::string s) : filename(s), enabled(true) {}
+
+FileDeleter::~FileDeleter() {
+    if (std::filesystem::exists(filename) && enabled)
+        std::filesystem::remove(filename);
+}
+
+void FileDeleter::disable() { enabled = false; }
+
 Fixture::Fixture(std::string n) : name(n) {}
 
-std::vector<std::string> Fixture::getInput() const { return {}; }
+types::input_t Fixture::getInput() const { return {}; }
 
-std::map<std::string, std::string> Fixture::getInputOutput() const { return {}; }
+types::inputOutput_t Fixture::getInputOutput() const { return {}; }
 
 // clang-format off
 FixtureIterator Fixture::begin() {

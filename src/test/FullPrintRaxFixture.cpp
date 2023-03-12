@@ -14,25 +14,6 @@
 #include <stdexcept>
 using namespace ncc::test;
 
-namespace {
-
-struct FileDeleter {
-    static bool shouldDelete;
-
-    std::string name;
-
-    FileDeleter(std::string n) : name(n) {}
-
-    ~FileDeleter() {
-        if (std::filesystem::exists(name) && shouldDelete)
-            std::filesystem::remove(name);
-    }
-};
-
-bool FileDeleter::shouldDelete = true;
-
-} // namespace
-
 FullPrintRaxFixture::FullPrintRaxFixture() : Fixture("FullPrintRax") {
     if (system(nullptr) == 0)
         throw std::runtime_error(
@@ -101,14 +82,17 @@ bool FullPrintRaxFixture::run(std::string input, std::optional<std::string> optO
         }
     }
 
-    if (!success)
-        FileDeleter::shouldDelete = false;
+    if (!success) {
+        asmGuard.disable();
+        exeGuard.disable();
+        txtGuard.disable();
+    }
 
     std::cout << "\n" << (success ? "PASS" : "FAIL") << "\n";
     return success;
 }
 
-std::map<std::string, std::string> FullPrintRaxFixture::getInputOutput() const {
+types::inputOutput_t FullPrintRaxFixture::getInputOutput() const {
     return {{"5", "5"},        {"1+2", "3"},       {"123 + 456", "579"}, {"5 - 4", "1"},
             {"10 - 15", "-5"}, {"4 + 5 - 3", "6"}, {"2 * 4", "8"}};
 }

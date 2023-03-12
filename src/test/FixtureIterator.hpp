@@ -6,9 +6,8 @@
 #ifndef FIXTURE_ITERATOR_HPP
 #define FIXTURE_ITERATOR_HPP
 
-#include <map>
-#include <string>
-#include <vector>
+#include "TestTypes.hpp"
+#include <memory>
 
 namespace ncc::test {
 class Fixture;
@@ -49,8 +48,8 @@ class FixtureIterator {
     const bool inputOnly;
     std::weak_ptr<Fixture> parentFixture;
 
-    std::vector<std::string>::iterator inputItr;
-    std::map<std::string, std::string>::iterator inputOutputItr;
+    types::input_iterator_t inputItr;
+    types::inputOutput_iterator_t inputOutputItr;
 };
 
 } // namespace ncc::test

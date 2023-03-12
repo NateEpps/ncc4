@@ -7,12 +7,33 @@
 #define FIXTURE_HPP
 
 #include "FixtureIterator.hpp"
+#include "TestTypes.hpp"
 #include <map>
 #include <optional>
 #include <string>
 #include <vector>
 
 namespace ncc::test {
+
+/**
+ * @brief Delete files on destruction
+ */
+class FileDeleter {
+  public:
+    /// @brief Delete the given file when `this` goes out of scope
+    FileDeleter(std::string);
+
+    /// @brief Delete file
+    ~FileDeleter();
+
+    /// @brief Don't delete the given file on destruction
+    void disable();
+
+  private:
+    const std::string filename;
+
+    bool enabled;
+};
 
 /**
  * @brief Abstract base class for test fixtures
@@ -32,10 +53,10 @@ class Fixture : public std::enable_shared_from_this<Fixture> {
     virtual bool run(std::string input, std::optional<std::string> output = std::nullopt) = 0;
 
     /// @brief Retrieve all inputs
-    virtual std::vector<std::string> getInput() const;
+    virtual types::input_t getInput() const;
 
     /// @brief Return input/output pairs
-    virtual std::map<std::string, std::string> getInputOutput() const;
+    virtual types::inputOutput_t getInputOutput() const;
 
     /// @brief Get iterator to the beginning of the test sequence
     FixtureIterator begin();
