@@ -15,6 +15,7 @@
 using namespace ncc::test;
 
 FullPrintRaxFixture::FullPrintRaxFixture() : Fixture("FullPrintRax") {
+#warning This is not the best place for this check
     if (system(nullptr) == 0)
         throw std::runtime_error(
             "Cannot create FullPrintRaxFixture, \"system\" function unavailable");
@@ -25,8 +26,6 @@ std::shared_ptr<FullPrintRaxFixture> FullPrintRaxFixture::factory() {
 }
 
 bool FullPrintRaxFixture::run(std::string input, std::optional<std::string> optOutput) {
-    static const std::string prompt = "*** ";
-
     std::string output = optOutput.value_or("");
 
     std::cout << "Input:\n" << testFormat(input) << "\n";
@@ -42,7 +41,7 @@ bool FullPrintRaxFixture::run(std::string input, std::optional<std::string> optO
     }
 
     // Run compiler and close output stream
-    std::cout << prompt << "Running ncc...\n";
+    std::cout << PROMPT << "Running ncc...\n";
     ncc::io::init(inputStream, asmStream);
     ncc::Controller ctrl;
     ctrl.run(ncc::ScaffoldType::PRINT_RAX);
@@ -54,17 +53,21 @@ bool FullPrintRaxFixture::run(std::string input, std::optional<std::string> optO
     FileDeleter asmGuard("tmp.s");
 
     // Turn assembled file into an executable
-    std::cout << prompt << "Assembling with gcc...\n";
+    std::cout << PROMPT << "Assembling with gcc...\n";
     system("gcc tmp.s -o Tmp");
-    if (!std::filesystem::exists("Tmp"))
-        throw std::runtime_error("Invoking gcc failed, output program does not exist");
+    if (!std::filesystem::exists("Tmp")) {
+        std::cerr << "Invoking gcc failed, output program does not exist\n";
+        return false;
+    }
     FileDeleter exeGuard("Tmp");
 
     // Run program and retrieve output
-    std::cout << prompt << "Running executable...\n";
+    std::cout << PROMPT << "Running executable...\n";
     system("./Tmp &> tmp-output.txt");
-    if (!std::filesystem::exists("tmp-output.txt"))
-        throw std::runtime_error("Error running executable, output text file does not exist");
+    if (!std::filesystem::exists("tmp-output.txt")) {
+        std::cerr << "Error running executable, output text file does not exist\n";
+        return false;
+    }
     FileDeleter txtGuard("tmp-output.txt");
 
     std::string realOutput = ncc::util::readFile("tmp-output.txt");

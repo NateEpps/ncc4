@@ -4,7 +4,9 @@
 //
 
 #include "ExpgenFixture.hpp"
+#include "FullPrintRaxFixture.hpp"
 #include "Util.hpp"
+#include <filesystem>
 #include <iostream>
 using namespace ncc::test;
 
@@ -32,17 +34,31 @@ bool ExpgenFixture::run(std::string input, std::optional<std::string> optOutput)
     std::string output = optOutput.value_or("");
 
     if (seed != output) {
-        std::cerr << "Seed and output must match (given \"" << seed << "\" and \"" << output
-                  << "\")\n";
+        std::cerr << "Seed and output must match (given seed \"" << seed << "\" and output \""
+                  << output << "\")\n";
         return false;
     }
 
     std::cout << "Seed:         " << seed << "\n";
     std::cout << "Iterations:   " << iter << "\n";
 
-    std::cout << "Expected output:\n" << testFormat(output) << "\n";
+    // Run expgen, and retrieve output
+    std::cout << PROMPT << "Running expgen...\n";
+    system(std::string("./expgen " + seed + " " + iter + " &> exp-out.txt").c_str());
+    if (!std::filesystem::exists("exp-out.txt")) {
+        std::cerr << "Ran expgen, but no output file was generated\n";
+        return false;
+    }
+    FileDeleter expOutGuard("exp-out.txt");
 
-    std::cout << "...\n";
+    std::string expression = ncc::util::readFile("exp-out.txt");
+
+    // Borrow rest of logic from PrintRaxFixture
+    auto printRaxFixture = FullPrintRaxFixture::factory();
+    if (!printRaxFixture->run(expression, output)) {
+        expOutGuard.disable();
+        return false;
+    }
 
     return true;
 }
