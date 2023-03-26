@@ -48,6 +48,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
         * `ncc::test::ErrorFixture` ✅
         * `ncc::test::FullPrintRaxFixture` ✅
         * `ncc::test::ExpgenFixture` ✅
+        * `ncc::test::FullFixture` ✅
         * `ncc::test::FullMainFixture`
         * Command-line interface
     * [🧪] Test additions - _Added as needed_
@@ -174,9 +175,9 @@ The test suite is comprised of various _fixtures_ (see `ncc::test::Fixture`), ea
 * `ncc::test::ErrorFixture` ✅ - Run invalid input through compiler. Running valid code is an error.
 * `ncc::test::FullPrintRaxFixture` ✅ - Run valid input through compiler with `--print-rax` option, create and run resulting executable on hardware, and check result.
 * `ncc::test::ExpgenFixture` ✅ - Use `expgen` program to generate various mathematical expressions, and then test via `ncc::test::FullPrintRaxFixture`.
+* `ncc::test::FullFixture` ✅ - Pseudo-fixture that runs basic file IO logic.
 * `ncc::test::FullMainFixture` - Will replace newer former `TEST_CASE_WITH_OUTPUT`'s, older ones were covered by `ncc::test::FullPrintRaxFixture`
 * `ncc::test::TimeoutFixture` - Not sure if this will be needed. Inputs that would cause the compiler to time out are probably indications of a deeper problem, which should likely be fixed and handled elsewhere. Might be useful to have and interesting to implement though.
-* `ncc::test::FullFixture` - In terms of inheritance, could serve as a middle layer between `ncc::test::Fixture` and subclasses that perform hardware operations (`ncc::test::FullMainFixture`, `ncc::test::FullPrintRaxFixture`) to extract out common logic. _Note:_ `ncc::test::ExpgenFixture` is a special case-- while it does do hardware stuff, it has its own flow and piggybacks off of `ncc::test::FullPrintRaxFixture`, so it wouldn't inherit from hypothetical `ncc::test::FullFixture`.
 * `ncc::test::FullScaffoldlessFixture` - As the name implies, no scaffolding. This is a long way off, won't be needed until **0.7**.
 
 ## Acknowledgements

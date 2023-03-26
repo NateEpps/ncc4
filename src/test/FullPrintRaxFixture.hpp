@@ -6,7 +6,7 @@
 #ifndef PRINT_RAX_FIXTURE_HPP
 #define PRINT_RAX_FIXTURE_HPP
 
-#include "Fixture.hpp"
+#include "FullFixture.hpp"
 
 namespace ncc::test {
 
@@ -16,7 +16,7 @@ namespace ncc::test {
  * Run input through ncc with "print rax" scaffolding, run assembly through gcc, run resulting
  * program and collect output
  */
-class FullPrintRaxFixture : public Fixture {
+class FullPrintRaxFixture : public FullFixture {
   private:
     FullPrintRaxFixture();
 
@@ -24,8 +24,8 @@ class FullPrintRaxFixture : public Fixture {
     /// @brief Create `FullPrintRaxFixture` instances
     static std::shared_ptr<FullPrintRaxFixture> factory();
 
-    /// @brief Run a test case
-    virtual bool run(std::string input, std::optional<std::string> output = std::nullopt) override;
+    /// @brief Get the scaffolding type
+    virtual ncc::ScaffoldType getScaffoldType() const override;
 
     /// @brief Get input/output data
     virtual types::inputOutput_t getInputOutput() const override;

@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-// Used by some Fixtures to prepend step output
+/// @brief Used by some Fixtures to prepend step output
 #define PROMPT "*** "
 
 namespace ncc::test {

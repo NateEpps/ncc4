@@ -8,6 +8,9 @@
 #include <iostream>
 
 int main(int argc, const char** argv) {
+    if (system(nullptr) == 0)
+        throw std::runtime_error("\"system\" function unavailable");
+
     ncc::test::TestController ctrl;
 
     auto start = std::chrono::system_clock::now();
