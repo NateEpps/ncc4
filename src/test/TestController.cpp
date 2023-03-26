@@ -7,6 +7,7 @@
 #include "BasicFixture.hpp"
 #include "ErrorFixture.hpp"
 #include "ExpgenFixture.hpp"
+#include "FullMainFixture.hpp"
 #include "FullPrintRaxFixture.hpp"
 #include <iostream>
 #include <thread>
@@ -30,6 +31,7 @@ TestController::TestController() {
     add<ErrorFixture>();
     add<FullPrintRaxFixture>();
     add<ExpgenFixture>();
+    add<FullMainFixture>();
 }
 
 int TestController::run(args_t cmd) {
