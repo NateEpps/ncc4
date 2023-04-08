@@ -9,6 +9,7 @@
 #include "ExpgenFixture.hpp"
 #include "FullMainFixture.hpp"
 #include "FullPrintRaxFixture.hpp"
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <thread>
