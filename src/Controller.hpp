@@ -23,6 +23,9 @@ class Controller {
     Controller();
 
     /// @brief Run the compiler
+    ///
+    /// This runs the compiler at the highest conceptual level. When testing, or for other
+    /// development purposes, this is the method to wrap in a `try` / `catch` setup
     void run(ScaffoldType st);
 
     /// @brief Add a string literal to the data section, and return index

@@ -31,7 +31,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 * **0.3** - General expressions, including function calls, and statements ⚠️
     * [Scaffold] Scaffolding adjustments ✅
     * [Scanner] String literals ✅
-    * [Scanner] Function call ⚠️ _In Progress_
+    * [Scanner] Function call ⚠️
         * Function arguments ⚠️ _First draft_
         * Function call ✅
         * Nested function calls ❌ _Not yet_
@@ -40,7 +40,18 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
         * Recognize non-function identifiers, some sort of stub
         * Assignment operator (_Remember to filter out rvalues_)
     * [NEW Parser] Statements
-    * [🧪] Test adjustments / additions ⚠️ _In progress_
+    * [🧪] Test refactor ✅ _see_ __Test Suite__ _section for more details_
+        * Central class `ncc::test::TestController` ✅
+        * Test fixture base class `ncc::test::Fixture` ✅
+        * Iterate over a fixture with `ncc::test::FixtureIterator` ✅
+        * `ncc::test::BasicFixture` ✅
+        * `ncc::test::ErrorFixture` ✅
+        * `ncc::test::FullPrintRaxFixture` ✅
+        * `ncc::test::ExpgenFixture` ✅
+        * `ncc::test::FullFixture` ✅
+        * `ncc::test::FullMainFixture` ✅
+        * Command-line interface ✅
+    * [🧪] Test additions - _Added as needed_
 * **0.4** - Declaration and assignment (Types 1)
 * **0.5** - `if` / `else`
 * **0.6** - `while` / `do-while` / `for` 😎
@@ -147,28 +158,40 @@ Given a _seed_ and a number of _iterations_, randomly generate a mathematical ex
 ~$ cat ncc.log | wc -l
    11522
 ```
-_5107 lines of assembly... I'd hate to have to debug that!_
 
 ## Test Suite
 
 ```
 ~$ ./test --help
-./test v0.2
 Usage:
-        ./test [option]
+      ./test [option, specific fixture, OR nothing]
 
- -h / --help           Bring up this help info
- -v / --version        Exit after printing version info
- --expgen              Run just the expgen test
- (no option)           Run the full test suite
+  --list / -l          List all test fixtures
+  --help / -h          Bring up this help info
+  (Specific fixture)   Run just the named fixture
+  (Nothing)            Run the full test suite
+```
+```
+~$ ./test --list && ./test --list | wc -l
+Basic
+Error
+FullPrintRax
+Expgen
+FullMain
+       5
 ```
 
-The test suite consists of two parts, the first being a series of hard-coded strings given to the compiler, that fall into three categories:
-* _Test cases_ are ran, and the output is shown, to manually confirm correctness
-* _Error cases_ are expected to fail. _Not_ failing causes the error case to fail
-* _Test cases with output_ are ran, assembled, and the resulting executable is run and output is compared against a hard-coded expected output.
+The test suite is comprised of various _fixtures_ (see `ncc::test::Fixture`), each fixture representing a type of test. Each fixture has associated test cases. Fixtures that run actual executables on hardware require C `system` function availability, fairly basic `gcc` functionality, and a sane shell. Currently developing on MacOS 12.5.1. May expand support to Linux in some form eventually-- see Github issue #20. See output from `./test --help` for command line interface info. May look into [CTest](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Testing%20With%20CMake%20and%20CTest.html) integration ⚠️.
 
-The other piece of the test suite utilizes the `expgen` program to randomly generate mathematical expression input for the compiler.
+### Fixtures
+
+* `ncc::test::BasicFixture` ✅ - Run valid input through compiler and print generated assembly
+* `ncc::test::ErrorFixture` ✅ - Run invalid input through compiler. Running valid code is an error.
+* `ncc::test::FullPrintRaxFixture` ✅ - Run valid input through compiler with `--print-rax` option, create and run resulting executable on hardware, and check result.
+* `ncc::test::ExpgenFixture` ✅ - Use `expgen` program to generate various mathematical expressions, and then test via `ncc::test::FullPrintRaxFixture`.
+* `ncc::test::FullFixture` ✅ - Pseudo-fixture that runs basic file IO logic.
+* `ncc::test::FullMainFixture` ✅ - Run valid input through compiler with `MAIN` scaffolding, create and run resulting executable on hardware, and check result.
+* `ncc::test::FullScaffoldlessFixture` ⚠️ _Not yet needed_ - As the name implies, no scaffolding. This is a long way off, won't be needed until around **0.7**.
 
 ## Acknowledgements
 

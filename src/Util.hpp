@@ -32,14 +32,14 @@ namespace util {
 template <class T>
 T convert(std::string str) {
     if (str.empty())
-        throw std::runtime_error("convert: Can't convert empty string");
+        throw std::runtime_error("ncc::util::convert: Can't convert empty string");
 
     std::stringstream ss(str);
     T data;
     if (ss >> data)
         return data;
     else
-        throw std::runtime_error("convert: Conversion error for string \"" + str + "\"");
+        throw std::runtime_error("ncc::util::convert: Conversion error for string \"" + str + "\"");
 }
 
 /// @brief Return random integer in range [lo, hi]
@@ -52,6 +52,10 @@ args_t bundle(int, const char**);
 
 /// @brief Return an iterator to the given arg from the arg list
 args_itr_t getOpt(args_t&, std::string);
+
+/// @brief Get all non-options from `args`, meaning command line args that don't start with "-" or
+/// "--"
+std::vector<std::string> getParameters(const args_t& args);
 
 /// @brief Given `args`, search for and return an iterator for the first parameter found
 template <class... Args>

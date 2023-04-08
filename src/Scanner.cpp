@@ -104,6 +104,9 @@ void Scanner::parseStringLiteral() {
         token += next;
         prev = next;
         next = io::read();
+
+        if (next == EOF)
+            expected("end-of-string, not EOF");
     }
 
     next = io::read();
@@ -138,7 +141,7 @@ void Scanner::parseOp() {
         token = "%";
         opType = OpType::Modulus;
     } else {
-        expected("operator");
+        expected("operator (next = \'" + std::string(1, next) + "\')");
     }
 
     tokenType = TokenType::Operator;
