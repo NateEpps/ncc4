@@ -161,7 +161,16 @@ void Scanner::parseFunctionArgs() {
         if (regIndex >= argRegs.size())
             expected("less arguments");
 
+        // save...
+        for (int x = 0; x <= regIndex; x++)
+            io::write("pushq " + argRegs[x]);
+
         expression();
+
+        // ... and restore
+        for (int x = regIndex; x >= 0; x--)
+            io::write("popq " + argRegs[x]);
+
         io::write("movq %rax, " + argRegs[regIndex]);
         regIndex++;
 

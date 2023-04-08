@@ -34,7 +34,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
     * [Scanner] Function call ⚠️
         * Function arguments ⚠️ _First draft_
         * Function call ✅
-        * Nested function calls ❌ _Not yet_
+        * Nested function calls ⚠️ _First draft_
             * _Note: don't forget to align the stack- 16 bytes?_
     * [Scanner] Assignment, sort of
         * Recognize non-function identifiers, some sort of stub
@@ -192,6 +192,55 @@ The test suite is comprised of various _fixtures_ (see `ncc::test::Fixture`), ea
 * `ncc::test::FullFixture` ✅ - Pseudo-fixture that runs basic file IO logic.
 * `ncc::test::FullMainFixture` ✅ - Run valid input through compiler with `MAIN` scaffolding, create and run resulting executable on hardware, and check result.
 * `ncc::test::FullScaffoldlessFixture` ⚠️ _Not yet needed_ - As the name implies, no scaffolding. This is a long way off, won't be needed until around **0.7**.
+
+### Example
+
+```
+$ ./test FullMain
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ Test Fixture "FullMain" @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+Input:
+>> printf("Hello, world");
+Expected output:
+>> Hello, world
+*** Running ncc...
+*** Assembling with gcc...
+*** Running executable...
+Output:
+>> Hello, world
+
+PASS
+--------------------------------------------------------------------
+Input:
+>> printf("%ld", 1 + 2);
+Expected output:
+>> 3
+*** Running ncc...
+*** Assembling with gcc...
+*** Running executable...
+Output:
+>> 3
+
+PASS
+--------------------------------------------------------------------
+Input:
+>> printf("%ld", strlen("MeltMyEyezSeeYourFuture"));
+Expected output:
+>> 23
+*** Running ncc...
+*** Assembling with gcc...
+*** Running executable...
+Output:
+>> 23
+
+PASS
+--------------------------------------------------------------------
+
+Test time 918ms
+06:42:58PM Apr-08-2023
+```
 
 ## Acknowledgements
 

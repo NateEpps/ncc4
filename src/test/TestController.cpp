@@ -78,6 +78,7 @@ int TestController::run(args_t cmd) {
     auto end = std::chrono::system_clock::now();
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     std::cout << "\nTest time " << ms << "ms\n";
+    std::cout << ncc::util::getFormattedDateTime() << "\n";
     return status;
 }
 

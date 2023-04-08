@@ -76,6 +76,9 @@ std::string readFile(std::string);
 /// @brief Write `contents` to file named `name`, replace contents if the file exists
 void writeFile(std::string name, std::string contents);
 
+/// @brief Return a nicely formatted string with the current date/time
+std::string getFormattedDateTime();
+
 } // end namespace util
 } // end namespace ncc
 

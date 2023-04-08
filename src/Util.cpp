@@ -6,6 +6,7 @@
 #include "Util.hpp"
 #include <algorithm>
 #include <cstdlib>
+#include <ctime>
 #include <fstream>
 #include <random>
 #include <sstream>
@@ -65,4 +66,13 @@ void ncc::util::writeFile(std::string name, std::string contents) {
 
     file << contents;
     file.close();
+}
+
+std::string ncc::util::getFormattedDateTime() {
+    time_t now = time(nullptr);
+    char buffer[1024];
+
+    // see https://en.cppreference.com/w/cpp/chrono/c/strftime
+    strftime(&buffer[0], 1024, "%I:%M:%S%p %b-%d-%Y", localtime(&now));
+    return std::string(buffer);
 }
