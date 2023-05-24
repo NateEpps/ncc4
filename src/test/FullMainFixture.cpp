@@ -21,6 +21,7 @@ types::inputOutput_t FullMainFixture::getInputOutput() const {
     io.push_back({"printf(\"%ld\", 1 + 2);", "3"});
     io.push_back({R"(printf("%ld", strlen("MeltMyEyezSeeYourFuture"));)",
                   std::to_string(std::string("MeltMyEyezSeeYourFuture").size())});
+    io.push_back({R"(printf("%ld", printf("%ld", printf("HelloWorld")));)", "HelloWorld102"});
 
     return io;
 }

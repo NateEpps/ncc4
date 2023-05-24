@@ -237,9 +237,21 @@ Output:
 
 PASS
 --------------------------------------------------------------------
+Input:
+>> printf("%ld", printf("%ld", printf("HelloWorld")));
+Expected output:
+>> HelloWorld102
+*** Running ncc...
+*** Assembling with gcc...
+*** Running executable...
+Output:
+>> HelloWorld102
 
-Test time 918ms
-06:42:58PM Apr-08-2023
+PASS
+--------------------------------------------------------------------
+
+Test time 1035ms
+02:57:10PM May-24-2023
 ```
 
 ## Acknowledgements
