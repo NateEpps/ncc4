@@ -15,7 +15,7 @@ int ncc::util::randInt(int lo, int hi) {
     if (lo >= hi)
         return 0;
 
-    // This is disgusting and I hate it but it works a lot better then rand()
+    // ew
     std::random_device device;
     std::mt19937 generator(device());
     std::uniform_int_distribution<> distribution(lo, hi);

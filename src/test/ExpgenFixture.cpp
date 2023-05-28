@@ -29,6 +29,8 @@ std::shared_ptr<ExpgenFixture> ExpgenFixture::factory() {
 }
 
 bool ExpgenFixture::run(std::string input, std::optional<std::string> optOutput) {
+    std::cout << std::endl;
+
     std::string seed = input.substr(0, input.find(' '));
     std::string iter = input.substr(input.find(' ') + 1);
     std::string output = optOutput.value_or("");

@@ -24,7 +24,7 @@ namespace ncc::test {
 class FileDeleter {
   public:
     /// @brief Delete the given file when `this` goes out of scope
-    FileDeleter(std::string);
+    explicit FileDeleter(std::string);
 
     /// @brief Delete file
     ~FileDeleter();

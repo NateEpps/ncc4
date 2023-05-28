@@ -37,7 +37,7 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
         * Nested function calls ⚠️ _First draft_
             * _Note: don't forget to align the stack- 16 bytes?_
     * [Scanner] Assignment, sort of
-        * Recognize non-function identifiers, some sort of stub
+        * Recognize non-function identifiers, some sort of stub ⚠️ _Stub exists_
         * Assignment operator (_Remember to filter out rvalues_)
     * [NEW Parser] Statements
     * [🧪] Test refactor ✅ _see_ __Test Suite__ _section for more details_
@@ -164,12 +164,12 @@ Given a _seed_ and a number of _iterations_, randomly generate a mathematical ex
 ```
 ~$ ./test --help
 Usage:
-      ./test [option, specific fixture, OR nothing]
+      ./test ...
 
-  --list / -l          List all test fixtures
-  --help / -h          Bring up this help info
-  (Specific fixture)   Run just the named fixture
-  (Nothing)            Run the full test suite
+  --list / -l                          List all test fixtures
+  --help / -h                          Bring up this help info
+  (Specific fixture) [Test number]     Run just the named fixture. Optional [Test number] param can be used to indicate a specific test
+  (Nothing)                            Run the full test suite-- all test fixtures
 ```
 ```
 ~$ ./test --list && ./test --list | wc -l
@@ -196,36 +196,12 @@ The test suite is comprised of various _fixtures_ (see `ncc::test::Fixture`), ea
 ### Example
 
 ```
-$ ./test FullMain
+$ ./test FullMain 2
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ Test Fixture "FullMain" @@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-Input:
->> printf("Hello, world");
-Expected output:
->> Hello, world
-*** Running ncc...
-*** Assembling with gcc...
-*** Running executable...
-Output:
->> Hello, world
-
-PASS
---------------------------------------------------------------------
-Input:
->> printf("%ld", 1 + 2);
-Expected output:
->> 3
-*** Running ncc...
-*** Assembling with gcc...
-*** Running executable...
-Output:
->> 3
-
-PASS
---------------------------------------------------------------------
-Input:
+2) Input:
 >> printf("%ld", strlen("MeltMyEyezSeeYourFuture"));
 Expected output:
 >> 23
@@ -237,21 +213,9 @@ Output:
 
 PASS
 --------------------------------------------------------------------
-Input:
->> printf("%ld", printf("%ld", printf("HelloWorld")));
-Expected output:
->> HelloWorld102
-*** Running ncc...
-*** Assembling with gcc...
-*** Running executable...
-Output:
->> HelloWorld102
 
-PASS
---------------------------------------------------------------------
-
-Test time 1035ms
-02:57:10PM May-24-2023
+Test time 370ms
+03:28:41PM May-28-2023
 ```
 
 ## Acknowledgements

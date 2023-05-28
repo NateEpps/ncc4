@@ -35,6 +35,9 @@ class FixtureIterator {
     /// @brief Postfix increment
     FixtureIterator operator++(int);
 
+    /// @brief Compound add
+    FixtureIterator& operator+=(int);
+
     /// @brief Logical equality operator
     bool operator==(const FixtureIterator&);
 

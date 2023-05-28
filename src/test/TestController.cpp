@@ -20,13 +20,24 @@ static const std::string separator =
     "--------------------------------------------------------------------";
 
 static void printHeader(std::string name) {
-    static const char block = '@';
+    static constexpr char block = '@';
     std::string header =
         std::string(2, block) + " Test Fixture \"" + name + "\" " + std::string(2, block);
     std::string buf(header.size(), block);
 
     std::cout << buf << "\n" << header << "\n" << buf << "\n\n";
 }
+
+// clang-format off
+static void printHelp(const std::string& cmd0) {
+    std::cout << "Usage:\n";
+    std::cout << "      " << cmd0 << " ...\n\n";
+    std::cout << "  --list / -l                          List all test fixtures\n";
+    std::cout << "  --help / -h                          Bring up this help info\n";
+    std::cout << "  (Specific fixture) [Test number]     Run just the named fixture. Optional [Test number] param can be used to indicate a specific test\n";
+    std::cout << "  (Nothing)                            Run the full test suite-- all test fixtures\n";
+}
+// clang-format on
 
 TestController::TestController() : listFlag(false), helpFlag(false) {
     add<BasicFixture>();
@@ -36,19 +47,16 @@ TestController::TestController() : listFlag(false), helpFlag(false) {
     add<FullMainFixture>();
 }
 
-int TestController::run(args_t cmd) {
+int TestController::run(args_t cmdLineArgs) {
     // check args
-    if (!processArgs(cmd))
+    if (!processArgs(cmdLineArgs)) {
+        printHelp(cmdLineArgs[0]);
         return EXIT_FAILURE;
+    }
 
     // check flags
     if (helpFlag) {
-        std::cout << "Usage:\n";
-        std::cout << "      " << cmd[0] << " [option, specific fixture, OR nothing]\n\n";
-        std::cout << "  --list / -l          List all test fixtures\n";
-        std::cout << "  --help / -h          Bring up this help info\n";
-        std::cout << "  (Specific fixture)   Run just the named fixture\n";
-        std::cout << "  (Nothing)            Run the full test suite\n";
+        printHelp(cmdLineArgs[0]);
         return EXIT_SUCCESS;
     }
 
@@ -59,15 +67,25 @@ int TestController::run(args_t cmd) {
         return EXIT_SUCCESS;
     }
 
-    // Otherwise, run things
+    // Otherwise, run things...
     int status = EXIT_SUCCESS;
     auto start = std::chrono::system_clock::now();
 
     if (specificFixture.has_value()) {
-        if (!runFixture(specificFixture.value()))
-            status = EXIT_FAILURE;
+        if (specificIndex.has_value()) { // Runing just one specific fixture-test pair
+            printHeader(specificFixture.value()->name);
+
+            FixtureIterator itr = specificFixture.value()->begin();
+            itr += specificIndex.value();
+
+            if (!runTest(itr, specificIndex.value()))
+                status = EXIT_FAILURE;
+        } else {
+            if (!runFixture(specificFixture.value())) // Running a specific fixture
+                status = EXIT_FAILURE;
+        }
     } else {
-        for (std::shared_ptr<Fixture> fixture : testFixtures) {
+        for (std::shared_ptr<Fixture> fixture : testFixtures) { // Run everything
             if (!runFixture(fixture)) {
                 status = EXIT_FAILURE;
                 break;
@@ -88,31 +106,39 @@ bool TestController::runFixture(std::shared_ptr<Fixture> fixture) {
     FixtureIterator itr = fixture->begin();
     const FixtureIterator end = fixture->end();
 
+    int index = 0;
     while (itr != end) {
-        TestResult res = itr.runTest();
-
-        if (res != TestResult::Success) {
-            if (res == TestResult::Failure)
-                std::cerr << "*** Test Failed ***\n";
-            else if (res == TestResult::Exception)
-                std::cerr << "*** Test threw unexpected exception ***\n";
-
+        if (!runTest(itr, index))
             return false;
-        }
 
-        std::cout << separator << "\n";
+        index++;
         itr++;
     }
 
     return true;
 }
 
-bool TestController::processArgs(args_t& args) {
-    if (ncc::util::getOpt(args, "--help", "-h") != args.end())
-        helpFlag = true;
+bool TestController::runTest(FixtureIterator& itr, int index) {
+    std::cout << index << ") ";
+    TestResult res = itr.runTest();
+    bool status = true;
 
-    if (ncc::util::getOpt(args, "--list", "-l") != args.end())
-        listFlag = true;
+    if (res != TestResult::Success) {
+        if (res == TestResult::Failure)
+            std::cerr << "*** Test Failed ***\n";
+        else if (res == TestResult::Exception)
+            std::cerr << "*** Test threw unexpected exception ***\n";
+
+        status = false;
+    }
+
+    std::cout << separator << "\n";
+    return status;
+}
+
+bool TestController::processArgs(args_t& args) {
+    helpFlag = (ncc::util::getOpt(args, "--help", "-h") != args.end());
+    listFlag = (ncc::util::getOpt(args, "--list", "-l") != args.end());
 
     // A flag was set, bail out here
     if (helpFlag || listFlag)
@@ -121,8 +147,9 @@ bool TestController::processArgs(args_t& args) {
     // Otherwise, see if we have a specifically named test
     auto params = ncc::util::getParameters(args);
     if (params.empty())
-        return true;
+        return true; // no specific test. Bail out here
 
+    // If params aren't empty, we should have at least a fixture name
     std::string targetName = params[0];
     auto itr =
         std::find_if(testFixtures.begin(), testFixtures.end(),
@@ -134,5 +161,20 @@ bool TestController::processArgs(args_t& args) {
     }
 
     specificFixture = *itr;
+
+    // See if we've been passed a test index as well
+    if (params.size() >= 2) {
+        std::string maybeIndex = params[1];
+        std::stringstream ss(maybeIndex);
+        int extracted;
+
+        if (!(ss >> extracted)) {
+            std::cerr << "Error: Could not convert \"" << maybeIndex << "\" to an int\n";
+            return false;
+        }
+
+        specificIndex = extracted;
+    }
+
     return true;
 }

@@ -55,6 +55,13 @@ FixtureIterator FixtureIterator::operator++(int) {
     return *this;
 }
 
+FixtureIterator& FixtureIterator::operator+=(int i) {
+    for (int x = 0; x < i; x++)
+        (*this)++;
+
+    return *this;
+}
+
 bool FixtureIterator::operator==(const FixtureIterator& that) {
     if (inputOnly != that.inputOnly)
         throw std::runtime_error("Cannot compare input-only and IO fixture iterators");
