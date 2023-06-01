@@ -120,6 +120,8 @@ S0:
 3
 ```
 
+_Todo: Add some error example(s)_
+
 ## Expression Generator
 
 ```
@@ -206,6 +208,73 @@ PASS
 
 Test time 370ms
 03:28:41PM May-28-2023
+```
+
+## Log File
+
+`ncc` writes a log file to make debugging easy!
+
+```
+~$ echo "1 + 2" > input.c
+~$ ./ncc --print-rax < input.c > output.s && cat output.s
+    .globl   _main
+_main:
+    pushq    %rbp
+    movq     %rsp, %rbp
+    subq     $16, %rsp
+
+    movq     $1, %rax
+    pushq    %rax
+    movq     $2, %rax
+    popq     %r10
+    addq     %r10, %rax
+
+    leaq     S0(%rip), %rdi
+    movq     %rax, %rsi
+    callq    _printf
+    movq     $0, %rax
+    addq     $16, %rsp
+    popq     %rbp
+    retq
+
+S0:
+    .asciz "%ld\n"
+
+~$ cat ncc.log
+void ncc::io::init(std::istream &, std::os...: Initialized
+                         char ncc::io::read(): Read '1' from input
+     ncc::Scanner::Scanner(ncc::Controller *): Scanner initialized, next = '1'
+             void ncc::io::write(std::string): Writing instruction ".globl _main"
+               void ncc::io::put(std::string): Writing "_main:(newline)"
+             void ncc::io::write(std::string): Writing instruction "pushq %rbp"
+             void ncc::io::write(std::string): Writing instruction "movq %rsp, %rbp"
+             void ncc::io::write(std::string): Writing instruction "subq $16, %rsp"
+               void ncc::io::put(std::string): Writing "(newline)"
+                         char ncc::io::read(): Read ' ' from input
+                         char ncc::io::read(): Read '+' from input
+             void ncc::io::write(std::string): Writing instruction "movq $1, %rax"
+             void ncc::io::write(std::string): Writing instruction "pushq %rax"
+                         char ncc::io::read(): Read ' ' from input
+                         char ncc::io::read(): Read '2' from input
+                         char ncc::io::read(): Read '(newline)' from input
+                         char ncc::io::read(): Read '(EOF)' from input
+             void ncc::io::write(std::string): Writing instruction "movq $2, %rax"
+             void ncc::io::write(std::string): Writing instruction "popq %r10"
+             void ncc::io::write(std::string): Writing instruction "addq %r10, %rax"
+               void ncc::io::put(std::string): Writing "(newline)"
+size_t ncc::Controller::addStringData(std:...: Adding string literal <<<%ld\n>>>
+             void ncc::io::write(std::string): Writing instruction "leaq S0(%rip), %rdi"
+             void ncc::io::write(std::string): Writing instruction "movq %rax, %rsi"
+             void ncc::io::write(std::string): Writing instruction "callq _printf"
+             void ncc::io::write(std::string): Writing instruction "movq $0, %rax"
+             void ncc::io::write(std::string): Writing instruction "addq $16, %rsp"
+             void ncc::io::write(std::string): Writing instruction "popq %rbp"
+             void ncc::io::write(std::string): Writing instruction "retq"
+               void ncc::io::put(std::string): Writing "(newline)S0:(newline)    .asciz "%ld\n"(newline)"
+                 int main(int, const char **): Exiting successfully
+
+~$ gcc output.s -o Output && ./Output
+3
 ```
 
 ## Acknowledgements
