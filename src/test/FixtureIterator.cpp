@@ -9,29 +9,36 @@
 #include <stdexcept>
 using namespace ncc::test;
 
-static std::map<std::string, types::input_t> inputRecords;
-static std::map<std::string, types::inputOutput_t> inputOutputRecords;
+/*static*/ std::map<std::string, std::any> FixtureIterator::storedContainers;
 
 FixtureIterator::FixtureIterator(std::weak_ptr<Fixture> wp, Position pos)
-    : inputOnly(!wp.lock()->getInput().empty()), parentFixture(wp) {
+    : inputOnly(isInputOnly(wp)), parentFixture(wp) {
 
     std::shared_ptr<Fixture> parent = parentFixture.lock();
+
     if (inputOnly) {
-        if (inputRecords.find(parent->name) == inputRecords.end())
-            inputRecords[parent->name] = parent->getInput();
+        if (storedContainers.find(parent->name) == storedContainers.end())
+            storedContainers[parent->name] = std::make_any<types::input_t>(parent->getInput());
+
+        types::input_t* container =
+            std::any_cast<types::input_t>(&storedContainers.at(parent->name));
 
         if (pos == FixtureIterator::Begin)
-            inputItr = inputRecords.at(parent->name).begin();
+            inputItr = container->begin();
         else if (pos == FixtureIterator::End)
-            inputItr = inputRecords.at(parent->name).end();
+            inputItr = container->end();
     } else {
-        if (inputOutputRecords.find(parent->name) == inputOutputRecords.end())
-            inputOutputRecords[parent->name] = parent->getInputOutput();
+        if (storedContainers.find(parent->name) == storedContainers.end())
+            storedContainers[parent->name] =
+                std::make_any<types::inputOutput_t>(parent->getInputOutput());
+
+        types::inputOutput_t* container =
+            std::any_cast<types::inputOutput_t>(&storedContainers.at(parent->name));
 
         if (pos == FixtureIterator::Begin)
-            inputOutputItr = inputOutputRecords.at(parent->name).begin();
+            inputOutputItr = container->begin();
         else if (pos == FixtureIterator::End)
-            inputOutputItr = inputOutputRecords.at(parent->name).end();
+            inputOutputItr = container->end();
     }
 }
 
@@ -45,13 +52,9 @@ FixtureIterator& FixtureIterator::operator++() {
     return *this;
 }
 
-// postfix
+// postfix - dummy parameter
 FixtureIterator FixtureIterator::operator++(int) {
-    if (inputOnly)
-        inputItr++;
-    else
-        inputOutputItr++;
-
+    ++(*this);
     return *this;
 }
 
@@ -92,4 +95,8 @@ TestResult FixtureIterator::runTest() {
         std::cerr << "FixtureIterator::runTest(): Caught exception \"" << ex.what() << "\"\n";
         return TestResult::Exception;
     }
+}
+
+/*static*/ bool FixtureIterator::isInputOnly(std::weak_ptr<Fixture> wpf) {
+    return !wpf.lock()->getInput().empty();
 }

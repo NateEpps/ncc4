@@ -7,6 +7,8 @@
 #define FIXTURE_ITERATOR_HPP
 
 #include "TestTypes.hpp"
+#include <any>
+#include <map>
 #include <memory>
 
 namespace ncc::test {
@@ -47,10 +49,15 @@ class FixtureIterator {
     /// @brief Run the current input (and possibly output) against the test fixture
     TestResult runTest();
 
+  protected:
+    /// @brief Is the fixture input-only? Used to initialize `inputOnly`
+    static bool isInputOnly(std::weak_ptr<Fixture>);
+
   private:
+    static std::map<std::string, std::any> storedContainers;
+
     const bool inputOnly;
     std::weak_ptr<Fixture> parentFixture;
-
     types::input_iterator_t inputItr;
     types::inputOutput_iterator_t inputOutputItr;
 };
