@@ -276,6 +276,12 @@ size_t ncc::Controller::addStringData(std:...: Adding string literal <<<%ld\n>>>
 ~$ gcc output.s -o Output && ./Output
 3
 ```
+_Test log? Yikes_
+```
+~$ ./test &> /dev/null
+~$ cat ncc.log | wc -l
+   17158
+```
 
 ## Acknowledgements
 
