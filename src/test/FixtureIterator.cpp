@@ -14,12 +14,10 @@ using namespace ncc::test;
 FixtureIterator::FixtureIterator(std::weak_ptr<Fixture> wp, Position pos)
     : inputOnly(isInputOnly(wp)), parentFixture(wp) {
 
+    staticInit(parentFixture);
     std::shared_ptr<Fixture> parent = parentFixture.lock();
 
     if (inputOnly) {
-        if (storedContainers.find(parent->name) == storedContainers.end())
-            storedContainers[parent->name] = std::make_any<types::input_t>(parent->getInput());
-
         types::input_t* container =
             std::any_cast<types::input_t>(&storedContainers.at(parent->name));
 
@@ -28,10 +26,6 @@ FixtureIterator::FixtureIterator(std::weak_ptr<Fixture> wp, Position pos)
         else if (pos == FixtureIterator::End)
             inputItr = container->end();
     } else {
-        if (storedContainers.find(parent->name) == storedContainers.end())
-            storedContainers[parent->name] =
-                std::make_any<types::inputOutput_t>(parent->getInputOutput());
-
         types::inputOutput_t* container =
             std::any_cast<types::inputOutput_t>(&storedContainers.at(parent->name));
 
@@ -94,6 +88,20 @@ TestResult FixtureIterator::runTest() {
     } catch (std::exception& ex) {
         std::cerr << "FixtureIterator::runTest(): Caught exception \"" << ex.what() << "\"\n";
         return TestResult::Exception;
+    }
+}
+
+/*static*/ void FixtureIterator::staticInit(std::weak_ptr<Fixture> wpf) {
+    auto fixture = wpf.lock();
+
+    if (storedContainers.find(fixture->name) == storedContainers.end()) {
+        auto input = fixture->getInput();
+        auto inputOutput = fixture->getInputOutput();
+
+        if (isInputOnly(wpf))
+            storedContainers[fixture->name] = std::make_any<types::input_t>(input);
+        else
+            storedContainers[fixture->name] = std::make_any<types::inputOutput_t>(inputOutput);
     }
 }
 

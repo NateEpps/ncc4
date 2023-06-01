@@ -53,6 +53,9 @@ class FixtureIterator {
     /// @brief Is the fixture input-only? Used to initialize `inputOnly`
     static bool isInputOnly(std::weak_ptr<Fixture>);
 
+    /// @brief Initialize static stuff
+    static void staticInit(std::weak_ptr<Fixture>);
+
   private:
     static std::map<std::string, std::any> storedContainers;
 
