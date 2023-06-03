@@ -43,6 +43,11 @@ bool ErrorFixture::run(std::string input, std::optional<std::string>) {
 
 types::input_t ErrorFixture::getInput() const {
     /// @todo Unary minus is here, and unary plus is in BasicFixture, see issue #3
-    return {"Error", "-", "-a", "2 + +",   "2 * (3 + 4",   "(2 *",
-            "(2",    ")", "\"", "\"Hello", "variableName", "var = 10;"};
+    types::input_t in{"Error", "-", "-a", "2 + +",   "2 * (3 + 4",   "(2 *",
+                      "(2",    ")", "\"", "\"Hello", "variableName", "var = 10;"};
+
+#warning Note: commented out single-statement parser test
+    // in.push_back("printf(\"Hello, error\")"); // no semicolon
+
+    return in;
 }

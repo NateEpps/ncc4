@@ -6,8 +6,8 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
+#include "Parser.hpp"
 #include "Scaffold.hpp"
-#include "Scanner.hpp"
 #include <vector>
 
 namespace ncc {
@@ -37,10 +37,14 @@ class Controller {
     /// @brief Retrieve writeable data section
     std::string getDataSection();
 
-  private:
-    Scanner scanner;
+  protected:
+    /// @brief High-level parser
+    Parser parser;
+
+    /// @brief Output extra surrounding code until, like, __0.7__
     Scaffold scaffold;
 
+    /// @brief Data section until we do something better
     std::vector<std::string> data;
 };
 

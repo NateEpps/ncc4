@@ -171,6 +171,10 @@ void Scanner::parseFunctionArgs() {
         for (int x = regIndex; x >= 0; x--)
             io::write("popq " + argRegs[x]);
 
+        // strange that we're not specifically aligning the stack to 16 bytes above, but what we
+        // have here works. If weird things start causing segfaults, this is a good spot to
+        // look... See issue #37
+
         io::write("movq %rax, " + argRegs[regIndex]);
         regIndex++;
 

@@ -8,12 +8,12 @@
 #include <sstream>
 using namespace ncc;
 
-Controller::Controller() : scanner(this), scaffold(this) {}
+Controller::Controller() : parser(this), scaffold(this) {}
 
 void Controller::run(ScaffoldType type) {
     scaffold.start(type);
 
-    scanner.expression();
+    parser.program();
 
     scaffold.end();
 

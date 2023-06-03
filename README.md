@@ -31,19 +31,17 @@ Links: [Order of operations](https://en.cppreference.com/w/c/language/operator_p
 * **0.3** - General expressions, including function calls, and statements ⚠️
     * [Scaffold] Scaffolding adjustments ✅
     * [Scanner] String literals ✅
-    * [Scanner] Function call ⚠️
-        * Function arguments ⚠️ _First draft_
-        * Function call ✅
-        * Nested function calls ⚠️ _First draft_
-            * _Note: don't forget to align the stack- 16 bytes?_
-    * [Scanner] Assignment, sort of
-        * Recognize non-function identifiers, some sort of stub ⚠️ _Stub exists_
-        * Assignment operator (_Remember to filter out rvalues_)
-    * [NEW Parser] Statements
+    * [Scanner] Function call ✅ - Will stack alignment be needed? See issue #37
+    * [Scanner] Assignment, sort of 🚫 _Moved to_ **0.4**, _variable stub exists_
+    * [NEW Parser] Statements ⚠️
+        * Integrate minimum viable `ncc::Parser` class ✅
+        * Single statement
+        * Multiple statements
+        * "Null" statement - Technically, a single semicolon is a valid statement
     * [🧪] Test refactor ✅ _see_ __Test Suite__ _section_
     * [🧪] Test additions - _Added as needed_
 * **0.4** - Declaration and assignment (Types 1)
-* **0.5** - `if` / `else`
+* **0.5** - `if` / `else`, Logical Operators, Relational Operators
 * **0.6** - `while` / `do-while` / `for` 😎
 * **0.7** - Functions ?
 * **0.8** - Types 2

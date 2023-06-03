@@ -9,7 +9,6 @@
 #include <string>
 
 namespace ncc {
-
 class Controller;
 
 /// @brief Operator types
@@ -19,12 +18,12 @@ enum class OpType { None, Plus, Minus, Multiply, Division, Modulus };
 enum class TokenType { None, NumberLiteral, Operator, Identifier, StringLiteral };
 
 /**
- * @brief Handle expressions
+ * @brief Handle expressions and lexical scanning
  */
 class Scanner {
   public:
     /// @brief Constructor, store parent controller
-    Scanner(Controller*);
+    explicit Scanner(Controller*);
 
     /// @brief Skip whitespace
     void skipWs();
@@ -97,7 +96,7 @@ class Scanner {
 
   protected:
     /// @brief Parent controller
-    Controller* parent;
+    Controller* const parent;
 
     /// @brief Current char
     char next;
